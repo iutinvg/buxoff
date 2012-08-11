@@ -29,10 +29,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_amount"
-                android:nextFocusDown="@+id/edit_tags"
                 android:inputType="text|numberDecimal"
+                android:nextFocusDown="@+id/edit_tags"
                 android:selectAllOnFocus="true" >
-
             </EditText>
         </LinearLayout>
 
@@ -47,18 +46,18 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="3dp"
                 android:paddingTop="3dp"
-                android:text="@string/label_tags" />
+                android:text="@string/label_desc" />
 
-            <EditText
-                android:id="@+id/edit_tags"
+            <AutoCompleteTextView
+                android:id="@+id/edit_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_tags"
-                android:nextFocusDown="@+id/edit_desc"
-                android:inputType="textAutoComplete"
-                android:selectAllOnFocus="true" >
-
-            </EditText>
+                android:completionThreshold="1"
+                android:hint="@string/hint_desc"
+                android:inputType="textNoSuggestions"
+                android:nextFocusDown="@+id/edit_email"
+                android:selectAllOnFocus="true"
+                android:textColor="#000000" />
         </LinearLayout>
     </LinearLayout>
 
@@ -67,17 +66,18 @@
         android:layout_height="wrap_content"
         android:paddingLeft="3dp"
         android:paddingTop="3dp"
-        android:text="@string/label_desc" />
+        android:text="@string/label_tags" />
 
-    <EditText
-        android:id="@+id/edit_desc"
+    <AutoCompleteTextView
+        android:id="@+id/edit_tags"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_desc"
+        android:completionThreshold="1"
+        android:hint="@string/hint_tags"
         android:inputType="textAutoComplete"
-        android:selectAllOnFocus="true" >
-
-    </EditText>
+        android:nextFocusDown="@+id/edit_desc"
+        android:selectAllOnFocus="true"
+        android:textColor="#000000" />
 
     <TextView
         android:layout_width="wrap_content"
