@@ -21,7 +21,7 @@ public class MainActivity extends Activity {
 	private final static String SAVED_EMAIL = "com.whirix.buxoff.email";
 	private final static String SAVED_LAST_TAGS = "com.whirix.buxoff.tags";
 	private final static String SAVED_LAST_DESC = "com.whirix.buxoff.desc";
-	
+
 	// to store the tags
 	private final static String PREF_TAGS = "com.whirix.buxoff.all_tags";
 	private final static String PREF_DESC = "com.whirix.buxoff.all_desc";
@@ -35,6 +35,7 @@ public class MainActivity extends Activity {
 		initEmailHandlers();
 		initTagsHandlers();
 		initDescHandlers();
+		setupAdapters();
 	}
 
 	@Override
@@ -80,10 +81,6 @@ public class MainActivity extends Activity {
 				MODE_PRIVATE);
 		tags.setText(sp.getString(SAVED_LAST_TAGS, ""));
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, tagsHistory(null));
-		tags.setAdapter(adapter);
-
 		tags.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -107,11 +104,6 @@ public class MainActivity extends Activity {
 
 	protected void initDescHandlers() {
 		AutoCompleteTextView desc = (AutoCompleteTextView) findViewById(R.id.edit_desc);
-		
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, descHistory(null));
-		desc.setAdapter(adapter);
-
 
 		// set saved value
 		final SharedPreferences sp = getSharedPreferences(PREF_FILE,
@@ -135,10 +127,10 @@ public class MainActivity extends Activity {
 				SharedPreferences.Editor edit = sp.edit();
 				edit.putString(SAVED_LAST_DESC, s.toString());
 				edit.commit();
-				
+
 				// also we will try to find a rule for that
 				String possible_tag = rule(s.toString(), null);
-				if (possible_tag!=null) {
+				if (possible_tag != null) {
 					EditText tags = (EditText) findViewById(R.id.edit_tags);
 					tags.setText(possible_tag);
 				}
@@ -149,13 +141,16 @@ public class MainActivity extends Activity {
 	public void sendMessage(View view) {
 		EditText email = (EditText) findViewById(R.id.edit_email);
 		EditText amount = (EditText) findViewById(R.id.edit_amount);
-		EditText tags = (EditText) findViewById(R.id.edit_tags);
-		EditText desc = (EditText) findViewById(R.id.edit_desc);
-		
+		AutoCompleteTextView tags = (AutoCompleteTextView) findViewById(R.id.edit_tags);
+		AutoCompleteTextView desc = (AutoCompleteTextView) findViewById(R.id.edit_desc);
+
 		// save history before sending
 		tagsHistory(tags.getText().toString());
 		descHistory(desc.getText().toString());
 		rule(desc.getText().toString(), tags.getText().toString());
+
+		// update autocomplete adapters with new tags/descriptions
+		this.setupAdapters();
 
 		// comment
 		Intent emailIntent = new Intent(Intent.ACTION_SEND);
@@ -170,35 +165,48 @@ public class MainActivity extends Activity {
 				getString(R.string.email_prompt)));
 	}
 
+	protected void setupAdapters() {
+		AutoCompleteTextView tags = (AutoCompleteTextView) findViewById(R.id.edit_tags);
+		AutoCompleteTextView desc = (AutoCompleteTextView) findViewById(R.id.edit_desc);
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, descHistory(null));
+		desc.setAdapter(adapter);
+
+		adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, tagsHistory(null));
+		tags.setAdapter(adapter);
+	}
+
 	protected String[] tagsHistory(String new_tag) {
 		final SharedPreferences sp = getSharedPreferences(PREF_TAGS,
 				MODE_PRIVATE);
-		
-		if (new_tag!=null) {
+
+		if (new_tag != null) {
 			SharedPreferences.Editor edit = sp.edit();
 			edit.putString(new_tag, "");
 			edit.commit();
 		}
-		
+
 		Map<String, ?> all = sp.getAll();
 		Set<String> keys = all.keySet();
-		
+
 		return keys.toArray(new String[keys.size()]);
 	}
 
 	protected String[] descHistory(String new_desc) {
 		final SharedPreferences sp = getSharedPreferences(PREF_DESC,
 				MODE_PRIVATE);
-		
-		if (new_desc!=null) {
+
+		if (new_desc != null) {
 			SharedPreferences.Editor edit = sp.edit();
 			edit.putString(new_desc, "");
 			edit.commit();
 		}
-		
+
 		Map<String, ?> all = sp.getAll();
 		Set<String> keys = all.keySet();
-		
+
 		return keys.toArray(new String[keys.size()]);
 	}
 
@@ -206,15 +214,15 @@ public class MainActivity extends Activity {
 	protected String rule(String desc, String tag) {
 		final SharedPreferences sp = getSharedPreferences(PREF_RULES,
 				MODE_PRIVATE);
-		
-		if (tag==null) {
+
+		if (tag == null) {
 			tag = sp.getString(desc, null);
 		} else {
 			SharedPreferences.Editor edit = sp.edit();
 			edit.putString(desc, tag);
 			edit.commit();
 		}
-		
+
 		return tag;
 	}
 }
