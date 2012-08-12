@@ -10,11 +10,14 @@
     <string name="label_amount">Amount</string>
     <string name="hint_amount">Expense Amount</string>
     
+    <string name="label_desc">Description</string>
+    <string name="hint_desc">Description</string>
+    
     <string name="label_tags">Tags</string>
     <string name="hint_tags">Tags</string>
     
-    <string name="label_desc">Description</string>
-    <string name="hint_desc">Description</string>
+    <string name="label_acct">Account</string>
+    <string name="hint_acct">Account</string>
     
     <string name="text_send">Send</string>
     
