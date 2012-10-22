@@ -3,7 +3,6 @@ package com.whirix.buxferoffline;
 import java.util.Map;
 import java.util.Set;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,8 +13,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 
 	private final static String PREF_FILE = "com.whirix.buxoff.pref";
 	private final static String SAVED_EMAIL = "com.whirix.buxoff.email";
@@ -28,6 +29,12 @@ public class MainActivity extends Activity {
 	private final static String PREF_TAGS = "com.whirix.buxoff.all_tags";
 	private final static String PREF_ACCT = "com.whirix.buxoff.all_accounts";
 	private final static String PREF_RULES = "com.whirix.buxoff.rules";
+	
+	// dialogs
+	private final static int DIALOG_VALIDATION = 10;
+	
+	// the error message to show in validation error dialog
+	private String validation_error;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -169,6 +176,12 @@ public class MainActivity extends Activity {
 			}
 		});
 	}
+	
+	protected void showDialog() {
+		DialogFragment newFragment = ErrorAlertDialogFragment.newInstance(
+	            R.string.alert_dialog_two_buttons_title);
+		newFragment.show(getSupportFragmentManager(), "dialog");
+	}
 
 	public void sendMessage(View view) {
 		EditText email = (EditText) findViewById(R.id.edit_email);
@@ -176,6 +189,13 @@ public class MainActivity extends Activity {
 		AutoCompleteTextView tags = (AutoCompleteTextView) findViewById(R.id.edit_tags);
 		AutoCompleteTextView desc = (AutoCompleteTextView) findViewById(R.id.edit_desc);
 		AutoCompleteTextView acct = (AutoCompleteTextView) findViewById(R.id.edit_acct);
+		
+		// validation
+		if (!this.validate()) {
+			//this.showDialog(DIALOG_VALIDATION);
+			this.showDialog();
+			return;
+		}
 
 		// save history before sending
 		autocompletes(desc.getText().toString(), PREF_DESC);
@@ -246,5 +266,9 @@ public class MainActivity extends Activity {
 		}
 
 		return tag;
+	}
+	
+	protected Boolean validate() {
+		return false;
 	}
 }
