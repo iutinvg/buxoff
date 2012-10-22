@@ -27,8 +27,10 @@
     <string name="email_prompt">Email Buxfer With&#8230;</string>
     
     <!-- dialog -->
-    <string name="alert_dialog_ok">OK</string>
-    <string name="alert_dialog_cancel">Cancel</string>
-    <string name="alert_dialog_two_buttons_title">Error Title</string>
+    <string name="error_alert_dialog_ok">OK</string>
+    <string name="error_alert_dialog_title">Validation Error</string>
+    
+    <!-- errors -->
+    <string name="error_amount_empty">Please enter amount</string>
     
 </resources>

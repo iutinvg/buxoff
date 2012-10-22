@@ -30,9 +30,6 @@ public class MainActivity extends FragmentActivity {
 	private final static String PREF_ACCT = "com.whirix.buxoff.all_accounts";
 	private final static String PREF_RULES = "com.whirix.buxoff.rules";
 	
-	// dialogs
-	private final static int DIALOG_VALIDATION = 10;
-	
 	// the error message to show in validation error dialog
 	private String validation_error;
 
@@ -178,8 +175,7 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	protected void showDialog() {
-		DialogFragment newFragment = ErrorAlertDialogFragment.newInstance(
-	            R.string.alert_dialog_two_buttons_title);
+		DialogFragment newFragment = ErrorAlertDialogFragment.newInstance(this.validation_error);
 		newFragment.show(getSupportFragmentManager(), "dialog");
 	}
 
@@ -269,6 +265,17 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	protected Boolean validate() {
-		return false;
+		String tmp;
+		EditText amount = (EditText) findViewById(R.id.edit_amount);
+		
+		Boolean result = true;
+		
+		// check amount
+		tmp = amount.getText().toString();
+		if (tmp==null || tmp.length()==0) {
+			this.validation_error = this.getString(R.string.error_amount_empty);
+			result = false;
+		}
+		return result;
 	}
 }

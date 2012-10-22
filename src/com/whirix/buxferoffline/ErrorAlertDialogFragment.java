@@ -8,32 +8,26 @@ import android.support.v4.app.DialogFragment;
 
 public class ErrorAlertDialogFragment extends DialogFragment {
 
-    public static ErrorAlertDialogFragment newInstance(int title) {
+    public static ErrorAlertDialogFragment newInstance(String message) {
         ErrorAlertDialogFragment frag = new ErrorAlertDialogFragment();
         Bundle args = new Bundle();
-        args.putInt("title", title);
+        args.putString("message", message);
         frag.setArguments(args);
         return frag;
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        int title = getArguments().getInt("title");
+        String message = getArguments().getString("message");
 
         return new AlertDialog.Builder(getActivity())
                 //.setIcon(R.drawable.alert_dialog_icon)
-                .setTitle(title)
-                .setPositiveButton(R.string.alert_dialog_ok,
+                .setTitle(R.string.error_alert_dialog_title)
+                .setMessage(message)
+                .setPositiveButton(R.string.error_alert_dialog_ok,
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             //((FragmentAlertDialog)getActivity()).doPositiveClick();
-                        }
-                    }
-                )
-                .setNegativeButton(R.string.alert_dialog_cancel,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            //((FragmentAlertDialog)getActivity()).doNegativeClick();
                         }
                     }
                 )
