@@ -266,16 +266,48 @@ public class MainActivity extends FragmentActivity {
 	
 	protected Boolean validate() {
 		String tmp;
-		EditText amount = (EditText) findViewById(R.id.edit_amount);
+		EditText edit;
 		
 		Boolean result = true;
 		
+		this.validation_error = "";
+		
 		// check amount
-		tmp = amount.getText().toString();
+		edit = (EditText) findViewById(R.id.edit_amount);
+		tmp = edit.getText().toString();
 		if (tmp==null || tmp.length()==0) {
+			this.validation_error += "\n";
 			this.validation_error = this.getString(R.string.error_amount_empty);
 			result = false;
 		}
+		
+		// check description
+		edit = (EditText) findViewById(R.id.edit_desc);
+		tmp = edit.getText().toString();
+		if (tmp==null || tmp.length()==0) {
+			this.validation_error += "\n";
+			this.validation_error += this.getString(R.string.error_desc_empty);
+			result = false;
+		}
+		
+		// check tags
+		edit = (EditText) findViewById(R.id.edit_tags);
+		tmp = edit.getText().toString();
+		if (tmp==null || tmp.length()==0) {
+			this.validation_error += "\n";
+			this.validation_error += this.getString(R.string.error_tags_empty);
+			result = false;
+		}
+		
+		// check account
+		edit = (EditText) findViewById(R.id.edit_acct);
+		tmp = edit.getText().toString();
+		if (tmp==null || tmp.length()==0) {
+			this.validation_error += "\n";
+			this.validation_error += this.getString(R.string.error_account_empty);
+			result = false;
+		}
+		
 		return result;
 	}
 }

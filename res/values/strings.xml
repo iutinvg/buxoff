@@ -31,6 +31,9 @@
     <string name="error_alert_dialog_title">Validation Error</string>
     
     <!-- errors -->
-    <string name="error_amount_empty">Please enter amount</string>
+    <string name="error_amount_empty">Amount can\'t be empty</string>
+    <string name="error_desc_empty">Description can\'t be empty</string>
+    <string name="error_tags_empty">Enter at least one tag</string>
+    <string name="error_account_empty">Account can\'t be empty</string>
     
 </resources>
