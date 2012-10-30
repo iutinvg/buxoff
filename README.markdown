@@ -1,17 +1,18 @@
-##What?
+#What?
 Buxoff is short for Buxfer Offline. And this is yet another client app for the famous 
 finacial tracker.
 
 There are three main differences from ther other clients:
+
 1. it is offline;
 2. that's why it is fast;
 3. it is safe (read below).
 
-##Who?
+#Who?
 This is application for those who is traveling a lot, always on the run. Yes, 3G everywhere nowadays,
 but, alas, sometime it is terribly slow or too expesive. Do you like international roaming?
 
-##Why?
+#Why?
 Buxfer is not yet another slow / buggy web app forcing you to wait forages until it loads.
 This is native mobile application working as fast as you phone can. You can save all your
 expenses on the spot and push them to server later -- when you are in free WiFi zone or 3G is fine.
@@ -28,7 +29,7 @@ reports when you drink beer in Munich? I think you should leave the analytics fo
 have a free evening: just sit near the fireplace, open your laptop, take some cognac (or beer again?), open 
 the expenses report and think about all your life. If it is boring - call your wife.
 
-##More
+#More
 Support page: http://iutinvg.com/buxoff (coming soon)
 
 Play Market App: coming soon 
