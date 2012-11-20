@@ -1,57 +1,52 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     tools:context=".MainActivity" >
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical" >
+            android:orientation="horizontal" >
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="3dp"
-                android:paddingTop="3dp"
+                style="@style/Label"
+                android:layout_weight="40"
                 android:text="@string/label_amount" />
+
+            <TextView
+                style="@style/Label"
+                android:layout_weight="60"
+                android:text="@string/label_desc" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
             <EditText
                 android:id="@+id/edit_amount"
-                android:layout_width="match_parent"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
+                android:layout_weight="40"
                 android:hint="@string/hint_amount"
                 android:inputType="text|numberDecimal"
                 android:nextFocusDown="@+id/edit_desc"
                 android:selectAllOnFocus="true" >
+                <requestFocus />
             </EditText>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="3dp"
-                android:paddingTop="3dp"
-                android:text="@string/label_desc" />
 
             <AutoCompleteTextView
                 android:id="@+id/edit_desc"
-                android:layout_width="match_parent"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
+                android:layout_weight="60"
                 android:completionThreshold="1"
                 android:hint="@string/hint_desc"
                 android:imeOptions="actionNext"
@@ -60,31 +55,33 @@
                 android:selectAllOnFocus="true"
                 android:textColor="#000000" />
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="horizontal" >
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="60"
-            android:orientation="vertical" >
+            android:orientation="horizontal" >
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="3dp"
-                android:paddingTop="3dp"
+                style="@style/Label"
+                android:layout_weight="50"
                 android:text="@string/label_tags" />
+
+            <TextView
+                style="@style/Label"
+                android:layout_weight="50"
+                android:text="@string/label_acct" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
             <AutoCompleteTextView
                 android:id="@+id/edit_tags"
-                android:layout_width="match_parent"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
+                android:layout_weight="50"
                 android:completionThreshold="1"
                 android:hint="@string/hint_tags"
                 android:imeOptions="actionNext"
@@ -92,25 +89,12 @@
                 android:nextFocusDown="@+id/edit_acct"
                 android:selectAllOnFocus="true"
                 android:textColor="#000000" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="40"
-            android:orientation="vertical" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="3dp"
-                android:paddingTop="3dp"
-                android:text="@string/label_acct" />
 
             <AutoCompleteTextView
                 android:id="@+id/edit_acct"
-                android:layout_width="match_parent"
+                android:layout_width="0dip"
                 android:layout_height="wrap_content"
+                android:layout_weight="50"
                 android:completionThreshold="1"
                 android:hint="@string/hint_acct"
                 android:imeOptions="actionNext"
@@ -119,27 +103,42 @@
                 android:selectAllOnFocus="true"
                 android:textColor="#000000" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/button_save"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:onClick="saveTransaction"
+                android:text="@string/button_save_text" />
+
+            <Button
+                android:id="@+id/button_push"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:onClick="saveTransaction"
+                android:text="@string/button_push_text" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_email" />
+
+        <EditText
+            android:id="@+id/edit_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_email"
+            android:inputType="textEmailAddress" >
+        </EditText>
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="3dp"
-        android:paddingTop="3dp"
-        android:text="@string/label_email" />
-
-    <EditText
-        android:id="@+id/edit_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_email"
-        android:inputType="textEmailAddress" >
-    </EditText>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="sendMessage"
-        android:text="@string/text_send" />
-
-</LinearLayout>
+</ScrollView>

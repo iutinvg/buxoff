@@ -11,7 +11,7 @@
     <string name="label_email">Buxfer Email</string>
     
     <string name="label_amount">Amount</string>
-    <string name="hint_amount">Expense Amount</string>
+    <string name="hint_amount">Amount</string>
     
     <string name="label_desc">Description</string>
     <string name="hint_desc">Description</string>
@@ -22,7 +22,8 @@
     <string name="label_acct">Account</string>
     <string name="hint_acct">Account</string>
     
-    <string name="text_send">Send</string>
+    <string name="button_save_text">Save</string>
+    <string name="button_push_text">Push</string>
     
     <string name="email_prompt">Email Buxfer With&#8230;</string>
     
