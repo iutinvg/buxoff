@@ -23,7 +23,7 @@
     <string name="hint_acct">Account</string>
     
     <string name="button_save_text">Save</string>
-    <string name="button_push_text">Push</string>
+    <string name="button_push_text">Save &amp; Push</string>
     
     <string name="email_prompt">Email Buxfer With&#8230;</string>
     

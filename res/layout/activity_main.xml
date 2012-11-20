@@ -39,6 +39,7 @@
                 android:inputType="text|numberDecimal"
                 android:nextFocusDown="@+id/edit_desc"
                 android:selectAllOnFocus="true" >
+
                 <requestFocus />
             </EditText>
 
@@ -117,13 +118,31 @@
                 android:onClick="saveTransaction"
                 android:text="@string/button_save_text" />
 
-            <Button
-                android:id="@+id/button_push"
+            <RelativeLayout
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="50"
-                android:onClick="saveTransaction"
-                android:text="@string/button_push_text" />
+                android:layout_weight="50" >
+
+                <Button
+                    android:id="@+id/button_push"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:onClick="saveTransaction"
+                    android:text="@string/button_push_text" />
+
+                <TextView
+                    android:id="@+id/text_counter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/counter_bg"
+                    android:paddingLeft="6dp"
+                    android:paddingRight="6dp"
+                    android:layout_marginRight="1dip"
+                    android:textStyle="bold"
+                    android:visibility="invisible"
+                    android:textColor="#FFF" />
+            </RelativeLayout>
         </LinearLayout>
 
         <TextView

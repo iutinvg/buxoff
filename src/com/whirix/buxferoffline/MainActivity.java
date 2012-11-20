@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 
@@ -44,6 +45,7 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		setupCounter();
 		initEmailHandlers();
 		initDescHandlers();
 		initTagsHandlers();
@@ -193,19 +195,19 @@ public class MainActivity extends FragmentActivity {
 		newFragment.show(getSupportFragmentManager(), "dialog");
 	}
 
-	public void sendMessage(View view) {
-		// validation
-		if (!this.validate()) {
-			this.showDialog();
-			return;
+	protected void setupCounter() {
+		final SharedPreferences sp = getSharedPreferences(PREF_FILE,
+				MODE_PRIVATE);
+		String transactions = sp.getString(SAVED_TRANSACTIONS, "");
+		TextView counter = (TextView)findViewById(R.id.text_counter);
+		
+		if (transactions=="") {
+			counter.setVisibility(View.INVISIBLE);
+		} else {
+			String[] lines = transactions.split("\r\n|\r|\n");
+			counter.setText(String.format("%d", lines.length));
+			counter.setVisibility(View.VISIBLE);
 		}
-
-		// put new words, rules, etc
-		this.updateRules();
-
-		// update autocomplete adapters with new tags/descriptions
-		this.setupAdapters();
-
 	}
 
 	protected void pushTransactions() {
@@ -229,7 +231,7 @@ public class MainActivity extends FragmentActivity {
 		// clear saved transactions
 		SharedPreferences.Editor edit = sp.edit();
 		edit.putString(SAVED_TRANSACTIONS, "");
-		edit.commit();		
+		edit.commit();
 	}
 
 	public void saveTransaction(View view) {
@@ -269,6 +271,7 @@ public class MainActivity extends FragmentActivity {
 		if (pushing) {
 			pushTransactions();
 		}
+		setupCounter();
 	}
 
 	/**
