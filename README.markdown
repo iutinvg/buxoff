@@ -2,7 +2,7 @@
 Buxoff is short for a Buxfer Offline. And this is yet another client app for the famous 
 financial tracker.
 
-There are three main differences from ther other clients:
+There are three main differences from the other clients:
 
 1. it is offline;
 2. that's why it is fast;
