@@ -1,14 +1,16 @@
-package com.whirix.buxferoffline;
+package com.iutinvg.buxoff;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.Date;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,8 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 
 public class MainActivity extends FragmentActivity {
 	private final static String TAG = "MainActivity";

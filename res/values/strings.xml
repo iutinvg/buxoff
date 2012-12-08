@@ -37,4 +37,7 @@
     <string name="error_tags_empty">Enter at least one tag</string>
     <string name="error_account_empty">Account can\'t be empty</string>
     
+    <!-- Other -->
+    <string name="_desc">desc</string>
+    
 </resources>

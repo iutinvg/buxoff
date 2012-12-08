@@ -1,4 +1,4 @@
-package com.whirix.buxferoffline;
+package com.iutinvg.buxoff;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
