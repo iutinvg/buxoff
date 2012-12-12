@@ -39,5 +39,8 @@
     
     <!-- Other -->
     <string name="_desc">desc</string>
+    <string name="_preference_file">com.iutinvg.buxoff.pref</string>
+    <string name="_auth_token">com.iutinvg.buxoff.api_token</string>
+    <string name="_auth_username">com.iutinvg.buxoff.username</string>
     
 </resources>
