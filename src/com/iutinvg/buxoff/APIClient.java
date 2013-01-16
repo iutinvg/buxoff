@@ -1,9 +1,12 @@
 package com.iutinvg.buxoff;
 
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -13,73 +16,63 @@ import com.loopj.android.http.RequestParams;
 public class APIClient {
 	private static final String TAG = "APIClient";
 
-	public static final String ROOT_URL = "http://159.253.3.57:8000/";
-
-	private static final String BASE_URL = "api/v1/";
+	public static final String ROOT_URL = "https://www.buxfer.com/api/";
 
 	private static AsyncHttpClient client = new AsyncHttpClient();
-	public static String api_key = "";
+	public static String token = "";
 
 	public static void cancel() {
 		client.cancelRequests(null, true);
 	}
 
-	public static void get(String url, RequestParams params,
+	public static void get(String command, RequestParams params,
 			AsyncHttpResponseHandler responseHandler) {
 		if (params == null) {
 			params = new RequestParams();
 		}
-		addAuthToParams(params);
-		String absoluteUrl = getAbsoluteUrl(url);
+		if (APIClient.isAuthenticated()) {
+			params.put("token", token);
+		}
+		String absoluteUrl = getAbsoluteUrl(command);
 		client.get(absoluteUrl, params, responseHandler);
 		Log.i(TAG, "get: " + absoluteUrl + '?' + params);
 	}
 
-	public static void post(String url, RequestParams params,
+	public static void post(String command, RequestParams params,
 			AsyncHttpResponseHandler responseHandler) {
-		client.post(getAbsoluteUrlWithAuth(url), params, responseHandler);
+		client.post(getAbsoluteUrlWithToken(command), params, responseHandler);
 	}
 
-	public static void auth(String username, String password,
-			AsyncHttpResponseHandler responseHandler) {
-		client.setBasicAuth(username, password);
-		client.get(getAbsoluteUrl("auth/login/"), responseHandler);
-	}
-
-	/**
-	 * Unset basic HTTP auth params. Have to be called when api_token is got.
-	 */
-	public static void authClear() {
-		client = new AsyncHttpClient();
-	}
-
-	private static String getAbsoluteUrl(String relativeUrl) {
-		return ROOT_URL + BASE_URL + relativeUrl;
-	}
-
-	private static String getAbsoluteUrlWithAuth(String relativeUrl) {
-		return getAbsoluteUrl(relativeUrl) + "?api_key=" + api_key;
-	}
-
-	private static void addAuthToParams(RequestParams params) {
-		params.put("api_key", api_key);
-	}
-
-	public static void logout(Context c) {
-		APIClient.token(c, "");
-		APIClient.api_key = "";
-	}
-
-	public static Boolean isAuthenticated() {
+	public static JSONObject handleResponse(JSONObject response) {
 		try {
-			return !APIClient.api_key.isEmpty();
-		} catch (NullPointerException e) {
-			return false;
+			JSONObject obj = response.getJSONObject("response");
+			String status = obj.getString("status");
+			Log.d(TAG, "status: " + status);
+			if (status.equalsIgnoreCase("OK")) {
+				return obj; 
+			}
 		} catch (Exception e) {
 			Log.e(TAG, e.getLocalizedMessage());
 		}
+		return null;
+	}
 
-		return false;
+	private static String getAbsoluteUrl(String command) {
+		return ROOT_URL + command + ".json";
+	}
+
+	private static String getAbsoluteUrlWithToken(String command) {
+		return getAbsoluteUrl(command) + "?token=" + token;
+	}
+	
+	public static void logout(Context c) {
+		APIClient.token(c, "");
+		APIClient.token = "";
+	}
+
+	public static Boolean isAuthenticated() {
+		Log.d(TAG, "token is " + token);
+		return !TextUtils.isEmpty(token);
 	}
 
 	/**
@@ -87,8 +80,8 @@ public class APIClient {
 	 * when we need "clear" client further.
 	 */
 	public static void initialize(Context c) {
+		APIClient.token = APIClient.token(c, null);
 		client = new AsyncHttpClient();
-		APIClient.api_key = APIClient.token(c, null);
 	}
 
 	public static boolean isNetworkOnline(Context c) {

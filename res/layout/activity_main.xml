@@ -1,196 +1,176 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/bkg"
+    android:orientation="vertical"
     tools:context=".MainActivity" >
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bkg"
-        android:orientation="vertical" >
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                style="@style/Label"
-                android:layout_weight="40"
-                android:text="@string/label_amount" />
-
-            <TextView
-                style="@style/Label"
-                android:layout_weight="60"
-                android:text="@string/label_desc" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <EditText
-                android:id="@+id/edit_amount"
-                style="@style/Input"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="40"
-                android:hint="@string/hint_amount"
-                android:inputType="text|numberDecimal"
-                android:nextFocusDown="@+id/edit_desc"
-                android:selectAllOnFocus="true" >
-
-                <requestFocus />
-            </EditText>
-
-            <AutoCompleteTextView
-                android:id="@+id/edit_desc"
-                style="@style/Input"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="60"
-                android:completionThreshold="1"
-                android:hint="@string/hint_desc"
-                android:imeOptions="actionNext"
-                android:inputType="textNoSuggestions"
-                android:nextFocusDown="@+id/edit_tags"
-                android:selectAllOnFocus="true"
-                android:textColor="#000000" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                style="@style/Label"
-                android:layout_weight="50"
-                android:text="@string/label_tags" />
-
-            <TextView
-                style="@style/Label"
-                android:layout_weight="50"
-                android:text="@string/label_acct" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <AutoCompleteTextView
-                android:id="@+id/edit_tags"
-                style="@style/Input"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="50"
-                android:completionThreshold="1"
-                android:hint="@string/hint_tags"
-                android:imeOptions="actionNext"
-                android:inputType="textAutoComplete"
-                android:nextFocusDown="@+id/edit_acct"
-                android:selectAllOnFocus="true"
-                android:textColor="#000000" />
-
-            <AutoCompleteTextView
-                android:id="@+id/edit_acct"
-                style="@style/Input"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="50"
-                android:completionThreshold="1"
-                android:hint="@string/hint_acct"
-                android:imeOptions="actionNext"
-                android:inputType="textNoSuggestions"
-                android:nextFocusDown="@+id/edit_email"
-                android:selectAllOnFocus="true"
-                android:textColor="#000000" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:layout_marginTop="3dp"
-            android:orientation="horizontal" >
-
-            <RelativeLayout
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="50" >
-
-                <Button
-                    android:id="@+id/button_save"
-                    android:layout_width="153dp"
-                    android:layout_height="35dp"
-                    android:background="@drawable/btn_selector"
-                    android:layout_centerHorizontal="true"
-                    android:onClick="saveTransaction"
-                    android:shadowColor="@color/shadow"
-                    android:shadowDx="0"
-                    android:shadowDy="1"
-                    android:shadowRadius="1"
-                    android:text="@string/button_save_text"
-                    android:textStyle="bold" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="50" >
-
-                <Button
-                    android:id="@+id/button_push"
-                    android:layout_width="153dp"
-                    android:layout_height="35dp"
-                    android:background="@drawable/btn_selector"
-                    android:layout_centerHorizontal="true"
-                    android:onClick="saveTransaction"
-                    android:shadowColor="@color/shadow"
-                    android:shadowDx="0"
-                    android:shadowDy="1"
-                    android:shadowRadius="1"
-                    android:text="@string/button_push_text"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/text_counter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="1dip"
-                    android:background="@drawable/counter_bg"
-                    android:paddingTop="0dp"
-                    android:paddingBottom="0dp"
-                    android:paddingLeft="6dp"
-                    android:paddingRight="6dp"
-                    android:textColor="#FFF"
-                    android:textStyle="bold"
-                    android:shadowColor="@color/shadow_dark"
-                    android:shadowDx="0"
-                    android:shadowDy="1"
-                    android:shadowRadius="1"
-                    android:visibility="invisible" />
-            </RelativeLayout>
-        </LinearLayout>
+        android:orientation="horizontal" >
 
         <TextView
             style="@style/Label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_email" />
+            android:layout_weight="40"
+            android:text="@string/label_amount" />
 
-        <EditText
-            android:id="@+id/edit_email"
-                style="@style/Input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_email"
-            android:inputType="textEmailAddress" >
-        </EditText>
+        <TextView
+            style="@style/Label"
+            android:layout_weight="60"
+            android:text="@string/label_desc" />
     </LinearLayout>
 
-</ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/edit_amount"
+            style="@style/Input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="40"
+            android:hint="@string/hint_amount"
+            android:inputType="text|numberDecimal"
+            android:nextFocusDown="@+id/edit_desc"
+            android:selectAllOnFocus="true" >
+
+            <requestFocus />
+        </EditText>
+
+        <AutoCompleteTextView
+            android:id="@+id/edit_desc"
+            style="@style/Input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="60"
+            android:completionThreshold="1"
+            android:hint="@string/hint_desc"
+            android:imeOptions="actionNext"
+            android:inputType="textNoSuggestions"
+            android:nextFocusDown="@+id/edit_tags"
+            android:selectAllOnFocus="true"
+            android:textColor="#000000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/Label"
+            android:layout_weight="50"
+            android:text="@string/label_tags" />
+
+        <TextView
+            style="@style/Label"
+            android:layout_weight="50"
+            android:text="@string/label_acct" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <AutoCompleteTextView
+            android:id="@+id/edit_tags"
+            style="@style/Input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:completionThreshold="1"
+            android:hint="@string/hint_tags"
+            android:imeOptions="actionNext"
+            android:inputType="textAutoComplete"
+            android:nextFocusDown="@+id/edit_acct"
+            android:selectAllOnFocus="true"
+            android:textColor="#000000" />
+
+        <AutoCompleteTextView
+            android:id="@+id/edit_acct"
+            style="@style/Input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:completionThreshold="1"
+            android:hint="@string/hint_acct"
+            android:imeOptions="actionNext"
+            android:inputType="textNoSuggestions"
+            android:nextFocusDown="@+id/edit_email"
+            android:selectAllOnFocus="true"
+            android:textColor="#000000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:baselineAligned="false"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="50" >
+
+            <Button
+                android:id="@+id/button_save"
+                android:layout_width="153dp"
+                android:layout_height="35dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/btn_selector"
+                android:onClick="saveTransaction"
+                android:shadowColor="@color/shadow"
+                android:shadowDx="0"
+                android:shadowDy="1"
+                android:shadowRadius="1"
+                android:text="@string/button_save_text"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="50" >
+
+            <Button
+                android:id="@+id/button_push"
+                android:layout_width="153dp"
+                android:layout_height="35dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/btn_selector"
+                android:onClick="saveTransaction"
+                android:shadowColor="@color/shadow"
+                android:shadowDx="0"
+                android:shadowDy="1"
+                android:shadowRadius="1"
+                android:text="@string/button_push_text"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="1dip"
+                android:background="@drawable/counter_bg"
+                android:paddingBottom="0dp"
+                android:paddingLeft="6dp"
+                android:paddingRight="6dp"
+                android:paddingTop="0dp"
+                android:shadowColor="@color/shadow_dark"
+                android:shadowDx="0"
+                android:shadowDy="1"
+                android:shadowRadius="1"
+                android:textColor="#FFF"
+                android:textStyle="bold"
+                android:visibility="invisible" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

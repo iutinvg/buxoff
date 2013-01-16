@@ -6,12 +6,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.json.JSONObject;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +23,9 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 public class MainActivity extends FragmentActivity {
 	private final static String TAG = "MainActivity";
@@ -44,6 +50,18 @@ public class MainActivity extends FragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		APIClient.initialize(this);
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+
+		if (!APIClient.isAuthenticated()) {
+			Intent i = new Intent(this, LoginActivity.class);
+			startActivity(i);
+			return;
+		}
 
 		setupCounter();
 		initEmailHandlers();
@@ -61,8 +79,8 @@ public class MainActivity extends FragmentActivity {
 
 	protected void initEmailHandlers() {
 		EditText email = (EditText) findViewById(R.id.edit_email);
-		
-		if (email==null) { 
+
+		if (email == null) {
 			Log.i(TAG, "it is null?");
 			return;
 		} else {
@@ -199,9 +217,9 @@ public class MainActivity extends FragmentActivity {
 		final SharedPreferences sp = getSharedPreferences(PREF_FILE,
 				MODE_PRIVATE);
 		String transactions = sp.getString(SAVED_TRANSACTIONS, "");
-		TextView counter = (TextView)findViewById(R.id.text_counter);
-		
-		if (transactions=="") {
+		TextView counter = (TextView) findViewById(R.id.text_counter);
+
+		if (transactions == "") {
 			counter.setVisibility(View.INVISIBLE);
 		} else {
 			String[] lines = transactions.split("\r\n|\r|\n");
@@ -213,25 +231,87 @@ public class MainActivity extends FragmentActivity {
 	protected void pushTransactions() {
 		final SharedPreferences sp = getSharedPreferences(PREF_FILE,
 				MODE_PRIVATE);
-		
+
 		// deal to start email client
-		EditText email = (EditText) findViewById(R.id.edit_email);
-		Intent emailIntent = new Intent(Intent.ACTION_SEND);
-		emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { email.getText()
-				.toString() });
-		emailIntent.putExtra(Intent.EXTRA_SUBJECT, "expense");
-
+		// EditText email = (EditText) findViewById(R.id.edit_email);
+		// Intent emailIntent = new Intent(Intent.ACTION_SEND);
+		// emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {
+		// email.getText()
+		// .toString() });
+		// emailIntent.putExtra(Intent.EXTRA_SUBJECT, "expense");
+		//
 		String transactions = sp.getString(SAVED_TRANSACTIONS, "");
+		if (TextUtils.isEmpty(transactions)) {
+			Log.d(TAG, "nothing to push");
+			return;
+		}
+		//
+		// emailIntent.putExtra(Intent.EXTRA_TEXT, transactions);
+		// emailIntent.setType("plain/text");
+		// startActivity(Intent.createChooser(emailIntent,
+		// getString(R.string.email_prompt)));
+		RequestParams params = new RequestParams();
+		params.put("format", "sms");
+		params.put("text", transactions);
 
-		emailIntent.putExtra(Intent.EXTRA_TEXT, transactions);
-		emailIntent.setType("plain/text");
-		startActivity(Intent.createChooser(emailIntent,
-				getString(R.string.email_prompt)));
-		
-		// clear saved transactions
-		SharedPreferences.Editor edit = sp.edit();
-		edit.putString(SAVED_TRANSACTIONS, "");
-		edit.commit();
+		APIClient.post("add_transaction", params,
+				new JsonHttpResponseHandler() {
+
+					@Override
+					public void onSuccess(int statusCode, JSONObject response) {
+						handleAddTransaction(response);
+						super.onSuccess(statusCode, response);
+					}
+
+					@Override
+					public void onFinish() {
+						setupCounter();
+						// TODO Auto-generated method stub
+						super.onFinish();
+					}
+
+					@Override
+					public void onFailure(Throwable error, String content) {
+						// TODO Auto-generated method stub
+						super.onFailure(error, content);
+					}
+
+					@Override
+					protected void handleFailureMessage(Throwable e,
+							String responseBody) {
+						// TODO Auto-generated method stub
+						super.handleFailureMessage(e, responseBody);
+					}
+
+				});
+
+	}
+
+	private void handleAddTransaction(JSONObject response) {
+		String errorMessage = null;
+		Log.d(TAG, response.toString());
+		try {
+			JSONObject obj = APIClient.handleResponse(response);
+			if (obj != null) {
+				// clear saved transactions
+				SharedPreferences sp = getSharedPreferences(PREF_FILE,
+						MODE_PRIVATE);
+				SharedPreferences.Editor edit = sp.edit();
+				edit.putString(SAVED_TRANSACTIONS, "");
+				edit.commit();
+			} else {
+				errorMessage = "can't parse server response";
+			}
+		} catch (Exception e) {
+			Log.e(TAG, e.getLocalizedMessage());
+			errorMessage = e.getLocalizedMessage();
+		}
+
+		if (errorMessage != null) {
+			DialogFragment newFragment = ErrorAlertDialogFragment
+					.newInstance(errorMessage);
+			newFragment.show(getSupportFragmentManager(), "push_errors");
+		}
 	}
 
 	public void saveTransaction(View view) {
@@ -263,11 +343,11 @@ public class MainActivity extends FragmentActivity {
 			edit.putString(SAVED_TRANSACTIONS, existing);
 			edit.commit();
 		}
-		
+
 		EditText amount = (EditText) findViewById(R.id.edit_amount);
 		amount.setText("");
 		amount.requestFocus();
-		
+
 		if (pushing) {
 			pushTransactions();
 		}
@@ -286,14 +366,14 @@ public class MainActivity extends FragmentActivity {
 		AutoCompleteTextView acct = (AutoCompleteTextView) findViewById(R.id.edit_acct);
 
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:dd:ss",
-				Locale.US);
+				Locale.getDefault());
 		String now = format.format(new Date());
 
-		String result = desc.getText().toString() + " "
+		String result = desc.getText().toString().trim() + " "
 				+ amount.getText().toString() + " tags:"
 				+ tags.getText().toString() + " acct:"
 				+ acct.getText().toString() + " date:" + now;
-		
+
 		return result;
 	}
 

@@ -1,14 +1,11 @@
 <resources>
 
-    <string name="app_name">Buxfer Offline</string>
+    <string name="app_name">Buxoff</string>
     
     <string name="OK">OK</string>
     
     <string name="menu_settings">Settings</string>
-    <string name="title_activity_main">Buxfer Offline</string>
-    
-    <string name="hint_email">like this crackNNNN@buxfer.com</string>
-    <string name="label_email">Buxfer Email</string>
+    <string name="title_activity_main">Buxoff</string>
     
     <string name="label_amount">Amount</string>
     <string name="hint_amount">Amount</string>
@@ -24,8 +21,6 @@
     
     <string name="button_save_text">Save</string>
     <string name="button_push_text">Save &amp; Push</string>
-    
-    <string name="email_prompt">Email Buxfer With&#8230;</string>
     
     <!-- dialog -->
     <string name="error_alert_dialog_ok">OK</string>

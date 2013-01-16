@@ -1,13 +1,17 @@
 package com.iutinvg.buxoff;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -15,27 +19,15 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
 /**
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
 public class LoginActivity extends Activity {
-	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"foo@example.com:hello", "bar@example.com:world" };
-
-	/**
-	 * The default email to populate the email field with.
-	 */
-	public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
-
-	/**
-	 * Keep track of the login task to ensure we can cancel it if requested.
-	 */
-	private UserLoginTask mAuthTask = null;
+	private static final String TAG = "LoginActivity";
 
 	// Values for email and password at the time of the login attempt.
 	private String mEmail;
@@ -53,9 +45,9 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_login);
-
+		
 		// Set up the login form.
-		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
+		mEmail = APIClient.username(this, null);
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
 
@@ -99,10 +91,8 @@ public class LoginActivity extends Activity {
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptLogin() {
-		if (mAuthTask != null) {
-			return;
-		}
-
+		// TODO avoid double request
+		
 		// Reset errors.
 		mEmailView.setError(null);
 		mPasswordView.setError(null);
@@ -144,9 +134,11 @@ public class LoginActivity extends Activity {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
+			
+			APIClient.username(this, mEmail);
 			showProgress(true);
-			mAuthTask = new UserLoginTask();
-			mAuthTask.execute((Void) null);
+			//requestToken(mEmail, mPassword);
+			requestToken("iutin@whirix.com", "Slava123");
 		}
 	}
 
@@ -191,52 +183,68 @@ public class LoginActivity extends Activity {
 		}
 	}
 
-	/**
-	 * Represents an asynchronous login/registration task used to authenticate
-	 * the user.
-	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
+	private void requestToken(String email, String password) {
+		showProgress(true);
+		
+		RequestParams params = new RequestParams();
+		params.put("userid", email);
+		params.put("password", password);
+		APIClient.get("login", params, new JsonHttpResponseHandler() {
 
-			try {
-				// Simulate network access.
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				return false;
+			@Override
+			public void onSuccess(int statusCode, JSONObject response) {
+				Log.d(TAG, "login: " + response.toString());
+				handleResponse(response);
+				super.onSuccess(statusCode, response);
 			}
 
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
-				}
+			@Override
+			public void onFailure(Throwable e, JSONObject errorResponse) {
+				Log.d(TAG, e.getLocalizedMessage());
+				super.onFailure(e, errorResponse);
 			}
 
-			// TODO: register the new account here.
-			return true;
-		}
+			@Override
+			public void onFailure(Throwable e, JSONArray errorResponse) {
+				Log.d(TAG, e.getLocalizedMessage());
+				super.onFailure(e, errorResponse);
+			}
 
-		@Override
-		protected void onPostExecute(final Boolean success) {
-			mAuthTask = null;
-			showProgress(false);
+			@Override
+			protected void handleFailureMessage(Throwable e, String responseBody) {
+				Log.d(TAG, e.getLocalizedMessage());
+				super.handleFailureMessage(e, responseBody);
+			}
 
-			if (success) {
+			@Override
+			public void onFailure(Throwable error, String content) {
+				Log.d(TAG, error.getLocalizedMessage());
+				Log.d(TAG, content);
+				super.onFailure(error, content);
+			}
+
+			@Override
+			public void onFinish() {
+				showProgress(false);
 				finish();
-			} else {
-				mPasswordView
-						.setError(getString(R.string.error_incorrect_password));
-				mPasswordView.requestFocus();
+				super.onFinish();
 			}
-		}
 
-		@Override
-		protected void onCancelled() {
-			mAuthTask = null;
-			showProgress(false);
+		});
+	}
+	
+	private void handleResponse(JSONObject response) {
+		try {
+			JSONObject obj = APIClient.handleResponse(response);
+			if (obj!=null) {
+				String token = obj.getString("token");
+				APIClient.token = token;
+				APIClient.token(this, token);
+			}
+		} catch (JSONException e) {
+			Log.e(TAG, e.getLocalizedMessage());
+			// TODO show error to user??? "Unrecognized server response."
 		}
 	}
+
 }
