@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bkg"
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
@@ -12,12 +11,14 @@
         android:orientation="horizontal" >
 
         <TextView
-            style="@style/Label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="40"
             android:text="@string/label_amount" />
 
         <TextView
-            style="@style/Label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="60"
             android:text="@string/label_desc" />
     </LinearLayout>
@@ -29,7 +30,6 @@
 
         <EditText
             android:id="@+id/edit_amount"
-            style="@style/Input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="40"
@@ -43,7 +43,6 @@
 
         <AutoCompleteTextView
             android:id="@+id/edit_desc"
-            style="@style/Input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="60"
@@ -62,12 +61,14 @@
         android:orientation="horizontal" >
 
         <TextView
-            style="@style/Label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="50"
             android:text="@string/label_tags" />
 
         <TextView
-            style="@style/Label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="50"
             android:text="@string/label_acct" />
     </LinearLayout>
@@ -79,7 +80,6 @@
 
         <AutoCompleteTextView
             android:id="@+id/edit_tags"
-            style="@style/Input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="50"
@@ -93,7 +93,6 @@
 
         <AutoCompleteTextView
             android:id="@+id/edit_acct"
-            style="@style/Input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="50"
@@ -101,7 +100,7 @@
             android:hint="@string/hint_acct"
             android:imeOptions="actionNext"
             android:inputType="textNoSuggestions"
-            android:nextFocusDown="@+id/edit_email"
+            android:nextFocusDown="@+id/button_save"
             android:selectAllOnFocus="true"
             android:textColor="#000000" />
     </LinearLayout>
@@ -120,17 +119,11 @@
 
             <Button
                 android:id="@+id/button_save"
-                android:layout_width="153dp"
-                android:layout_height="35dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/btn_selector"
                 android:onClick="saveTransaction"
-                android:shadowColor="@color/shadow"
-                android:shadowDx="0"
-                android:shadowDy="1"
-                android:shadowRadius="1"
-                android:text="@string/button_save_text"
-                android:textStyle="bold" />
+                android:text="@string/button_save_text" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -140,17 +133,11 @@
 
             <Button
                 android:id="@+id/button_push"
-                android:layout_width="153dp"
-                android:layout_height="35dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/btn_selector"
                 android:onClick="saveTransaction"
-                android:shadowColor="@color/shadow"
-                android:shadowDx="0"
-                android:shadowDy="1"
-                android:shadowRadius="1"
-                android:text="@string/button_push_text"
-                android:textStyle="bold" />
+                android:text="@string/button_push_text" />
 
             <TextView
                 android:id="@+id/text_counter"
@@ -163,7 +150,6 @@
                 android:paddingLeft="6dp"
                 android:paddingRight="6dp"
                 android:paddingTop="0dp"
-                android:shadowColor="@color/shadow_dark"
                 android:shadowDx="0"
                 android:shadowDy="1"
                 android:shadowRadius="1"
@@ -173,4 +159,4 @@
         </RelativeLayout>
     </LinearLayout>
 
-</LinearLayout>
+1</LinearLayout>

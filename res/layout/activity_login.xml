@@ -23,7 +23,6 @@
             android:id="@+id/login_status_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Label"
             android:layout_marginBottom="16dp"
             android:text="@string/login_progress_signing_in"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -38,7 +37,6 @@
 
         <LinearLayout
             style="@style/LoginFormContainer"
-            android:background="@drawable/bkg"
             android:orientation="vertical" >
 
             <EditText

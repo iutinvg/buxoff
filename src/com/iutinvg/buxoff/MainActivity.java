@@ -12,26 +12,26 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Window;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends SherlockFragmentActivity {
 	private final static String TAG = "MainActivity";
 
 	private final static String PREF_FILE = "com.whirix.buxoff.pref";
-	private final static String SAVED_EMAIL = "com.whirix.buxoff.email";
 	private final static String SAVED_LAST_TAGS = "com.whirix.buxoff.tags";
 	private final static String SAVED_LAST_DESC = "com.whirix.buxoff.desc";
 	private final static String SAVED_LAST_ACCT = "com.whirix.buxoff.acct";
@@ -45,11 +45,23 @@ public class MainActivity extends FragmentActivity {
 
 	// the error message to show in validation error dialog
 	private String validation_error;
+	
+	private Button _buttonSave;
+	private Button _buttonPush;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_main);
+		
+		getSupportActionBar();
+		setSupportProgressBarIndeterminateVisibility(false);
+		
+		_buttonSave = (Button)findViewById(R.id.button_save);
+		_buttonPush = (Button)findViewById(R.id.button_push);
+		APIClient.token(this, ""); // logout
+		
 		APIClient.initialize(this);
 	}
 
@@ -64,53 +76,10 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		setupCounter();
-		initEmailHandlers();
 		initDescHandlers();
 		initTagsHandlers();
 		initAcctHandlers();
 		setupAdapters();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
-	}
-
-	protected void initEmailHandlers() {
-		EditText email = (EditText) findViewById(R.id.edit_email);
-
-		if (email == null) {
-			Log.i(TAG, "it is null?");
-			return;
-		} else {
-			Log.i(TAG, "it is NOT null");
-		}
-
-		// set saved value
-		final SharedPreferences sp = getSharedPreferences(PREF_FILE,
-				MODE_PRIVATE);
-		email.setText(sp.getString(SAVED_EMAIL, "crackNNNN@buxfer.com"));
-
-		email.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				SharedPreferences.Editor edit = sp.edit();
-				edit.putString(SAVED_EMAIL, s.toString());
-				edit.commit();
-			}
-		});
 	}
 
 	protected void initTagsHandlers() {
@@ -232,30 +201,26 @@ public class MainActivity extends FragmentActivity {
 		final SharedPreferences sp = getSharedPreferences(PREF_FILE,
 				MODE_PRIVATE);
 
-		// deal to start email client
-		// EditText email = (EditText) findViewById(R.id.edit_email);
-		// Intent emailIntent = new Intent(Intent.ACTION_SEND);
-		// emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {
-		// email.getText()
-		// .toString() });
-		// emailIntent.putExtra(Intent.EXTRA_SUBJECT, "expense");
-		//
 		String transactions = sp.getString(SAVED_TRANSACTIONS, "");
 		if (TextUtils.isEmpty(transactions)) {
 			Log.d(TAG, "nothing to push");
 			return;
 		}
-		//
-		// emailIntent.putExtra(Intent.EXTRA_TEXT, transactions);
-		// emailIntent.setType("plain/text");
-		// startActivity(Intent.createChooser(emailIntent,
-		// getString(R.string.email_prompt)));
+		
 		RequestParams params = new RequestParams();
 		params.put("format", "sms");
 		params.put("text", transactions);
 
 		APIClient.post("add_transaction", params,
 				new JsonHttpResponseHandler() {
+
+					@Override
+					public void onStart() {
+						super.onStart();
+						getSupportActionBar();
+						setSupportProgressBarIndeterminateVisibility(true);
+						setButtonsEnabled(false);
+					}
 
 					@Override
 					public void onSuccess(int statusCode, JSONObject response) {
@@ -266,22 +231,40 @@ public class MainActivity extends FragmentActivity {
 					@Override
 					public void onFinish() {
 						setupCounter();
-						// TODO Auto-generated method stub
+						setButtonsEnabled(true);
+						getSupportActionBar();
+						setSupportProgressBarIndeterminateVisibility(false);
 						super.onFinish();
 					}
 
-					@Override
+					/*@Override
 					public void onFailure(Throwable error, String content) {
 						// TODO Auto-generated method stub
 						super.onFailure(error, content);
+						Log.e(TAG, "fail? "+ error.getLocalizedMessage());
+						Log.e(TAG, "fail? "+ content);
+					}*/
+					
+					@Override
+					public void onFailure(Throwable e, JSONObject errorResponse) {
+						String message = APIClient.handleError(errorResponse);
+						if (!TextUtils.isEmpty(message)) {
+							validation_error = message;
+							showDialog();
+						}
+						
+						Log.e(TAG, "fail? "+ e.getLocalizedMessage());
+						super.onFailure(e, errorResponse);
 					}
 
-					@Override
+					/*@Override
 					protected void handleFailureMessage(Throwable e,
 							String responseBody) {
 						// TODO Auto-generated method stub
 						super.handleFailureMessage(e, responseBody);
-					}
+						Log.e(TAG, "fail? "+ e.getLocalizedMessage());
+						Log.e(TAG, "fail? "+ responseBody);
+					}*/
 
 				});
 
@@ -343,6 +326,7 @@ public class MainActivity extends FragmentActivity {
 			edit.putString(SAVED_TRANSACTIONS, existing);
 			edit.commit();
 		}
+		setupCounter();
 
 		EditText amount = (EditText) findViewById(R.id.edit_amount);
 		amount.setText("");
@@ -351,7 +335,6 @@ public class MainActivity extends FragmentActivity {
 		if (pushing) {
 			pushTransactions();
 		}
-		setupCounter();
 	}
 
 	/**
@@ -370,9 +353,9 @@ public class MainActivity extends FragmentActivity {
 		String now = format.format(new Date());
 
 		String result = desc.getText().toString().trim() + " "
-				+ amount.getText().toString() + " tags:"
-				+ tags.getText().toString() + " acct:"
-				+ acct.getText().toString() + " date:" + now;
+				+ amount.getText().toString().trim() + " tags:"
+				+ tags.getText().toString().trim() + " acct:"
+				+ acct.getText().toString().trim() + " date:" + now;
 
 		return result;
 	}
@@ -415,7 +398,7 @@ public class MainActivity extends FragmentActivity {
 
 		if (new_item != null) {
 			SharedPreferences.Editor edit = sp.edit();
-			edit.putString(new_item, "");
+			edit.putString(new_item.trim(), "");
 			edit.commit();
 		}
 
@@ -434,7 +417,7 @@ public class MainActivity extends FragmentActivity {
 			tag = sp.getString(desc, null);
 		} else {
 			SharedPreferences.Editor edit = sp.edit();
-			edit.putString(desc, tag);
+			edit.putString(desc.trim(), tag.trim());
 			edit.commit();
 		}
 
@@ -452,7 +435,7 @@ public class MainActivity extends FragmentActivity {
 		// check amount
 		edit = (EditText) findViewById(R.id.edit_amount);
 		tmp = edit.getText().toString();
-		if (tmp == null || tmp.length() == 0) {
+		if (TextUtils.isEmpty(tmp)) {
 			this.validation_error += "\n";
 			this.validation_error = this.getString(R.string.error_amount_empty);
 			result = false;
@@ -461,7 +444,7 @@ public class MainActivity extends FragmentActivity {
 		// check description
 		edit = (EditText) findViewById(R.id.edit_desc);
 		tmp = edit.getText().toString();
-		if (tmp == null || tmp.length() == 0) {
+		if (TextUtils.isEmpty(tmp)) {
 			this.validation_error += "\n";
 			this.validation_error += this.getString(R.string.error_desc_empty);
 			result = false;
@@ -470,7 +453,7 @@ public class MainActivity extends FragmentActivity {
 		// check tags
 		edit = (EditText) findViewById(R.id.edit_tags);
 		tmp = edit.getText().toString();
-		if (tmp == null || tmp.length() == 0) {
+		if (TextUtils.isEmpty(tmp)) {
 			this.validation_error += "\n";
 			this.validation_error += this.getString(R.string.error_tags_empty);
 			result = false;
@@ -488,4 +471,11 @@ public class MainActivity extends FragmentActivity {
 
 		return result;
 	}
+	
+	private void setButtonsEnabled(boolean enabled) {
+		_buttonPush.setEnabled(enabled);
+		_buttonSave.setEnabled(enabled);
+	}
+	
+	
 }

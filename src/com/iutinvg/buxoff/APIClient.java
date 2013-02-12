@@ -57,6 +57,18 @@ public class APIClient {
 		return null;
 	}
 
+	public static String handleError(JSONObject response) {
+		try {
+			JSONObject obj = response.getJSONObject("error");
+			String message = obj.getString("message");
+			Log.e(TAG, "error: " + message);
+			return message; 
+		} catch (Exception e) {
+			Log.e(TAG, e.getLocalizedMessage());
+		}
+		return null;
+	}
+
 	private static String getAbsoluteUrl(String command) {
 		return ROOT_URL + command + ".json";
 	}
