@@ -42,7 +42,7 @@ public class APIClient {
 			AsyncHttpResponseHandler responseHandler) {
 		client.post(getAbsoluteUrlWithToken(command), params, responseHandler);
 	}
-
+	
 	public static JSONObject handleResponse(JSONObject response) {
 		try {
 			JSONObject obj = response.getJSONObject("response");

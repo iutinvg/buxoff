@@ -3,8 +3,6 @@ package com.iutinvg.buxoff;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
 import org.json.JSONObject;
 
@@ -31,43 +29,49 @@ import com.loopj.android.http.RequestParams;
 public class MainActivity extends SherlockFragmentActivity {
 	private final static String TAG = "MainActivity";
 
-	private final static String PREF_FILE = "com.whirix.buxoff.pref";
-	private final static String SAVED_LAST_TAGS = "com.whirix.buxoff.tags";
-	private final static String SAVED_LAST_DESC = "com.whirix.buxoff.desc";
-	private final static String SAVED_LAST_ACCT = "com.whirix.buxoff.acct";
-	private final static String SAVED_TRANSACTIONS = "com.whirix.buxoff.transactions";
-
-	// to store the tags
-	private final static String PREF_DESC = "com.whirix.buxoff.all_desc";
-	private final static String PREF_TAGS = "com.whirix.buxoff.all_tags";
-	private final static String PREF_ACCT = "com.whirix.buxoff.all_accounts";
-	private final static String PREF_RULES = "com.whirix.buxoff.rules";
-
 	// the error message to show in validation error dialog
 	private String validation_error;
-	
+
 	private Button _buttonSave;
 	private Button _buttonPush;
+	private AutoCompleteTextView _tags;
+	private AutoCompleteTextView _desc;
+	private AutoCompleteTextView _acct;
+	private EditText _amount;
+	private TextView _counter;
+
+	private Storage _storage;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_main);
-		
+
 		getSupportActionBar();
 		setSupportProgressBarIndeterminateVisibility(false);
-		
-		_buttonSave = (Button)findViewById(R.id.button_save);
-		_buttonPush = (Button)findViewById(R.id.button_push);
-		APIClient.token(this, ""); // logout
-		
+
+		_buttonSave = (Button) findViewById(R.id.button_save);
+		_buttonPush = (Button) findViewById(R.id.button_push);
+		_tags = (AutoCompleteTextView) findViewById(R.id.edit_tags);
+		_desc = (AutoCompleteTextView) findViewById(R.id.edit_desc);
+		_acct = (AutoCompleteTextView) findViewById(R.id.edit_acct);
+		_amount = (EditText) findViewById(R.id.edit_amount);
+		_counter = (TextView) findViewById(R.id.text_counter);
+
+		//APIClient.token(this, ""); // logout
+
 		APIClient.initialize(this);
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
+		
+		//String a = null;
+		//a.length();
+
+		_storage = new Storage(this);
 
 		if (!APIClient.isAuthenticated()) {
 			Intent i = new Intent(this, LoginActivity.class);
@@ -80,17 +84,16 @@ public class MainActivity extends SherlockFragmentActivity {
 		initTagsHandlers();
 		initAcctHandlers();
 		setupAdapters();
+		
+		
 	}
 
 	protected void initTagsHandlers() {
-		AutoCompleteTextView tags = (AutoCompleteTextView) findViewById(R.id.edit_tags);
-
 		// set saved value
-		final SharedPreferences sp = getSharedPreferences(PREF_FILE,
+		final SharedPreferences sp = getSharedPreferences(Storage.PREF_FILE,
 				MODE_PRIVATE);
-		tags.setText(sp.getString(SAVED_LAST_TAGS, ""));
-
-		tags.addTextChangedListener(new TextWatcher() {
+		_tags.setText(sp.getString(Storage.SAVED_LAST_TAGS, ""));
+		_tags.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
@@ -105,21 +108,19 @@ public class MainActivity extends SherlockFragmentActivity {
 			@Override
 			public void afterTextChanged(Editable s) {
 				SharedPreferences.Editor edit = sp.edit();
-				edit.putString(SAVED_LAST_TAGS, s.toString());
+				edit.putString(Storage.SAVED_LAST_TAGS, s.toString());
 				edit.commit();
 			}
 		});
 	}
 
 	protected void initDescHandlers() {
-		AutoCompleteTextView desc = (AutoCompleteTextView) findViewById(R.id.edit_desc);
-
 		// set saved value
-		final SharedPreferences sp = getSharedPreferences(PREF_FILE,
+		final SharedPreferences sp = getSharedPreferences(Storage.PREF_FILE,
 				MODE_PRIVATE);
-		desc.setText(sp.getString(SAVED_LAST_DESC, "buxoff"));
+		_desc.setText(sp.getString(Storage.SAVED_LAST_DESC, "buxoff"));
 
-		desc.addTextChangedListener(new TextWatcher() {
+		_desc.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
@@ -134,28 +135,25 @@ public class MainActivity extends SherlockFragmentActivity {
 			@Override
 			public void afterTextChanged(Editable s) {
 				SharedPreferences.Editor edit = sp.edit();
-				edit.putString(SAVED_LAST_DESC, s.toString());
+				edit.putString(Storage.SAVED_LAST_DESC, s.toString());
 				edit.commit();
 
 				// also we will try to find a rule for that
-				String possible_tag = rule(s.toString(), null);
+				String possible_tag = _storage.rule(s.toString(), null);
 				if (possible_tag != null) {
-					EditText tags = (EditText) findViewById(R.id.edit_tags);
-					tags.setText(possible_tag);
+					_tags.setText(possible_tag);
 				}
 			}
 		});
 	}
 
 	protected void initAcctHandlers() {
-		AutoCompleteTextView acct = (AutoCompleteTextView) findViewById(R.id.edit_acct);
-
 		// set saved value
-		final SharedPreferences sp = getSharedPreferences(PREF_FILE,
+		final SharedPreferences sp = getSharedPreferences(Storage.PREF_FILE,
 				MODE_PRIVATE);
-		acct.setText(sp.getString(SAVED_LAST_ACCT, ""));
+		_acct.setText(sp.getString(Storage.SAVED_LAST_ACCT, ""));
 
-		acct.addTextChangedListener(new TextWatcher() {
+		_acct.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
@@ -170,7 +168,7 @@ public class MainActivity extends SherlockFragmentActivity {
 			@Override
 			public void afterTextChanged(Editable s) {
 				SharedPreferences.Editor edit = sp.edit();
-				edit.putString(SAVED_LAST_ACCT, s.toString());
+				edit.putString(Storage.SAVED_LAST_ACCT, s.toString());
 				edit.commit();
 			}
 		});
@@ -183,30 +181,29 @@ public class MainActivity extends SherlockFragmentActivity {
 	}
 
 	protected void setupCounter() {
-		final SharedPreferences sp = getSharedPreferences(PREF_FILE,
+		final SharedPreferences sp = getSharedPreferences(Storage.PREF_FILE,
 				MODE_PRIVATE);
-		String transactions = sp.getString(SAVED_TRANSACTIONS, "");
-		TextView counter = (TextView) findViewById(R.id.text_counter);
+		String transactions = sp.getString(Storage.SAVED_TRANSACTIONS, "");
 
 		if (transactions == "") {
-			counter.setVisibility(View.INVISIBLE);
+			_counter.setVisibility(View.INVISIBLE);
 		} else {
 			String[] lines = transactions.split("\r\n|\r|\n");
-			counter.setText(String.format("%d", lines.length));
-			counter.setVisibility(View.VISIBLE);
+			_counter.setText(String.format("%d", lines.length));
+			_counter.setVisibility(View.VISIBLE);
 		}
 	}
 
 	protected void pushTransactions() {
-		final SharedPreferences sp = getSharedPreferences(PREF_FILE,
+		final SharedPreferences sp = getSharedPreferences(Storage.PREF_FILE,
 				MODE_PRIVATE);
 
-		String transactions = sp.getString(SAVED_TRANSACTIONS, "");
+		String transactions = sp.getString(Storage.SAVED_TRANSACTIONS, "");
 		if (TextUtils.isEmpty(transactions)) {
 			Log.d(TAG, "nothing to push");
 			return;
 		}
-		
+
 		RequestParams params = new RequestParams();
 		params.put("format", "sms");
 		params.put("text", transactions);
@@ -237,14 +234,14 @@ public class MainActivity extends SherlockFragmentActivity {
 						super.onFinish();
 					}
 
-					/*@Override
-					public void onFailure(Throwable error, String content) {
-						// TODO Auto-generated method stub
-						super.onFailure(error, content);
-						Log.e(TAG, "fail? "+ error.getLocalizedMessage());
-						Log.e(TAG, "fail? "+ content);
-					}*/
-					
+					/*
+					 * @Override public void onFailure(Throwable error, String
+					 * content) { // TODO Auto-generated method stub
+					 * super.onFailure(error, content); Log.e(TAG, "fail? "+
+					 * error.getLocalizedMessage()); Log.e(TAG, "fail? "+
+					 * content); }
+					 */
+
 					@Override
 					public void onFailure(Throwable e, JSONObject errorResponse) {
 						String message = APIClient.handleError(errorResponse);
@@ -252,19 +249,18 @@ public class MainActivity extends SherlockFragmentActivity {
 							validation_error = message;
 							showDialog();
 						}
-						
-						Log.e(TAG, "fail? "+ e.getLocalizedMessage());
+
+						Log.e(TAG, "fail? " + e.getLocalizedMessage());
 						super.onFailure(e, errorResponse);
 					}
 
-					/*@Override
-					protected void handleFailureMessage(Throwable e,
-							String responseBody) {
-						// TODO Auto-generated method stub
-						super.handleFailureMessage(e, responseBody);
-						Log.e(TAG, "fail? "+ e.getLocalizedMessage());
-						Log.e(TAG, "fail? "+ responseBody);
-					}*/
+					/*
+					 * @Override protected void handleFailureMessage(Throwable
+					 * e, String responseBody) { // TODO Auto-generated method
+					 * stub super.handleFailureMessage(e, responseBody);
+					 * Log.e(TAG, "fail? "+ e.getLocalizedMessage()); Log.e(TAG,
+					 * "fail? "+ responseBody); }
+					 */
 
 				});
 
@@ -277,10 +273,10 @@ public class MainActivity extends SherlockFragmentActivity {
 			JSONObject obj = APIClient.handleResponse(response);
 			if (obj != null) {
 				// clear saved transactions
-				SharedPreferences sp = getSharedPreferences(PREF_FILE,
+				SharedPreferences sp = getSharedPreferences(Storage.PREF_FILE,
 						MODE_PRIVATE);
 				SharedPreferences.Editor edit = sp.edit();
-				edit.putString(SAVED_TRANSACTIONS, "");
+				edit.putString(Storage.SAVED_TRANSACTIONS, "");
 				edit.commit();
 			} else {
 				errorMessage = "can't parse server response";
@@ -316,21 +312,20 @@ public class MainActivity extends SherlockFragmentActivity {
 		if (valid) {
 			String transaction = getTransactionString();
 
-			final SharedPreferences sp = getSharedPreferences(PREF_FILE,
-					MODE_PRIVATE);
-			String existing = sp.getString(SAVED_TRANSACTIONS, "");
+			final SharedPreferences sp = getSharedPreferences(
+					Storage.PREF_FILE, MODE_PRIVATE);
+			String existing = sp.getString(Storage.SAVED_TRANSACTIONS, "");
 
 			existing = existing + transaction + "\n";
 
 			SharedPreferences.Editor edit = sp.edit();
-			edit.putString(SAVED_TRANSACTIONS, existing);
+			edit.putString(Storage.SAVED_TRANSACTIONS, existing);
 			edit.commit();
 		}
 		setupCounter();
 
-		EditText amount = (EditText) findViewById(R.id.edit_amount);
-		amount.setText("");
-		amount.requestFocus();
+		_amount.setText("");
+		_amount.requestFocus();
 
 		if (pushing) {
 			pushTransactions();
@@ -343,98 +338,51 @@ public class MainActivity extends SherlockFragmentActivity {
 	 * @return a string to insert in email message
 	 */
 	protected String getTransactionString() {
-		EditText amount = (EditText) findViewById(R.id.edit_amount);
-		AutoCompleteTextView tags = (AutoCompleteTextView) findViewById(R.id.edit_tags);
-		AutoCompleteTextView desc = (AutoCompleteTextView) findViewById(R.id.edit_desc);
-		AutoCompleteTextView acct = (AutoCompleteTextView) findViewById(R.id.edit_acct);
-
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:dd:ss",
 				Locale.getDefault());
 		String now = format.format(new Date());
 
-		String result = desc.getText().toString().trim() + " "
-				+ amount.getText().toString().trim() + " tags:"
-				+ tags.getText().toString().trim() + " acct:"
-				+ acct.getText().toString().trim() + " date:" + now;
+		String result = _desc.getText().toString().trim() + " "
+				+ _amount.getText().toString().trim() + " tags:"
+				+ _tags.getText().toString().trim() + " acct:"
+				+ _acct.getText().toString().trim() + " date:" + now;
 
 		return result;
 	}
 
 	protected void setupAdapters() {
-		AutoCompleteTextView tags = (AutoCompleteTextView) findViewById(R.id.edit_tags);
-		AutoCompleteTextView desc = (AutoCompleteTextView) findViewById(R.id.edit_desc);
-		AutoCompleteTextView acct = (AutoCompleteTextView) findViewById(R.id.edit_acct);
-
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, autocompletes(null,
-						PREF_DESC));
-		desc.setAdapter(adapter);
+				android.R.layout.simple_list_item_1, _storage.autocompletes(
+						null, Storage.PREF_DESC));
+		_desc.setAdapter(adapter);
 
 		adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, autocompletes(null,
-						PREF_TAGS));
-		tags.setAdapter(adapter);
+				android.R.layout.simple_list_item_1, _storage.autocompletes(
+						null, Storage.PREF_TAGS));
+		_tags.setAdapter(adapter);
 
 		adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, autocompletes(null,
-						PREF_ACCT));
-		acct.setAdapter(adapter);
+				android.R.layout.simple_list_item_1, _storage.autocompletes(
+						null, Storage.PREF_ACCT));
+		_acct.setAdapter(adapter);
 	}
 
 	protected void updateRules() {
-		AutoCompleteTextView tags = (AutoCompleteTextView) findViewById(R.id.edit_tags);
-		AutoCompleteTextView desc = (AutoCompleteTextView) findViewById(R.id.edit_desc);
-		AutoCompleteTextView acct = (AutoCompleteTextView) findViewById(R.id.edit_acct);
-
 		// save history before sending
-		autocompletes(desc.getText().toString(), PREF_DESC);
-		autocompletes(tags.getText().toString(), PREF_TAGS);
-		autocompletes(acct.getText().toString(), PREF_ACCT);
-		rule(desc.getText().toString(), tags.getText().toString());
-	}
-
-	protected String[] autocompletes(String new_item, String pref_id) {
-		final SharedPreferences sp = getSharedPreferences(pref_id, MODE_PRIVATE);
-
-		if (new_item != null) {
-			SharedPreferences.Editor edit = sp.edit();
-			edit.putString(new_item.trim(), "");
-			edit.commit();
-		}
-
-		Map<String, ?> all = sp.getAll();
-		Set<String> keys = all.keySet();
-
-		return keys.toArray(new String[keys.size()]);
-	}
-
-	// get/set tag for description
-	protected String rule(String desc, String tag) {
-		final SharedPreferences sp = getSharedPreferences(PREF_RULES,
-				MODE_PRIVATE);
-
-		if (tag == null) {
-			tag = sp.getString(desc, null);
-		} else {
-			SharedPreferences.Editor edit = sp.edit();
-			edit.putString(desc.trim(), tag.trim());
-			edit.commit();
-		}
-
-		return tag;
+		_storage.autocompletes(_desc.getText().toString(), Storage.PREF_DESC);
+		_storage.autocompletes(_tags.getText().toString(), Storage.PREF_TAGS);
+		_storage.autocompletes(_acct.getText().toString(), Storage.PREF_ACCT);
+		_storage.rule(_desc.getText().toString(), _tags.getText().toString());
 	}
 
 	protected Boolean validate() {
 		String tmp;
-		EditText edit;
-
 		Boolean result = true;
 
 		this.validation_error = "";
 
 		// check amount
-		edit = (EditText) findViewById(R.id.edit_amount);
-		tmp = edit.getText().toString();
+		tmp = _amount.getText().toString();
 		if (TextUtils.isEmpty(tmp)) {
 			this.validation_error += "\n";
 			this.validation_error = this.getString(R.string.error_amount_empty);
@@ -442,8 +390,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		}
 
 		// check description
-		edit = (EditText) findViewById(R.id.edit_desc);
-		tmp = edit.getText().toString();
+		tmp = _desc.getText().toString();
 		if (TextUtils.isEmpty(tmp)) {
 			this.validation_error += "\n";
 			this.validation_error += this.getString(R.string.error_desc_empty);
@@ -451,8 +398,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		}
 
 		// check tags
-		edit = (EditText) findViewById(R.id.edit_tags);
-		tmp = edit.getText().toString();
+		tmp = _tags.getText().toString();
 		if (TextUtils.isEmpty(tmp)) {
 			this.validation_error += "\n";
 			this.validation_error += this.getString(R.string.error_tags_empty);
@@ -460,8 +406,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		}
 
 		// check account
-		edit = (EditText) findViewById(R.id.edit_acct);
-		tmp = edit.getText().toString();
+		tmp = _acct.getText().toString();
 		if (tmp == null || tmp.length() == 0) {
 			this.validation_error += "\n";
 			this.validation_error += this
@@ -471,11 +416,10 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		return result;
 	}
-	
+
 	private void setButtonsEnabled(boolean enabled) {
 		_buttonPush.setEnabled(enabled);
 		_buttonSave.setEnabled(enabled);
 	}
-	
-	
+
 }

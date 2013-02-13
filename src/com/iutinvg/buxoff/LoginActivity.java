@@ -8,6 +8,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -39,6 +40,8 @@ public class LoginActivity extends Activity {
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
+	
+	private HandleTagTask _tagsTask = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -195,6 +198,54 @@ public class LoginActivity extends Activity {
 			public void onSuccess(int statusCode, JSONObject response) {
 				Log.d(TAG, "login: " + response.toString());
 				handleResponse(response);
+				requestTags();
+				super.onSuccess(statusCode, response);
+			}
+
+			@Override
+			public void onFailure(Throwable e, JSONObject errorResponse) {
+				Log.d(TAG, e.getLocalizedMessage());
+				super.onFailure(e, errorResponse);
+			}
+
+			@Override
+			public void onFailure(Throwable e, JSONArray errorResponse) {
+				Log.d(TAG, e.getLocalizedMessage());
+				super.onFailure(e, errorResponse);
+			}
+
+			@Override
+			protected void handleFailureMessage(Throwable e, String responseBody) {
+				Log.d(TAG, e.getLocalizedMessage());
+				super.handleFailureMessage(e, responseBody);
+			}
+
+			@Override
+			public void onFailure(Throwable error, String content) {
+				Log.d(TAG, error.getLocalizedMessage());
+				Log.d(TAG, content);
+				super.onFailure(error, content);
+			}
+
+			/*@Override
+			public void onFinish() {
+				showProgress(false);
+				finish();
+				super.onFinish();
+			}*/
+
+		});
+	}
+	
+	private void requestTags() {
+		Log.d(TAG, "start getting tags");
+		mLoginStatusMessageView.setText(R.string.login_progress_syncing_tags);
+		APIClient.get("tags", null, new JsonHttpResponseHandler() {
+
+			@Override
+			public void onSuccess(int statusCode, JSONObject response) {
+				Log.d(TAG, "tags: " + response.toString());
+				handleTags(response);
 				super.onSuccess(statusCode, response);
 			}
 
@@ -225,8 +276,6 @@ public class LoginActivity extends Activity {
 
 			@Override
 			public void onFinish() {
-				showProgress(false);
-				finish();
 				super.onFinish();
 			}
 
@@ -245,6 +294,63 @@ public class LoginActivity extends Activity {
 			Log.e(TAG, e.getLocalizedMessage());
 			// TODO show error to user??? "Unrecognized server response."
 		}
+	}
+
+	private void handleTags(JSONObject response) {
+		_tagsTask = new HandleTagTask();
+		_tagsTask.execute(response);
+	}
+	
+	private class HandleTagTask extends AsyncTask<JSONObject, Void, Boolean> {
+
+		@Override
+		protected Boolean doInBackground(JSONObject... params) {
+			Log.d(TAG, "async task started");
+			try {
+				JSONObject obj = APIClient.handleResponse(params[0]);
+				if (obj!=null) {
+					Storage storage = new Storage(getBaseContext());
+					JSONArray tags = obj.getJSONArray("tags");
+					//Log.d(TAG, tags.toString());
+					for (int i = 0; i < tags.length(); i++) {
+						JSONObject tag = tags.getJSONObject(i);
+						Log.d(TAG, tag.toString());
+						this.handleSingleTag(storage, tag);
+					}
+				}
+			} catch (JSONException e) {
+				Log.e(TAG, e.getLocalizedMessage());
+			}
+			
+			return true;
+		}
+		
+		@Override
+		protected void onPostExecute(final Boolean success) {
+			Log.d(TAG, "async task finished");
+			_tagsTask = null;
+			showProgress(false);
+
+			if (success) {
+				finish();
+			}
+		}
+		
+		
+		private void handleSingleTag(Storage storage, JSONObject tag) throws JSONException {
+			tag = tag.getJSONObject("key-tag");
+			
+			String desc = null;
+			String name = tag.getString("name");
+			storage.autocompletes(name, Storage.PREF_TAGS);
+			
+			if (tag.has("keywords")) {
+				desc = tag.getString("keywords");
+				storage.autocompletes(desc, Storage.PREF_DESC);
+				storage.rule(desc, name);
+			}
+		}
+		
 	}
 
 }
