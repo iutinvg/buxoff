@@ -22,6 +22,8 @@
     <string name="button_save_text">Save</string>
     <string name="button_push_text">Save &amp; Push</string>
     
+    <string name="menu_logout">Logout</string>
+    
     <!-- dialog -->
     <string name="error_alert_dialog_ok">OK</string>
     <string name="error_alert_dialog_title">Validation Error</string>

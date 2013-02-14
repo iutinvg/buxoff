@@ -22,6 +22,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -59,8 +61,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		_amount = (EditText) findViewById(R.id.edit_amount);
 		_counter = (TextView) findViewById(R.id.text_counter);
 
-		//APIClient.token(this, ""); // logout
-
 		APIClient.initialize(this);
 	}
 
@@ -86,6 +86,34 @@ public class MainActivity extends SherlockFragmentActivity {
 		setupAdapters();
 		
 		
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getSupportMenuInflater().inflate(R.menu.activity_main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			return true;
+		case R.id.menu_logout:
+			actionLogout(null);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	public void actionLogout(View view) {
+		APIClient.token(this, "");
+		Intent i = new Intent(this, LoginActivity.class);
+		startActivity(i);
 	}
 
 	protected void initTagsHandlers() {
