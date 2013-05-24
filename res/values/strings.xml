@@ -19,10 +19,17 @@
     <string name="label_acct">Account</string>
     <string name="hint_acct">Account</string>
     
+    <string name="label_email">Email</string>
+    <string name="hint_email">Buxfer Mobile Email</string>
+    
     <string name="button_save_text">Save</string>
     <string name="button_push_text">Save &amp; Push</string>
     
     <string name="menu_logout">Logout</string>
+    <string name="menu_show">Show Saved</string>
+    <string name="menu_help">Help</string>
+    
+    <string name="email_prompt">Email Buxfer With&#8230;</string>
     
     <!-- dialog -->
     <string name="error_alert_dialog_ok">OK</string>
@@ -33,6 +40,7 @@
     <string name="error_desc_empty">Description can\'t be empty</string>
     <string name="error_tags_empty">Enter at least one tag</string>
     <string name="error_account_empty">Account can\'t be empty</string>
+    <string name="error_email_empty">Email can\'t be empty. See Help section to learn how to get it.</string>
     
     <!-- Other -->
     <string name="_desc">desc</string>

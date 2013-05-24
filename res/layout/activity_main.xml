@@ -53,8 +53,8 @@
             android:inputType="textNoSuggestions"
             android:nextFocusDown="@+id/edit_tags"
             android:selectAllOnFocus="true"
-            android:textColor="#000000"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textColor="#000000" />
     </LinearLayout>
 
     <LinearLayout
@@ -161,6 +161,27 @@
                 android:textStyle="bold"
                 android:visibility="invisible" />
         </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            style="@style/FieldLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_email" />
+
+        <EditText
+            android:id="@+id/edit_email"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_email"
+            android:inputType="textEmailAddress"
+            android:selectAllOnFocus="true"
+            android:singleLine="true" />
     </LinearLayout>
 
 </LinearLayout>

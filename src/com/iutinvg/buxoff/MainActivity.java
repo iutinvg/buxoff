@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -25,8 +22,6 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 public class MainActivity extends SherlockFragmentActivity {
 	private final static String TAG = "MainActivity";
@@ -34,13 +29,14 @@ public class MainActivity extends SherlockFragmentActivity {
 	// the error message to show in validation error dialog
 	private String validation_error;
 
-	private Button _buttonSave;
-	private Button _buttonPush;
+//	private Button _buttonSave;
+//	private Button _buttonPush;
 	private AutoCompleteTextView _tags;
 	private AutoCompleteTextView _desc;
 	private AutoCompleteTextView _acct;
 	private EditText _amount;
 	private TextView _counter;
+	private EditText _email;
 
 	private Storage _storage;
 
@@ -53,15 +49,14 @@ public class MainActivity extends SherlockFragmentActivity {
 		getSupportActionBar();
 		setSupportProgressBarIndeterminateVisibility(false);
 
-		_buttonSave = (Button) findViewById(R.id.button_save);
-		_buttonPush = (Button) findViewById(R.id.button_push);
+//		_buttonSave = (Button) findViewById(R.id.button_save);
+//		_buttonPush = (Button) findViewById(R.id.button_push);
 		_tags = (AutoCompleteTextView) findViewById(R.id.edit_tags);
 		_desc = (AutoCompleteTextView) findViewById(R.id.edit_desc);
 		_acct = (AutoCompleteTextView) findViewById(R.id.edit_acct);
 		_amount = (EditText) findViewById(R.id.edit_amount);
 		_counter = (TextView) findViewById(R.id.text_counter);
-
-		APIClient.initialize(this);
+		_email = (EditText) findViewById(R.id.edit_email);
 	}
 
 	@Override
@@ -73,19 +68,11 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		_storage = new Storage(this);
 
-		if (!APIClient.isAuthenticated()) {
-			Intent i = new Intent(this, LoginActivity.class);
-			startActivity(i);
-			return;
-		}
-
 		setupCounter();
 		initDescHandlers();
 		initTagsHandlers();
 		initAcctHandlers();
 		setupAdapters();
-		
-		
 	}
 	
 	@Override
@@ -102,18 +89,16 @@ public class MainActivity extends SherlockFragmentActivity {
 		case android.R.id.home:
 			finish();
 			return true;
-		case R.id.menu_logout:
-			actionLogout(null);
+		case R.id.menu_show:
+			actionShow(null);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 	
-	public void actionLogout(View view) {
-		APIClient.token(this, "");
-		Intent i = new Intent(this, LoginActivity.class);
-		startActivity(i);
+	public void actionShow(View view) {
+		// TODO show saved transactions...
 	}
 
 	protected void initTagsHandlers() {
@@ -231,94 +216,35 @@ public class MainActivity extends SherlockFragmentActivity {
 			Log.d(TAG, "nothing to push");
 			return;
 		}
+		
+		// check amount
+		if (TextUtils.isEmpty(_email.getText().toString())) {
+			this.validation_error += "\n";
+			this.validation_error = this.getString(R.string.error_email_empty);
+			showDialog();
+			return;
+		}
 
-		RequestParams params = new RequestParams();
-		params.put("format", "sms");
-		params.put("text", transactions);
 
-		APIClient.post("add_transaction", params,
-				new JsonHttpResponseHandler() {
-
-					@Override
-					public void onStart() {
-						super.onStart();
-						getSupportActionBar();
-						setSupportProgressBarIndeterminateVisibility(true);
-						setButtonsEnabled(false);
-					}
-
-					@Override
-					public void onSuccess(int statusCode, JSONObject response) {
-						handleAddTransaction(response);
-						super.onSuccess(statusCode, response);
-					}
-
-					@Override
-					public void onFinish() {
-						setupCounter();
-						setButtonsEnabled(true);
-						getSupportActionBar();
-						setSupportProgressBarIndeterminateVisibility(false);
-						super.onFinish();
-					}
-
-					/*
-					 * @Override public void onFailure(Throwable error, String
-					 * content) { // TODO Auto-generated method stub
-					 * super.onFailure(error, content); Log.e(TAG, "fail? "+
-					 * error.getLocalizedMessage()); Log.e(TAG, "fail? "+
-					 * content); }
-					 */
-
-					@Override
-					public void onFailure(Throwable e, JSONObject errorResponse) {
-						String message = APIClient.handleError(errorResponse);
-						if (!TextUtils.isEmpty(message)) {
-							validation_error = message;
-							showDialog();
-						}
-
-						Log.e(TAG, "fail? " + e.getLocalizedMessage());
-						super.onFailure(e, errorResponse);
-					}
-
-					/*
-					 * @Override protected void handleFailureMessage(Throwable
-					 * e, String responseBody) { // TODO Auto-generated method
-					 * stub super.handleFailureMessage(e, responseBody);
-					 * Log.e(TAG, "fail? "+ e.getLocalizedMessage()); Log.e(TAG,
-					 * "fail? "+ responseBody); }
-					 */
-
-				});
-
+		
+		// deal to start email client
+		Intent emailIntent = new Intent(Intent.ACTION_SEND);
+		emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] { _email.getText().toString() });
+		emailIntent.putExtra(Intent.EXTRA_SUBJECT, "expense");
+		emailIntent.putExtra(Intent.EXTRA_TEXT, transactions);
+		emailIntent.setType("plain/text");
+		startActivity(Intent.createChooser(emailIntent, getString(R.string.email_prompt)));
+		
+		handleAddTransaction();
 	}
 
-	private void handleAddTransaction(JSONObject response) {
-		String errorMessage = null;
-		Log.d(TAG, response.toString());
-		try {
-			JSONObject obj = APIClient.handleResponse(response);
-			if (obj != null) {
-				// clear saved transactions
-				SharedPreferences sp = getSharedPreferences(Storage.PREF_FILE,
-						MODE_PRIVATE);
-				SharedPreferences.Editor edit = sp.edit();
-				edit.putString(Storage.SAVED_TRANSACTIONS, "");
-				edit.commit();
-			} else {
-				errorMessage = "can't parse server response";
-			}
-		} catch (Exception e) {
-			Log.e(TAG, e.getLocalizedMessage());
-			errorMessage = e.getLocalizedMessage();
-		}
-
-		if (errorMessage != null) {
-			DialogFragment newFragment = ErrorAlertDialogFragment
-					.newInstance(errorMessage);
-			newFragment.show(getSupportFragmentManager(), "push_errors");
-		}
+	private void handleAddTransaction() {
+		// clear saved transactions
+		SharedPreferences sp = getSharedPreferences(Storage.PREF_FILE,
+				MODE_PRIVATE);
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putString(Storage.SAVED_TRANSACTIONS, "");
+		edit.commit();
 	}
 
 	public void saveTransaction(View view) {
@@ -410,7 +336,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		this.validation_error = "";
 
 		// check amount
-		tmp = _amount.getText().toString();
+		tmp = _amount.getText().toString(); 
 		if (TextUtils.isEmpty(tmp)) {
 			this.validation_error += "\n";
 			this.validation_error = this.getString(R.string.error_amount_empty);
@@ -445,9 +371,9 @@ public class MainActivity extends SherlockFragmentActivity {
 		return result;
 	}
 
-	private void setButtonsEnabled(boolean enabled) {
-		_buttonPush.setEnabled(enabled);
-		_buttonSave.setEnabled(enabled);
-	}
+//	private void setButtonsEnabled(boolean enabled) {
+//		_buttonPush.setEnabled(enabled);
+//		_buttonSave.setEnabled(enabled);
+//	}
 
 }
