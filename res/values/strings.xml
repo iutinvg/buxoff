@@ -22,6 +22,8 @@
     <string name="label_email">Email</string>
     <string name="hint_email">Buxfer Mobile Email</string>
     
+    <string name="checkbox_email_secure">Safely remember partial email</string>
+    
     <string name="button_save_text">Save</string>
     <string name="button_push_text">Save &amp; Push</string>
     

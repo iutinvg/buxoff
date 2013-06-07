@@ -13,8 +13,12 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -37,6 +41,7 @@ public class MainActivity extends SherlockFragmentActivity {
 	private EditText _amount;
 	private TextView _counter;
 	private EditText _email;
+	private CheckBox _securityCheckBox;
 
 	private Storage _storage;
 
@@ -57,6 +62,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		_amount = (EditText) findViewById(R.id.edit_amount);
 		_counter = (TextView) findViewById(R.id.text_counter);
 		_email = (EditText) findViewById(R.id.edit_email);
+		_securityCheckBox = (CheckBox) findViewById(R.id.checkbox_secure);
 	}
 
 	@Override
@@ -72,6 +78,8 @@ public class MainActivity extends SherlockFragmentActivity {
 		initDescHandlers();
 		initTagsHandlers();
 		initAcctHandlers();
+		initEmailHandlers();
+		initCheckSecure();
 		setupAdapters();
 	}
 	
@@ -185,6 +193,58 @@ public class MainActivity extends SherlockFragmentActivity {
 				edit.commit();
 			}
 		});
+	}
+
+	protected void initEmailHandlers() {
+		// set saved value
+		_email.setText(_storage.email(null, _storage.secureMode(null)));
+
+		_email.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				_storage.email(s.toString(), _storage.secureMode(null));
+			}
+			
+			
+		});
+		
+		_email.setOnFocusChangeListener(new OnFocusChangeListener() {
+			
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (!hasFocus) {
+					return;
+				}
+				// set position right before @
+				String email = _email.getText().toString();
+				int index = email.indexOf("@");
+				if (index > 0) {
+					_email.setSelection(index);
+				}
+			}
+		});
+	}
+	
+	protected void initCheckSecure() {
+		_securityCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				_storage.secureMode(isChecked);
+				_storage.email(_email.getText().toString(), isChecked);
+			}
+		});
+		_securityCheckBox.setChecked(_storage.secureMode(null));
 	}
 
 	protected void showDialog() {

@@ -13,7 +13,9 @@ public class Storage {
 	public final static String SAVED_LAST_TAGS = "com.whirix.buxoff.tags";
 	public final static String SAVED_LAST_DESC = "com.whirix.buxoff.desc";
 	public final static String SAVED_LAST_ACCT = "com.whirix.buxoff.acct";
+	public final static String SAVED_LAST_EMAIL = "com.whirix.buxoff.email";
 	public final static String SAVED_TRANSACTIONS = "com.whirix.buxoff.transactions";
+	public final static String SAVED_SECURE_MODE = "com.iutinvg.buxoff.secure";
 
 	// to store the tags
 	public final static String PREF_DESC = "com.whirix.buxoff.all_desc";
@@ -23,6 +25,44 @@ public class Storage {
 	
 	public Storage(Context context) {
 		_context = context;
+	}
+	
+	public Boolean secureMode(Boolean secure) {
+		final SharedPreferences sp = _context.getSharedPreferences(Storage.PREF_FILE,
+				Context.MODE_PRIVATE);
+		if (secure==null) {
+			return sp.getBoolean(SAVED_SECURE_MODE, true);
+		} else {
+			SharedPreferences.Editor edit = sp.edit();
+			edit.putBoolean(SAVED_SECURE_MODE, secure);
+			edit.commit();
+		}
+		
+		return secure;
+	}
+	
+	public String email(String newEmail, Boolean dropDigits) {
+		final SharedPreferences sp = _context.getSharedPreferences(Storage.PREF_FILE,
+				Context.MODE_PRIVATE);
+		if (newEmail==null) {
+			String email = sp.getString(Storage.SAVED_LAST_EMAIL, "@m.buxfer.com");
+			if (dropDigits) {
+				return emailWithoutDigits(email);
+			}
+			return email;
+		} else {
+			if (dropDigits) {
+				newEmail = emailWithoutDigits(newEmail);
+			}
+			SharedPreferences.Editor edit = sp.edit();
+			edit.putString(Storage.SAVED_LAST_EMAIL, newEmail);
+			edit.commit();
+		}
+		return newEmail;
+	}
+	
+	private String emailWithoutDigits(String email) {
+		return email.replaceAll("\\d", "");
 	}
 
 	public String rule(String desc, String tag) {

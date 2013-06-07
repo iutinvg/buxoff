@@ -180,8 +180,20 @@
             android:layout_height="wrap_content"
             android:hint="@string/hint_email"
             android:inputType="textEmailAddress"
-            android:selectAllOnFocus="true"
             android:singleLine="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        
+        <CheckBox
+            android:id="@+id/checkbox_secure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:text="@string/checkbox_email_secure"/>
+
     </LinearLayout>
 
 </LinearLayout>
