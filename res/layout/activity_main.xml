@@ -39,6 +39,7 @@
             android:inputType="text|numberDecimal"
             android:nextFocusDown="@+id/edit_desc"
             android:selectAllOnFocus="true"
+            android:drawableRight="@drawable/pricetag"
             android:singleLine="true" >
         </EditText>
 
@@ -50,6 +51,7 @@
             android:completionThreshold="1"
             android:hint="@string/hint_desc"
             android:imeOptions="actionNext"
+            android:drawableRight="@drawable/pencil"
             android:inputType="textNoSuggestions"
             android:nextFocusDown="@+id/edit_tags"
             android:selectAllOnFocus="true"
@@ -90,6 +92,7 @@
             android:completionThreshold="1"
             android:hint="@string/hint_tags"
             android:imeOptions="actionNext"
+            android:drawableRight="@drawable/tags"
             android:inputType="textAutoComplete"
             android:nextFocusDown="@+id/edit_acct"
             android:selectAllOnFocus="true"
@@ -103,6 +106,7 @@
             android:completionThreshold="1"
             android:hint="@string/hint_acct"
             android:imeOptions="actionNext"
+            android:drawableRight="@drawable/cards"
             android:inputType="textNoSuggestions"
             android:nextFocusDown="@+id/button_save"
             android:selectAllOnFocus="true"
@@ -126,6 +130,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
+                android:drawableLeft="@drawable/plus"
                 android:onClick="saveTransaction"
                 android:text="@string/button_save_text" />
         </RelativeLayout>
@@ -141,6 +146,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:onClick="saveTransaction"
+                android:drawableLeft="@drawable/action2"
                 android:text="@string/button_push_text" />
 
             <TextView
@@ -180,6 +186,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/hint_email"
             android:inputType="textEmailAddress"
+            android:drawableRight="@drawable/envelope"
             android:singleLine="true" />
     </LinearLayout>
 

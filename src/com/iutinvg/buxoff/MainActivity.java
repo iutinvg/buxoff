@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -33,8 +34,8 @@ public class MainActivity extends SherlockFragmentActivity {
 	// the error message to show in validation error dialog
 	private String validation_error;
 
-//	private Button _buttonSave;
-//	private Button _buttonPush;
+	private Button _buttonSave;
+	private Button _buttonPush;
 	private AutoCompleteTextView _tags;
 	private AutoCompleteTextView _desc;
 	private AutoCompleteTextView _acct;
@@ -54,8 +55,8 @@ public class MainActivity extends SherlockFragmentActivity {
 		getSupportActionBar();
 		setSupportProgressBarIndeterminateVisibility(false);
 
-//		_buttonSave = (Button) findViewById(R.id.button_save);
-//		_buttonPush = (Button) findViewById(R.id.button_push);
+		_buttonSave = (Button) findViewById(R.id.button_save);
+		_buttonPush = (Button) findViewById(R.id.button_push);
 		_tags = (AutoCompleteTextView) findViewById(R.id.edit_tags);
 		_desc = (AutoCompleteTextView) findViewById(R.id.edit_desc);
 		_acct = (AutoCompleteTextView) findViewById(R.id.edit_acct);
@@ -63,6 +64,9 @@ public class MainActivity extends SherlockFragmentActivity {
 		_counter = (TextView) findViewById(R.id.text_counter);
 		_email = (EditText) findViewById(R.id.edit_email);
 		_securityCheckBox = (CheckBox) findViewById(R.id.checkbox_secure);
+		
+//		String a = null;
+//		a.length();
 	}
 
 	@Override
@@ -100,6 +104,12 @@ public class MainActivity extends SherlockFragmentActivity {
 		case R.id.menu_show:
 			actionShow(null);
 			return true;
+		case R.id.menu_save:
+			saveTransaction(_buttonSave);
+			return true;			
+		case R.id.menu_push:
+			saveTransaction(_buttonPush);
+			return true;			
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -297,7 +307,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		
 		handleAddTransaction();
 	}
-
+	
 	private void handleAddTransaction() {
 		// clear saved transactions
 		SharedPreferences sp = getSharedPreferences(Storage.PREF_FILE,

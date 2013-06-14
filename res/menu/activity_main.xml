@@ -1,10 +1,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_save"
+        android:title="@string/button_save_text"
+        android:orderInCategory="100"
+        android:icon="@drawable/plus"
+        android:showAsAction="always" />
+    <item android:id="@+id/menu_push"
+        android:title="@string/button_push_text"
+        android:orderInCategory="101"
+        android:icon="@drawable/action2"
+        android:showAsAction="always" />
     <item android:id="@+id/menu_show"
         android:title="@string/menu_show"
         android:orderInCategory="100"
         android:showAsAction="never" />
     <item android:id="@+id/menu_help"
         android:title="@string/menu_help"
+        android:icon="@drawable/info"
         android:orderInCategory="100"
         android:showAsAction="never" />
 </menu>
