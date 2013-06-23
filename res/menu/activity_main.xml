@@ -2,12 +2,12 @@
     <item android:id="@+id/menu_save"
         android:title="@string/button_save_text"
         android:orderInCategory="100"
-        android:icon="@drawable/plus"
+        android:icon="@drawable/plus_white"
         android:showAsAction="always" />
     <item android:id="@+id/menu_push"
         android:title="@string/button_push_text"
         android:orderInCategory="101"
-        android:icon="@drawable/action2"
+        android:icon="@drawable/action2_white"
         android:showAsAction="always" />
     <item android:id="@+id/menu_show"
         android:title="@string/menu_show"
