@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.iutinvg.buxoff"
+    package="com.sevencrayons.buxoff"
     android:versionCode="1"
     android:versionName="1.0.0" >
 
@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.Buxoff" >
         <activity
-            android:name="com.iutinvg.buxoff.MainActivity"
+            android:name="com.sevencrayons.buxoff.MainActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.iutinvg.buxoff.LoginActivity"
+            android:name="com.sevencrayons.buxoff.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>

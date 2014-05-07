@@ -1,9 +1,8 @@
-package com.iutinvg.buxoff;
+package com.sevencrayons.buxoff;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,11 +21,11 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
+import com.sevencrayons.buxoff.R;
 
 public class MainActivity extends SherlockFragmentActivity {
 	private final static String TAG = "MainActivity";

@@ -1,10 +1,11 @@
-package com.iutinvg.buxoff;
+package com.sevencrayons.buxoff;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import com.sevencrayons.buxoff.R;
 
 public class ErrorAlertDialogFragment extends DialogFragment {
 

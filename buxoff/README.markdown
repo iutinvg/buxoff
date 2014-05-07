@@ -30,6 +30,6 @@ have a free evening: just sitting near the fireplace, taking some cognac (or bee
 laptop and create the expenses report and think about all your life. If it is boring -- call your wife.
 
 #More
-Support page: http://iutinvg.com/buxoff (coming soon)
+Support page: http://sevencrayons.com/buxoff (coming soon)
 
-Play Market App: coming soon
+Play Market App: https://play.google.com/store/apps/details?id=com.sevencrayons.buxoff
