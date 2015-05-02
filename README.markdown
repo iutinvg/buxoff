@@ -1,6 +1,6 @@
 #What?
 Buxoff is short for a Buxfer Offline. And this is yet another client app for the famous
-financial tracker.
+financial tracker. It is just to log your expenses.
 
 There are three main differences from the other clients:
 
@@ -23,11 +23,6 @@ helps you fill the fields. The more you use the app, the more rules it knows.
 Buxoff uses email interface of buxfer.com, thus it doesn't require your buxfer account credentials
 and even Internet connection. And nobody can see your buxfer account using this app if you happy enough
 to lose you mobile.
-
-It is just to log your expenses. Indeed, why do you need all these
-reports when you are drinking beer in Munich? I think you should leave the analytics for the time when you
-have a free evening: just sitting near the fireplace, taking some cognac (or beer again?), you'll open your
-laptop and create the expenses report and think about all your life. If it is boring -- call your wife.
 
 #More
 Support page: http://sevencrayons.com/buxoff
