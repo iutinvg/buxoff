@@ -38,3 +38,5 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+
+base/tests/test.db

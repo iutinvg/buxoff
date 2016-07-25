@@ -1,0 +1,29 @@
+{
+	"paths":{
+            "linux": [],
+            "osx": ["/Users/slava/virtualenvs/smarttrade/bin", "/Users/slava/virtualenvs/smarttrade/lib/python2.7/site-packages"],
+            "windows": []
+    },
+	"folders":[
+		{
+			"path":".",
+			"file_exclude_patterns": ["smarttrade.sublime-workspace"]
+		}
+	],
+    "settings": {
+        "python_interpreter": "/Users/slava/virtualenvs/smarttrade/bin/python",
+        "extra_paths": ["/Users/slava/virtualenvs/smarttrade/lib/python2.7/site-packages"],
+        "line_padding_bottom": 3,
+        "flake8lint": {
+            "python_interpreter": "/Users/slava/virtualenvs/smarttrade/bin/python",
+            "gutter_marks": "circle",
+            "ignore": ["E501", "F403",
+                       "D100", "D101", "D102", "D103", "D105",
+                       "D200", "D202", "D203", "D204", "D205", "D208", "D210", "D211",
+                       "D400", "D401", "D403",
+                       "I100", "I101",
+                       "E731",
+                       "W503"]
+        }
+    }
+}
