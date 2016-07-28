@@ -1,6 +1,5 @@
 #include "Record.h"
 
-
 using namespace Buxoff;
 
 Record::Record(string amount, string description, Tags tags, string account):

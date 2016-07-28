@@ -1,6 +1,5 @@
 CXXFLAGS=-c -Wall -std=c++0x -O2 -Ideps/leveldb/include/
-SOURCES=Storage.cc \
-	Record.cc
+SOURCES=$(wildcard *.cc)
 
 PLATFORM_OUTDIR=x86_64
 
@@ -9,8 +8,7 @@ STATIC=$(PLATFORM_OUTDIR)/libbuxoff.a
 LIBS=-Ldeps/leveldb/out-static/ -lleveldb -L$(PLATFORM_OUTDIR) -lbuxoff
 
 
-TSOURCES=tests/tests_record.cc \
-	tests/tests_storage.cc
+TSOURCES=$(wildcard tests/*.cc)
 TOBJECTS=$(TSOURCES:.cc=.o)
 TEXE=tests/tests
 
