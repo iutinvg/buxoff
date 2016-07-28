@@ -7,3 +7,6 @@
 [submodule "base/deps/catch"]
 	path = base/deps/catch
 	url = https://github.com/philsquared/Catch.git
+[submodule "base/deps/json"]
+	path = base/deps/json
+	url = https://github.com/nlohmann/json.git

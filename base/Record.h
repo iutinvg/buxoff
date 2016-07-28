@@ -4,7 +4,7 @@
 #include <string>
 #include <set>
 
-#include "deps/json.hpp"
+#include "json.hpp"
 
 
 using namespace std;
