@@ -4,3 +4,6 @@
 [submodule "base/deps/leveldb"]
 	path = base/deps/leveldb
 	url = https://github.com/google/leveldb.git
+[submodule "base/deps/catch"]
+	path = base/deps/catch
+	url = https://github.com/philsquared/Catch.git

@@ -1,4 +1,4 @@
-CXXFLAGS=-c -Wall -std=c++0x -O2 -Ideps/leveldb/include/
+CXXFLAGS=-c -Wall -std=c++0x -O2 -Ideps/leveldb/include/ -Ideps/catch/include/
 SOURCES=$(wildcard *.cc)
 
 PLATFORM_OUTDIR=x86_64
