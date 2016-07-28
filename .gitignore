@@ -39,8 +39,9 @@ DerivedData
 *.ipa
 *.xcuserstate
 
-base/tests/test.db
 project.sublime-workspace
 *.o
 *.a
+test.db
+base/tests/tests
 

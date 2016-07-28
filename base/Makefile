@@ -1,5 +1,4 @@
 CXXFLAGS=-c -Wall -std=c++0x -Ideps/leveldb/include/
-LIBS=-Ldeps/leveldb/out-static/ -lleveldb -L. -lbuxoff
 SOURCES=Storage.cc \
 	Record.cc
 
@@ -10,6 +9,7 @@ TSOURCES=tests/tests_record.cc \
 	tests/tests_storage.cc
 TOBJECTS=$(TSOURCES:.cc=.o)
 STATIC=$(PLATFORM_OUTDIR)/libbuxoff.a
+LIBS=-Ldeps/leveldb/out-static/ -lleveldb -L$(PLATFORM_OUTDIR) -lbuxoff
 
 ifeq ($(PLATFORM), IOS)
 # Note: iOS should probably be using libtool, not ar.
@@ -54,7 +54,7 @@ $(PLATFORM_OUTDIR):
 	mkdir $@
 
 tests: $(TOBJECTS) $(STATIC)
-	$(CC) $(TOBJECTS) $(LIBS) -o tests/$@
+	$(CXX) $(TOBJECTS) $(LIBS) -o tests/$@
 	./tests/tests
 
 $(PLATFORM_OUTDIR)/%.o: %.cc
