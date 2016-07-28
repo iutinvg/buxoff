@@ -11,9 +11,6 @@ Storage::Storage(string filename) {
     _options.create_if_missing = true;
     leveldb::Status status = leveldb::DB::Open(_options, filename, &_db);
     assert(status.ok());
-    // string value = "value1";
-    // string key1 = "key1";
-    // status = _db->Put(leveldb::WriteOptions(), key1, "value");
 }
 
 Storage::~Storage() {
@@ -21,13 +18,10 @@ Storage::~Storage() {
 }
 
 Record Storage::get(const string& key) {
-    // cout << key;
     std::string value;
     leveldb::Status status = _db->Get(leveldb::ReadOptions(), key, &value);
     assert(status.ok());
-    // cout << value;
     return Record(json::parse(value));
-    // return nullptr;
 }
 
 void Storage::test(const string& key) {

@@ -40,3 +40,5 @@ DerivedData
 *.xcuserstate
 
 base/tests/test.db
+project.sublime-workspace
+
