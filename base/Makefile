@@ -7,7 +7,6 @@ STATIC_LIBOBJECTS := $(addprefix $(PLATFORM_OUTDIR)/, $(SOURCES:.cc=.o))
 STATIC=$(PLATFORM_OUTDIR)/libbuxoff.a
 LIBS=-Ldeps/leveldb/out-static/ -lleveldb -L$(PLATFORM_OUTDIR) -lbuxoff
 
-
 TSOURCES=$(wildcard tests/*.cc)
 TOBJECTS=$(TSOURCES:.cc=.o)
 TEXE=tests/tests
@@ -71,16 +70,10 @@ $(EXECUTABLE): $(TOBJECTS) $(STATIC)
 
 $(PLATFORM_OUTDIR)/%.o: %.cc
 	$(CXX) $(CXXFLAGS) $< -o $@
-# $(TEXE): $(TOBJECTS)
-# 	$(CXX) $(TOBJECTS) $(LIBS) -o $@
-
-# $(TOBJECTS): $(TSOURCES):
-# 	$(CXX) $(CXXFLAGS) $< -o $@
 
 $(PLATFORM_OUTDIR)/%.o: %.cc
 	$(CXX) $(CXXFLAGS) $< -o $@
 endif
 
 clean:
-	rm -rf $(STATIC) *.o *.a \
-	tests/*.o test.db tests/tests $(PLATFORM_OUTDIR) ios
+	rm -rf tests/*.o test.db tests/tests x86_64 ios
