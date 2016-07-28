@@ -1,3 +1,6 @@
 [submodule "ActionBarSherlock"]
 	path = ActionBarSherlock
 	url = https://github.com/JakeWharton/ActionBarSherlock.git
+[submodule "base/deps/leveldb"]
+	path = base/deps/leveldb
+	url = https://github.com/google/leveldb.git
