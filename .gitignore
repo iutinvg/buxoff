@@ -41,4 +41,6 @@ DerivedData
 
 base/tests/test.db
 project.sublime-workspace
+*.o
+*.a
 
