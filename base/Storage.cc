@@ -1,5 +1,6 @@
 #include <random>
 #include <cassert>
+#include "json.hpp"
 
 #include "Storage.h"
 #include "Record.h"
@@ -23,7 +24,7 @@ Record Storage::get(const string& key) {
     std::string value;
     leveldb::Status status = _db->Get(leveldb::ReadOptions(), key, &value);
     assert(status.ok());
-    return Record(json::parse(value));
+    return Record(nlohmann::json::parse(value));
 }
 
 void Storage::test(const string& key) {

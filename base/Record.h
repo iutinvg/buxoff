@@ -4,11 +4,13 @@
 #include <string>
 #include <set>
 
-#include "json.hpp"
-
+#ifndef NLOHMANN_JSON_HPP
+namespace nlohmann {
+    class json;
+}
+#endif
 
 using namespace std;
-using json = nlohmann::json;
 
 typedef set<string> Tags;
 
@@ -22,7 +24,7 @@ namespace Buxoff {
         string _join_tags(const Tags &tags) const;
     public:
         Record(string amount, string description, Tags tags, string account);
-        Record(json o);
+        Record(nlohmann::json o);
         string get_line() const;
         string get_json_string() const;
     };

@@ -1,10 +1,11 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
-
+#include "json.hpp"
 #include "../Record.h"
 
 
 using namespace Buxoff;
+
 
 TEST_CASE("get_line_N_tags", "[record]") {
     Record r = Record("345.67", "desc", {"tag1", "tag2"}, "cash");
@@ -17,7 +18,7 @@ TEST_CASE("get_line_1_tag", "[record]") {
 }
 
 TEST_CASE("from_json", "[record]") {
-    json o = "{\"acct\":\"cash\",\"amount\":\"345.67\",\"description\":\"desc\",\"tags\":[\"tag1\",\"tag2\"]}"_json;
+    nlohmann::json o = "{\"acct\":\"cash\",\"amount\":\"345.67\",\"description\":\"desc\",\"tags\":[\"tag1\",\"tag2\"]}"_json;
     Record r = Record(o);
     REQUIRE(r.get_line() == "desc 345.67 tags:tag1,tag2 acct:cash");
 }

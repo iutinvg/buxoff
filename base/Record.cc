@@ -1,3 +1,4 @@
+#include "json.hpp"
 #include "Record.h"
 
 using namespace Buxoff;
@@ -9,7 +10,7 @@ Record::Record(string amount, string description, Tags tags, string account):
     _account(account) {
 }
 
-Record::Record(json o):
+Record::Record(nlohmann::json o):
     _amount(o["amount"].get<string>()),
     _description(o["description"].get<string>()),
     _tags(o["tags"].get<Tags>()),
@@ -44,7 +45,7 @@ string Record::_join_tags(const Tags &tags) const {
 }
 
 string Record::get_json_string() const {
-    json j;
+    nlohmann::json j;
     j["amount"] = _amount;
     j["description"] = _description;
     j["tags"] = _tags;
