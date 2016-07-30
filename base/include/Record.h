@@ -15,6 +15,7 @@ using namespace std;
 typedef set<string> Tags;
 
 namespace Buxoff {
+    const string Record_ID_Prefix = "tr_";
     class Record {
         string _amount;
         string _description;
