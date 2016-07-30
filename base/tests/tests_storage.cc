@@ -1,7 +1,7 @@
 #include <set>
 #include "catch.hpp"
-#include "../Storage.h"
-#include "../Record.h"
+#include "Storage.h"
+#include "Record.h"
 
 using namespace Buxoff;
 
