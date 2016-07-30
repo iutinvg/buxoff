@@ -16,23 +16,16 @@ Storage::Storage(string filename) {
     _db.reset(db);
 }
 
-// Storage::~Storage() {
-//     delete _db;
-// }
-
-Record Storage::get(const string& key) {
+string Storage::get_string(const string &key) {
     std::string value;
     leveldb::Status status = _db->Get(leveldb::ReadOptions(), key, &value);
     assert(status.ok());
-    return Record(nlohmann::json::parse(value));
+    return value;
 }
 
-void Storage::test(const string& key) {
-    cout << key;
-    std::string value;
-    leveldb::Status status = _db->Get(leveldb::ReadOptions(), key, &value);
-    assert(status.ok());
-    cout << value;
+Record Storage::get(const string& key) {
+    std::string value = get_string(key);
+    return Record(nlohmann::json::parse(value));
 }
 
 string Storage::put(const Record& record) {
@@ -41,9 +34,13 @@ string Storage::put(const Record& record) {
 
 string Storage::put(const Record& record, const string& key) {
     string value = record.get_json_string();
-    leveldb::Status status = _db->Put(leveldb::WriteOptions(), key, record.get_json_string());
-    assert(status.ok());
+    put(key, value);
     return key;
+}
+
+void Storage::put(const string &key, const string &value) {
+    leveldb::Status status = _db->Put(leveldb::WriteOptions(), key, value);
+    assert(status.ok());
 }
 
 string Storage::random_key(size_t length) {
