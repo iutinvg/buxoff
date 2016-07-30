@@ -1,24 +1,5 @@
 # Build on Macos
-Read:
-https://github.com/hoisie/LevelDB-ObjC
 https://github.com/litl/android-leveldb/blob/master/src/main/jni/Android.mk
-
-make TARGET_OS=IOS
-xcode-select --install
-make TARGET_OS=OS_ANDROID_CROSSCOMPILE
-
-lipo -create
-out-ios-arm/libleveldb.a
-out-ios-x86/libleveldb.a
--output out-ios-universal/libleveldb.a
-
-xcrun -sdk iphoneos c++ -I. -I./include -std=c++0x  -DOS_MACOSX -DLEVELDB_PLATFORM_POSIX -DLEVELDB_ATOMIC_PRESENT -O2 -DNDEBUG -isysroot "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk" -arch armv6 -arch armv7 -arch armv7s -arch arm64 -c util/status.cc -o out-ios-arm/util/status.o
-
-xcrun -sdk iphonesimulator c++ -I. -I./include -std=c++0x  -DOS_MACOSX -DLEVELDB_PLATFORM_POSIX -DLEVELDB_ATOMIC_PRESENT -O2 -DNDEBUG -isysroot "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator9.3.sdk" -arch i686 -arch x86_64 -c port/port_posix.cc -o out-ios-x86/port/port_posix.o
-
-xcrun ar -rs out-ios-arm/libmemenv.a out-ios-arm/helpers/memenv/memenv.o
-
-
 
 #What?
 Buxoff is short for a Buxfer Offline. And this is yet another client app for the famous

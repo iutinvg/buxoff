@@ -9,13 +9,15 @@ using namespace std;
 
 Storage::Storage(string filename) {
     _options.create_if_missing = true;
-    leveldb::Status status = leveldb::DB::Open(_options, filename, &_db);
+    leveldb::DB *db;
+    auto status = leveldb::DB::Open(_options, filename, &db);
     assert(status.ok());
+    _db.reset(db);
 }
 
-Storage::~Storage() {
-    delete _db;
-}
+// Storage::~Storage() {
+//     delete _db;
+// }
 
 Record Storage::get(const string& key) {
     std::string value;

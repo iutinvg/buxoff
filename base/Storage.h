@@ -13,11 +13,11 @@ namespace Buxoff {
     class Record;
 
     class Storage {
-        leveldb::DB *_db;
+        unique_ptr<leveldb::DB> _db;
         leveldb::Options _options;
     public:
         Storage(string filename);
-        ~Storage();
+        // ~Storage();
 
         Record get(const string& key);
         string put(const Record& record);
