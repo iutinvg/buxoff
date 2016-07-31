@@ -3,6 +3,13 @@
 
 using namespace Buxoff;
 
+Record::Record():
+    _amount(""),
+    _description(""),
+    _tags({}),
+    _account("") {
+}
+
 Record::Record(string amount, string description, Tags tags, string account):
     _amount(amount),
     _description(description),

@@ -28,8 +28,36 @@ Record Storage::get(const string& key) {
     return Record(nlohmann::json::parse(value));
 }
 
+RecordsList Storage::get_records() {
+    RecordsList res;
+    auto last = Record_ID_Prefix + "\u02ad";
+
+    unique_ptr<leveldb::Iterator> it(_db->NewIterator(leveldb::ReadOptions()));
+    for (it->Seek(Record_ID_Prefix);
+        it->Valid() && it->key().ToString() < last;
+        it->Next()) {
+        res.push_back(Record(nlohmann::json::parse(it->value().ToString())));
+    }
+    assert(it->status().ok());
+    return res;
+}
+
+int Storage::get_records_count() {
+    auto i = 0;
+    auto last = Record_ID_Prefix + "\u02ad";
+
+    unique_ptr<leveldb::Iterator> it(_db->NewIterator(leveldb::ReadOptions()));
+    for (it->Seek(Record_ID_Prefix);
+        it->Valid() && it->key().ToString() < last;
+        it->Next()) {
+        ++i;
+    }
+    assert(it->status().ok());
+    return i;
+}
+
 string Storage::put(const Record& record) {
-    return put(record, Storage::random_key());
+    return put(record, Record_ID_Prefix + Storage::random_key());
 }
 
 string Storage::put(const Record& record, const string& key) {
@@ -41,6 +69,15 @@ string Storage::put(const Record& record, const string& key) {
 void Storage::put(const string &key, const string &value) {
     leveldb::Status status = _db->Put(leveldb::WriteOptions(), key, value);
     assert(status.ok());
+}
+
+void Storage::__clear() {
+    unique_ptr<leveldb::Iterator> it(_db->NewIterator(leveldb::ReadOptions()));
+    for (it->SeekToFirst(); it->Valid(); it->Next()) {
+        auto s = _db->Delete(leveldb::WriteOptions(), it->key());
+        assert(s.ok());
+    }
+    assert(it->status().ok());
 }
 
 string Storage::random_key(size_t length) {

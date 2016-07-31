@@ -3,6 +3,7 @@
 
 #include <string>
 #include <set>
+#include <vector>
 
 #ifndef NLOHMANN_JSON_HPP
 namespace nlohmann {
@@ -12,10 +13,12 @@ namespace nlohmann {
 
 using namespace std;
 
-typedef set<string> Tags;
 
 namespace Buxoff {
+    typedef set<string> Tags;
+
     const string Record_ID_Prefix = "tr_";
+
     class Record {
         string _amount;
         string _description;
@@ -26,9 +29,12 @@ namespace Buxoff {
     public:
         Record(string amount, string description, Tags tags, string account);
         Record(nlohmann::json o);
+        Record();
         string get_line() const;
         string get_json_string() const;
     };
+
+    typedef vector<Record> RecordsList;
 };
 
 #endif
