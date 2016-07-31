@@ -25,6 +25,7 @@ namespace Buxoff {
 
         string put(const Record& record);
         string put(const Record& record, const string& key);
+        string put(const string& amount, const string& description, const Tags& tags, const string& account);
         void put(const string &key, const string &value);
 
         void __clear();

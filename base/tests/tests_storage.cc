@@ -21,6 +21,18 @@ TEST_CASE("get-put", "[storage]") {
     REQUIRE(r1.get_line() == r2.get_line());
 }
 
+TEST_CASE("get-put-record-props", "[storage]") {
+    auto s = get_clean_storage();
+    string amount{"1"};
+    string desc{"d"};
+    Tags tags{"tag1"};
+    string acct{"c"};
+    string key = s.put(amount, desc, tags, acct);
+    Record r1 = s.get(key);
+    Record r2{amount, desc, tags, acct};
+    REQUIRE(r1.get_line() == r2.get_line());
+}
+
 TEST_CASE("get_records", "[storage]") {
     auto s = get_clean_storage();
 

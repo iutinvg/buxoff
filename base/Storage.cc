@@ -60,6 +60,10 @@ string Storage::put(const Record& record) {
     return put(record, Record_ID_Prefix + Storage::random_key());
 }
 
+string Storage::put(const string& amount, const string& description, const Tags& tags, const string& account) {
+    return put(Record(amount, description, tags, account));
+}
+
 string Storage::put(const Record& record, const string& key) {
     string value = record.get_json_string();
     put(key, value);
