@@ -1,4 +1,7 @@
+#include <numeric>
+
 #include "json.hpp"
+
 #include "Record.h"
 
 using namespace Buxoff;
@@ -31,6 +34,10 @@ string Record::get_line() const {
 }
 
 string Record::_join_tags(const Tags &tags) const {
+    // return accumulate(tags.begin(), tags.end(), string{},
+    //     [](const string& a, const string& b) {
+    //         return a.empty() ? b : a + "," + b;
+    //     });
     if (tags.empty()) {
         return "";
     }
