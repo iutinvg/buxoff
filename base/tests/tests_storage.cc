@@ -8,15 +8,15 @@
 using namespace Buxoff;
 
 TEST_CASE("C-r", "[storage]") {
-    Storage s = Storage("test.db");
+    auto s = Storage("test.db");
     REQUIRE(true);
 }
 
 TEST_CASE("get-put", "[storage]") {
     auto s = get_clean_storage();
-    Record r1 = Record("1", "d", {"tag1"}, "c");
-    string key = s.put(r1);
-    Record r2 = s.get(key);
+    auto r1 = Record("1", "d", {"tag1"}, "c");
+    auto key = s.put(r1);
+    auto r2 = s.get(key);
 
     REQUIRE(r1.get_line() == r2.get_line());
 }
@@ -27,9 +27,9 @@ TEST_CASE("get-put-record-props", "[storage]") {
     string desc{"d"};
     Tags tags{"tag1"};
     string acct{"c"};
-    string key = s.put(amount, desc, tags, acct);
-    Record r1 = s.get(key);
-    Record r2{amount, desc, tags, acct};
+    auto key = s.put(amount, desc, tags, acct);
+    auto r1 = s.get(key);
+    auto r2 = Record{amount, desc, tags, acct};
     REQUIRE(r1.get_line() == r2.get_line());
 }
 
@@ -66,8 +66,9 @@ TEST_CASE("random_key", "[storage]") {
     set<string> c;
     auto num = 10000;
 
+    string s;
     for (auto i = 0; i < num; ++i) {
-        string s = Storage::random_key(10);
+        s = Storage::random_key(10);
         c.insert(s);
     }
 
@@ -75,6 +76,6 @@ TEST_CASE("random_key", "[storage]") {
 }
 
 TEST_CASE("random_key_size", "[storage]") {
-    string s1 = Storage::random_key(20);
+    auto s1 = Storage::random_key(20);
     REQUIRE(s1.size() == 20);
 }

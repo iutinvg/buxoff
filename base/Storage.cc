@@ -29,10 +29,10 @@ Record Storage::get(const string& key) {
 }
 
 RecordsList Storage::get_records() {
-    RecordsList res;
     auto last = Record_ID_Prefix + "\u02ad";
 
     unique_ptr<leveldb::Iterator> it(_db->NewIterator(leveldb::ReadOptions()));
+    RecordsList res;
     for (it->Seek(Record_ID_Prefix);
         it->Valid() && it->key().ToString() < last;
         it->Next()) {
@@ -87,11 +87,11 @@ void Storage::__clear() {
 string Storage::random_key(size_t length) {
     auto randchar = []() -> char
     {
-        const char charset[] =
+        constexpr char charset[] =
         "0123456789"
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         "abcdefghijklmnopqrstuvwxyz";
-        const size_t max_index = (sizeof(charset) - 1);
+        constexpr size_t max_index = (sizeof(charset) - 1);
         return charset[ rand() % max_index ];
     };
     string str(length, 0);
