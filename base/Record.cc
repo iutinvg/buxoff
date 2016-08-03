@@ -29,7 +29,7 @@ Record::Record(nlohmann::json o):
 }
 
 string Record::get_line() const {
-    string tags = _join_tags(_tags);
+    string tags {_join_tags(_tags)};
     return _description + " " + _amount + " tags:" + tags + " acct:" + _account;
 }
 

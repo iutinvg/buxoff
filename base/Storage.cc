@@ -18,13 +18,13 @@ Storage::Storage(string filename) {
 
 string Storage::get_string(const string &key) {
     std::string value;
-    leveldb::Status status = _db->Get(leveldb::ReadOptions(), key, &value);
+    auto status = _db->Get(leveldb::ReadOptions(), key, &value);
     assert(status.ok());
     return value;
 }
 
 Record Storage::get(const string& key) {
-    std::string value = get_string(key);
+    std::string value {get_string(key)};
     return Record(nlohmann::json::parse(value));
 }
 
@@ -65,13 +65,13 @@ string Storage::put(const string& amount, const string& description, const Tags&
 }
 
 string Storage::put(const Record& record, const string& key) {
-    string value = record.get_json_string();
+    string value {record.get_json_string()};
     put(key, value);
     return key;
 }
 
 void Storage::put(const string &key, const string &value) {
-    leveldb::Status status = _db->Put(leveldb::WriteOptions(), key, value);
+    auto status = _db->Put(leveldb::WriteOptions(), key, value);
     assert(status.ok());
 }
 
