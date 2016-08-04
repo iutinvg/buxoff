@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "Record.h"
+#import "StorageWrapper.h"
 
 @interface ViewController ()
 
@@ -15,20 +15,30 @@
 
 @implementation ViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    
-    Buxoff::Record r = Buxoff::Record([@"12.45" UTF8String],
-                                      [@"desc" UTF8String],
-                                      {[@"t1" UTF8String], [@"t2" UTF8String]}, [@"cash" UTF8String]);
-    NSString *res = [NSString stringWithUTF8String:r.get_json_string().c_str()];
-    NSLog(@"res is %@", res);
-    // Do any additional setup after loading the view, typically from a nib.
+    _sw = [[StorageWrapper alloc] init];    
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self setupCounter];
+}
+
+#pragma - Mark Layout Helpers
+- (void)setupCounter
+{
+    _labelCounter.text = [NSString stringWithFormat:@"total records: %ld", [_sw getCount]];
+}
+
+#pragma mark - Actions
+- (void)actionAdd:(id)sender
+{
+    NSString* uid = [_sw addTestRecord];
+    NSLog(@"new record was added %@ ...", uid);
+    [self setupCounter];
 }
 
 @end
