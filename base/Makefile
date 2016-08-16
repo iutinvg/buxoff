@@ -76,4 +76,4 @@ $(PLATFORM_OUTDIR)/%.o: %.cc
 endif
 
 clean:
-	rm -rf tests/*.o test.db tests/tests x86_64 ios
+	rm -rf tests/*.o test.db tests/tests x86_64 ios android/obj android/libs
