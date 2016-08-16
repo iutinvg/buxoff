@@ -9,11 +9,14 @@ using namespace Buxoff;
 using namespace std;
 
 Storage::Storage(string filename) {
+    srand(time(0));
     _options.create_if_missing = true;
-    leveldb::DB *db;
-    auto status = leveldb::DB::Open(_options, filename, &db);
+    auto status = leveldb::DB::Open(_options, filename, &_db);
     assert(status.ok());
-    _db.reset(db);
+}
+
+Storage::~Storage() {
+    delete _db;
 }
 
 string Storage::get_string(const string &key) {
@@ -53,6 +56,15 @@ int Storage::get_records_count() {
         ++i;
     }
     assert(it->status().ok());
+    return i;
+}
+
+int Storage::get_total_count() {
+    auto i = 0;
+    unique_ptr<leveldb::Iterator> it(_db->NewIterator(leveldb::ReadOptions()));
+    for (it->SeekToFirst(); it->Valid(); it->Next()) {
+        ++i;
+    }
     return i;
 }
 

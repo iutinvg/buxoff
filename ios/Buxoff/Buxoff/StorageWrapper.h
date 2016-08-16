@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@interface StorageWrapper : NSObject
+@interface StorageWrapper : NSObject {
+}
 
 - (instancetype)init;
 - (NSInteger)getCount;
 - (NSString*)addTestRecord;
+- (void)testGet:(NSString*)key;
 
 @end

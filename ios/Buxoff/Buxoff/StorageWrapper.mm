@@ -50,16 +50,28 @@
     return _internal->get_records_count();
 }
 
+- (NSInteger)getCount2
+{
+    return _internal->get_total_count();
+}
+
 - (NSString*)addTestRecord
 {
     Buxoff::Record r = Buxoff::Record([@"12.45" UTF8String],
                                       [@"desc" UTF8String],
                                       {[@"t1" UTF8String], [@"t2" UTF8String]}, [@"cash" UTF8String]);
+    std::string uid = _internal->put(r);
+    
+    NSString* nsuid = [NSString stringWithUTF8String:uid.c_str()];
+//    [self testGet:nsuid];
+    return nsuid;
+}
+
+- (void)testGet:(NSString *)key {
+//    key = @"tr_7b9PZS0hoI";
+    Buxoff::Record r = _internal->get([key UTF8String]);
     NSString *res = [NSString stringWithUTF8String:r.get_json_string().c_str()];
-    NSLog(@"res is %@", res);
-    // Do any additional setup after loading the view, typically from a nib.
-    auto uid = _internal->put(r);
-    return [NSString stringWithUTF8String:uid.c_str()];
+    NSLog(@"get: %@ -> %@", key, res);
 }
 
 @end

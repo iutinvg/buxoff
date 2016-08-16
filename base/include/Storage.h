@@ -13,15 +13,17 @@ using namespace std;
 
 namespace Buxoff {
     class Storage {
-        unique_ptr<leveldb::DB> _db;
+        leveldb::DB* _db;
         leveldb::Options _options;
     public:
         Storage(string filename);
+        ~Storage();
 
         Record get(const string& key);
         string get_string(const string &key);
         RecordsList get_records();
         int get_records_count();
+        int get_total_count();
 
         string put(const Record& record);
         string put(const Record& record, const string& key);
