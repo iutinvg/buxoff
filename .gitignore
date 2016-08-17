@@ -44,4 +44,6 @@ project.sublime-workspace
 *.a
 test.db
 base/tests/tests
+base/android/libs
+base/android/obj
 
