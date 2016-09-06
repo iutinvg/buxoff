@@ -14,10 +14,14 @@ using namespace std;
 namespace Buxoff {
     class Storage {
         leveldb::DB* _db;
-        leveldb::Options _options;
+
     public:
+        leveldb::Status last_status;
+        Storage();
         Storage(string filename);
         ~Storage();
+
+        Storage& operator=(Storage&& other);
 
         Record get(const string& key);
         string get_string(const string &key);

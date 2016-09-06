@@ -8,15 +8,32 @@
 using namespace Buxoff;
 using namespace std;
 
+Storage::Storage() {
+    _db = nullptr;
+}
+
 Storage::Storage(string filename) {
     srand(time(0));
-    _options.create_if_missing = true;
-    auto status = leveldb::DB::Open(_options, filename, &_db);
-    assert(status.ok());
+    leveldb::Options options;
+    options.create_if_missing = true;
+    last_status = leveldb::DB::Open(options, filename, &_db);
+    assert(_last_status.ok());
 }
 
 Storage::~Storage() {
-    delete _db;
+    if (_db) {
+        delete _db;
+    }
+}
+
+Storage& Storage::operator=(Storage&& other) {
+    assert(this != &other);
+    if (_db) {
+        delete _db;
+    }
+    _db = other._db;
+    other._db = nullptr;
+    return *this;
 }
 
 string Storage::get_string(const string &key) {
@@ -55,6 +72,7 @@ int Storage::get_records_count() {
         it->Next()) {
         ++i;
     }
+    last_status = it->status();
     assert(it->status().ok());
     return i;
 }
@@ -65,6 +83,8 @@ int Storage::get_total_count() {
     for (it->SeekToFirst(); it->Valid(); it->Next()) {
         ++i;
     }
+    last_status = it->status();
+    assert(it->status().ok());
     return i;
 }
 
@@ -83,8 +103,8 @@ string Storage::put(const Record& record, const string& key) {
 }
 
 void Storage::put(const string &key, const string &value) {
-    auto status = _db->Put(leveldb::WriteOptions(), key, value);
-    assert(status.ok());
+    last_status = _db->Put(leveldb::WriteOptions(), key, value);
+    assert(last_status.ok());
 }
 
 void Storage::__clear() {
