@@ -17,7 +17,7 @@
 
 using namespace Buxoff;
 
-static Storage storage;
+static Storage *storage;
 
 extern "C" {
     JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_init(JNIEnv *, jobject, jstring);
@@ -30,20 +30,17 @@ JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_init(JNIEnv *env, job
     LOGE("full path: %s", filename);
     LOGE("full path: %d", 10);
 
-    // int* p = nullptr;
-    // delete p;
-
-    storage = Storage(filename);
-    LOGE("open status: %s", storage.last_status.ToString().c_str());
+    storage = new Storage(filename);
+    LOGE("open status: %s", storage->last_status.ToString().c_str());
 
     env->ReleaseStringUTFChars(fn, filename);
 }
 
 JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_add(JNIEnv *env, jobject obj) {
-    storage.put(Record());
+    storage->put(Record());
 }
 
 JNIEXPORT jint JNICALL Java_com_sevencrayons_buxoff_Buxoff_count(JNIEnv *env, jobject obj) {
     // storage.put(Storage::random_key(), "val");
-    return storage.get_total_count();
+    return storage->get_total_count();
 }
