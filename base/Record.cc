@@ -5,6 +5,7 @@
 #include "Record.h"
 
 using namespace Buxoff;
+using namespace std;
 
 Record::Record():
     _amount(""),

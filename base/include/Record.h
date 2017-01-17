@@ -11,30 +11,27 @@ namespace nlohmann {
 }
 #endif
 
-using namespace std;
-
-
 namespace Buxoff {
-    typedef set<string> Tags;
+    typedef std::set<std::string> Tags;
 
-    const string Record_ID_Prefix{"tr_"};
+    const std::string Record_ID_Prefix{"tr_"};
 
     class Record {
-        string _amount;
-        string _description;
+        std::string _amount;
+        std::string _description;
         Tags _tags;
-        string _account;
+        std::string _account;
 
-        string _join_tags(const Tags &tags) const;
+        std::string _join_tags(const Tags &tags) const;
     public:
-        Record(string amount, string description, Tags tags, string account);
+        Record(std::string amount, std::string description, Tags tags, std::string account);
         Record(nlohmann::json o);
         Record();
-        string get_line() const;
-        string get_json_string() const;
+        std::string get_line() const;
+        std::string get_json_string() const;
     };
 
-    typedef vector<Record> RecordsList;
+    typedef std::vector<Record> RecordsList;
 };
 
 #endif

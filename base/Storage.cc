@@ -8,32 +8,16 @@
 using namespace Buxoff;
 using namespace std;
 
-Storage::Storage() {
-    _db = nullptr;
-}
-
 Storage::Storage(string filename) {
     srand(time(0));
     leveldb::Options options;
     options.create_if_missing = true;
     last_status = leveldb::DB::Open(options, filename, &_db);
-    assert(_last_status.ok());
+    assert(last_status.ok());
 }
 
 Storage::~Storage() {
-    if (_db) {
-        delete _db;
-    }
-}
-
-Storage& Storage::operator=(Storage&& other) {
-    assert(this != &other);
-    if (_db) {
-        delete _db;
-    }
-    _db = other._db;
-    other._db = nullptr;
-    return *this;
+    delete _db;
 }
 
 string Storage::get_string(const string &key) {

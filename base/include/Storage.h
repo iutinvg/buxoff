@@ -9,34 +9,31 @@
 #include "Record.h"
 
 
-using namespace std;
-
 namespace Buxoff {
     class Storage {
         leveldb::DB* _db;
 
     public:
         leveldb::Status last_status;
-        Storage();
-        Storage(string filename);
+        Storage(std::string filename);
         ~Storage();
 
-        Storage& operator=(Storage&& other);
+        // TODO: delete copy c-r and assignment?
 
-        Record get(const string& key);
-        string get_string(const string &key);
+        Record get(const std::string& key);
+        std::string get_string(const std::string &key);
         RecordsList get_records();
         int get_records_count();
         int get_total_count();
 
-        string put(const Record& record);
-        string put(const Record& record, const string& key);
-        string put(const string& amount, const string& description, const Tags& tags, const string& account);
-        void put(const string &key, const string &value);
+        std::string put(const Record& record);
+        std::string put(const Record& record, const std::string& key);
+        std::string put(const std::string& amount, const std::string& description, const Tags& tags, const std::string& account);
+        void put(const std::string &key, const std::string &value);
 
         void __clear();
 
-        static string random_key(size_t length=10);
+        static std::string random_key(size_t length=10);
     };
 };
 

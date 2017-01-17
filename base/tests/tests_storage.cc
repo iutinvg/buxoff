@@ -6,6 +6,7 @@
 #include "utils.hpp"
 
 using namespace Buxoff;
+using namespace std;
 
 TEST_CASE("C-r", "[storage]") {
     auto s = Storage("test.db");
