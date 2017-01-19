@@ -15,7 +15,7 @@ import java.io.File;
 public class MainActivity extends AppCompatActivity {
 
     Buxoff buxoff;
-    TextView textCount;
+    TextView textStats;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        textCount = (TextView) findViewById(R.id.textCount);
+        textStats = (TextView) findViewById(R.id.textStats);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -36,8 +36,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        initBuxoff();
+    }
+
+    private void initBuxoff() {
         buxoff = new Buxoff();
         buxoff.init(getDocPath());
+        updateCount();
     }
 
     @Override
@@ -61,24 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//
-//        buxoff = new Buxoff();
-//        buxoff.init(getDocPath());
-//
-//        textCount = (TextView) findViewById(R.id.textView);
-//        buttonAdd = (Button) findViewById(R.id.button);
-//
-//        buttonAdd.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                updateCount();
-//            }
-//        });
-//    }
 
     protected String getDocPath() {
         File data = getCacheDir();
@@ -89,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
     protected void updateCount() {
         buxoff.add();
         buxoff.count();
-        textCount.setText("Total: " + buxoff.count());
+        textStats.setText("Total: " + buxoff.count());
     }
-
 }
