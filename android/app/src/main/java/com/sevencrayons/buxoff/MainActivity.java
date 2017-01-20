@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private void initBuxoff() {
         buxoff = new Buxoff();
         buxoff.init(getDocPath());
-        updateCount();
     }
 
     @Override
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void updateCount() {
-        buxoff.add();
+        buxoff.add("", "", "", "");
         buxoff.count();
         textStats.setText("Total: " + buxoff.count());
     }

@@ -9,6 +9,8 @@
 #include "Storage.h"
 #include "Record.h"
 
+#include "jutils.h"
+
 
 #define  LOG_TAG    "buxoff"
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
@@ -21,26 +23,34 @@ static Storage *storage;
 
 extern "C" {
     JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_init(JNIEnv *, jobject, jstring);
-    JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_add(JNIEnv *, jobject);
+    JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_add(JNIEnv *, jobject, jstring amount, jstring desc, jstring tag, jstring account);
     JNIEXPORT jint JNICALL Java_com_sevencrayons_buxoff_Buxoff_count(JNIEnv *, jobject);
 };
 
 JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_init(JNIEnv *env, jobject obj, jstring fn) {
-    const char *filename = env->GetStringUTFChars(fn, 0);
-    LOGE("full path: %s", filename);
-    LOGE("full path: %d", 10);
+    // const char *filename = env->GetStringUTFChars(fn, 0);
+    // ...filename usage
+    // env->ReleaseStringUTFChars(fn, filename);
+
+    JStr filename{env, fn};
+
+    LOGE("full path: %s", filename.c_str());
+    LOGE("lib version: %d", 12);
 
     storage = new Storage(filename);
     LOGE("open status: %s", storage->last_status.ToString().c_str());
-
-    env->ReleaseStringUTFChars(fn, filename);
 }
 
-JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_add(JNIEnv *env, jobject obj) {
-    storage->put(Record());
+JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_add(JNIEnv *env, jobject obj,
+    jstring amount, jstring desc, jstring tag, jstring account) {
+    storage->put(
+        JStr{env, amount},
+        JStr{env, desc},
+        {JStr{env, tag}},
+        JStr{env, account}
+    );
 }
 
 JNIEXPORT jint JNICALL Java_com_sevencrayons_buxoff_Buxoff_count(JNIEnv *env, jobject obj) {
-    // storage.put(Storage::random_key(), "val");
     return storage->get_total_count();
 }
