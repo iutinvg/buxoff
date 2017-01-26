@@ -26,9 +26,10 @@ namespace Buxoff {
     public:
         Record(std::string amount, std::string description, Tags tags, std::string account);
         Record(nlohmann::json o);
-        Record();
+        Record() {};
         std::string get_line() const;
         std::string get_json_string() const;
+        void validate() const;
     };
 
     typedef std::vector<Record> RecordsList;

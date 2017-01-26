@@ -1,6 +1,6 @@
 ## Android build
 cd ~/buxoff/base/android/jni
-~/Applications/android-ndk-r12b/ndk-build
+~/Library/Android/sdk/ndk-bundle/ndk-build
 
 ## iOS build
 cd ~/buxoff/base

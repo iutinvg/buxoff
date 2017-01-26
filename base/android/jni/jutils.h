@@ -1,3 +1,6 @@
+#ifndef __Buxoff__Jutils__
+#define __Buxoff__Jutils__
+
 #include <string>
 
 // convert jstring manipulations to stack allocated object routine
@@ -12,3 +15,5 @@ public:
     const char* c_str() const { return str.c_str(); }
     operator std::string() const { return str; }
 };
+
+#endif
