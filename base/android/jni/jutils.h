@@ -16,4 +16,17 @@ public:
     operator std::string() const { return str; }
 };
 
+// http://stackoverflow.com/a/8492085/444966
+void throw_java_exception(JNIEnv *env, const char *msg)
+{
+    // You can put your own exception here
+    // jclass c;
+    // if (c==nullptr) {
+    //     c = env->FindClass("java/lang/NullPointerException");
+    // } else {
+    jclass c = env->FindClass("java/lang/RuntimeException");
+    // }
+    env->ThrowNew(c, msg);
+}
+
 #endif
