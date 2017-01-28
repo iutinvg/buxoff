@@ -9,41 +9,78 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     Buxoff buxoff;
-    TextView textStats;
+    TextView labelStats;
+    EditText textAmount;
+    EditText textDescription;
+    EditText textTag;
+    EditText textAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        textStats = (TextView) findViewById(R.id.textStats);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String msg = updateCount();
-                Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
-            }
-        });
-
+        initViews();
+        initFab();
         initBuxoff();
     }
 
     private void initBuxoff() {
         buxoff = new Buxoff();
-        buxoff.init(getDocPath());
+        buxoff.init(Utils.getDocPath(this));
+    }
+
+    private void initViews() {
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        labelStats = (TextView) findViewById(R.id.textStats);
+        textAmount = (EditText) findViewById(R.id.textAmount);
+        textDescription = (EditText) findViewById(R.id.textDescription);
+        textTag = (EditText) findViewById(R.id.textTags);
+        textAccount = (EditText) findViewById(R.id.textAccount);
+    }
+
+    private void initFab() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addRecord(view);
+            }
+        });
+    }
+
+    private void addRecord(View view) {
+        try {
+            buxoff.add(textAmount.getText().toString(), textDescription.getText().toString(),
+                    textTag.getText().toString(), textAccount.getText().toString());
+            updateStatus(view, "Record is saved");
+            clearText();
+        } catch (RuntimeException e) {
+            updateStatus(view, e.getMessage());
+        }
+    }
+
+    private void updateStatus(View view, String msg) {
+        Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
+
+    private void clearText() {
+        // we don't clear account, it tends to be the same
+        List<EditText> l = Arrays.asList(textAmount, textDescription, textTag);
+        for (EditText e : l) {
+            e.setText("");
+        }
+        Utils.focus(this, textAmount);
     }
 
     @Override
@@ -68,22 +105,16 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected String getDocPath() {
-        File data = getCacheDir();
-        File child = new File(data, "MyData");
-        return child.getAbsolutePath();
-    }
-
-    protected String updateCount() {
-        try {
-            Log.e("Hm...", "here");
-            buxoff.exc();
-            return "No exception";
-        } catch (Exception e) {
-            return e.getMessage();
-        }
-        // buxoff.add("", "", "", "");
-        // buxoff.count();
-        // textStats.setText("Total: " + buxoff.count());
-    }
+//    protected String updateCount() {
+//        try {
+//            Log.e("Hm...", "here");
+//            buxoff.exc();
+//            return "No exception";
+//        } catch (Exception e) {
+//            return e.getMessage();
+//        }
+//        // buxoff.add("", "", "", "");
+//        // buxoff.count();
+//        // labelStats.setText("Total: " + buxoff.count());
+//    }
 }

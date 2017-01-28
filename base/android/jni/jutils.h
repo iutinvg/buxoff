@@ -3,6 +3,13 @@
 
 #include <string>
 
+#include <android/log.h>
+
+
+#define  LOG_TAG    "buxoff"
+#define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
+#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+
 // convert jstring manipulations to stack allocated object routine
 class JStr {
     const char* cstr;
@@ -19,6 +26,7 @@ public:
 // http://stackoverflow.com/a/8492085/444966
 void throw_java_exception(JNIEnv *env, const char *msg)
 {
+    LOGE("re-throw exception: %s", msg);
     // You can put your own exception here
     // jclass c;
     // if (c==nullptr) {
