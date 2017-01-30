@@ -59,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addRecord(View view) {
+        Log.d("subject", buxoff.emailSubject());
+        Log.d("body", buxoff.emailBody());
+
         try {
             buxoff.add(textAmount.getText().toString(), textDescription.getText().toString(),
                     textTag.getText().toString(), textAccount.getText().toString());

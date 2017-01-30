@@ -72,35 +72,40 @@ int Storage::get_total_count() {
     return i;
 }
 
-string Storage::put(const Record& record) {
-    return put(record, Record_ID_Prefix + Storage::random_key());
-}
-
-string Storage::put(const string& amount, const string& description, const Tags& tags, const string& account) {
-    return put(Record(amount, description, tags, account));
-}
-
-string Storage::put(const Record& record, const string& key) {
-    string value {record.get_json_string()};
-    put(key, value);
-    return key;
-}
-
-void Storage::put(const string &key, const string &value) {
+void Storage::put(const string& key, const string& value) {
     last_status = _db->Put(leveldb::WriteOptions(), key, value);
     assert(last_status.ok());
 }
 
-void Storage::__clear() {
+void Storage::put(const string& key, const Record& record) {
+    put(key, record.get_json_string());
+}
+
+string Storage::put(const Record& record) {
+    string key{Record_ID_Prefix + random_key()};
+    put(key, record);
+    return key;
+}
+
+string Storage::put(const string& amount, const string& description, const Tags& tags, const string& account) {
+    return put(Record{amount, description, tags, account});
+}
+
+void Storage::clear_records() {
+    clear(Record_ID_Prefix);
+}
+
+void Storage::clear(const string& prefix) {
+    auto last = prefix + "\u02ad";
     unique_ptr<leveldb::Iterator> it(_db->NewIterator(leveldb::ReadOptions()));
-    for (it->SeekToFirst(); it->Valid(); it->Next()) {
+    for (it->Seek(prefix); it->Valid() && it->key().ToString() < last; it->Next()) {
         auto s = _db->Delete(leveldb::WriteOptions(), it->key());
         assert(s.ok());
     }
     assert(it->status().ok());
 }
 
-string Storage::random_key(size_t length) {
+string Buxoff::random_key(size_t length) {
     auto randchar = []() -> char
     {
         constexpr char charset[] =

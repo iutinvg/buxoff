@@ -3,6 +3,6 @@
 
 Buxoff::Storage get_clean_storage() {
     auto s = Buxoff::Storage("test.db");
-    s.__clear();
+    s.clear();
     return s;
 }

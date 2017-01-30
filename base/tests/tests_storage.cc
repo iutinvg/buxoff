@@ -63,13 +63,39 @@ TEST_CASE("get_records_count", "[storage]") {
     REQUIRE(s.get_records_count() == 2);
 }
 
+TEST_CASE("clear_records", "[storage]") {
+    auto s = get_clean_storage();
+
+    s.put(Record("1", "d", {"tag1"}, "c"));
+    s.put(Record("1", "d", {"tag1"}, "c"));
+    s.put("key", "value");
+    REQUIRE(s.get_records_count() == 2);
+    REQUIRE(s.get_total_count() == 3);
+
+    s.clear_records();
+    REQUIRE(s.get_records_count() == 0);
+    REQUIRE(s.get_total_count() == 1);
+}
+
+TEST_CASE("clear all", "[storage]") {
+    auto s = get_clean_storage();
+
+    s.put(Record("1", "d", {"tag1"}, "c"));
+    s.put("key", "value");
+    REQUIRE(s.get_records_count() == 1);
+    REQUIRE(s.get_total_count() == 2);
+
+    s.clear();
+    REQUIRE(s.get_total_count() == 0);
+}
+
 TEST_CASE("random_key", "[storage]") {
     set<string> c;
     auto num = 10000;
 
     string s;
     for (auto i = 0; i < num; ++i) {
-        s = Storage::random_key(10);
+        s = random_key(10);
         c.insert(s);
     }
 
@@ -77,6 +103,6 @@ TEST_CASE("random_key", "[storage]") {
 }
 
 TEST_CASE("random_key_size", "[storage]") {
-    auto s1 = Storage::random_key(20);
+    auto s1 = random_key(20);
     REQUIRE(s1.size() == 20);
 }

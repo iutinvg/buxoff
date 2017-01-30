@@ -12,7 +12,7 @@ namespace Buxoff {
         RecordsList records;
     public:
         Email(RecordsList records);
-        std::string subject();
+        static std::string subject();
         std::string body();
     };
 };

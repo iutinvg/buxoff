@@ -26,15 +26,17 @@ namespace Buxoff {
         int get_records_count();
         int get_total_count();
 
+        void put(const std::string& key, const std::string& value);
+        void put(const std::string& key, const Record& record);
         std::string put(const Record& record);
-        std::string put(const Record& record, const std::string& key);
         std::string put(const std::string& amount, const std::string& description, const Tags& tags, const std::string& account);
-        void put(const std::string &key, const std::string &value);
 
-        void __clear();
+        void clear(const std::string& prefix="");
+        void clear_records();
 
-        static std::string random_key(size_t length=10);
     };
+
+    std::string random_key(size_t length=10);
 };
 
 #endif
