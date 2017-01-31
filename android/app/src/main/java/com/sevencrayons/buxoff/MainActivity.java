@@ -1,16 +1,19 @@
 package com.sevencrayons.buxoff;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,13 +26,16 @@ public class MainActivity extends AppCompatActivity {
     EditText textDescription;
     EditText textTag;
     EditText textAccount;
+    Button buttonAdd;
+    Button buttonPush;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initBuxoff();
         initViews();
         initFab();
-        initBuxoff();
+        initButtons();
     }
 
     private void initBuxoff() {
@@ -53,20 +59,48 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addRecord(view);
+                add(view);
             }
         });
     }
 
-    private void addRecord(View view) {
-        Log.d("subject", buxoff.emailSubject());
-        Log.d("body", buxoff.emailBody());
+    private void initButtons() {
+        buttonAdd = (Button) findViewById(R.id.buttonSave);
+        buttonPush = (Button) findViewById(R.id.buttonPush);
 
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                add(view);
+            }
+        });
+        buttonPush.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                push(view);
+            }
+        });
+    }
+
+    private void add(View view) {
         try {
             buxoff.add(textAmount.getText().toString(), textDescription.getText().toString(),
                     textTag.getText().toString(), textAccount.getText().toString());
             updateStatus(view, "Record is saved");
             clearText();
+            updateCount();
+        } catch (RuntimeException e) {
+            updateStatus(view, e.getMessage());
+        }
+    }
+
+    private void push(View view) {
+        try {
+            String body = buxoff.push(textAmount.getText().toString(), textDescription.getText().toString(),
+                    textTag.getText().toString(), textAccount.getText().toString());
+            clearText();
+            updateCount();
+            sendEmail(buxoff.subject(), body);
         } catch (RuntimeException e) {
             updateStatus(view, e.getMessage());
         }
@@ -77,6 +111,10 @@ public class MainActivity extends AppCompatActivity {
                 .setAction("Action", null).show();
     }
 
+    private void updateCount() {
+        labelStats.setText("Total: " + buxoff.count());
+    }
+
     private void clearText() {
         // we don't clear account, it tends to be the same
         List<EditText> l = Arrays.asList(textAmount, textDescription, textTag);
@@ -84,6 +122,19 @@ public class MainActivity extends AppCompatActivity {
             e.setText("");
         }
         Utils.focus(this, textAmount);
+    }
+
+    private void sendEmail(String subject, String body){
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto:" + "recipient@example.com"));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, body);
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send email using..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(this, "No email clients installed.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -107,17 +158,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-//    protected String updateCount() {
-//        try {
-//            Log.e("Hm...", "here");
-//            buxoff.exc();
-//            return "No exception";
-//        } catch (Exception e) {
-//            return e.getMessage();
-//        }
-//        // buxoff.add("", "", "", "");
-//        // buxoff.count();
-//        // labelStats.setText("Total: " + buxoff.count());
-//    }
 }

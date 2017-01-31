@@ -2,8 +2,8 @@
 
 using namespace Buxoff;
 
-Email::Email(RecordsList records):
-    records(records) {
+Email::Email(const RecordsList& records):
+    records{records} {
 }
 
 std::string Email::subject() {

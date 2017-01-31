@@ -11,9 +11,10 @@ namespace Buxoff {
     {
         RecordsList records;
     public:
-        Email(RecordsList records);
-        static std::string subject();
+        Email(const RecordsList& records);
         std::string body();
+
+        static std::string subject();
     };
 };
 

@@ -30,6 +30,7 @@ namespace Buxoff {
         std::string get_line() const;
         std::string get_json_string() const;
         void validate() const;
+        bool empty(bool ignore_account=true) const;
     };
 
     typedef std::vector<Record> RecordsList;

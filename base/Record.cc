@@ -67,3 +67,9 @@ void Record::validate() const {
     validate_amount(_amount);
     validate_account(_account);
 }
+
+// account is prefilled in UI, so we ignore it if other fields are empty
+bool Record::empty(bool ignore_account) const {
+    return _amount.empty() && _description.empty() &&
+        _tags.empty() && (ignore_account || _account.empty());
+}
