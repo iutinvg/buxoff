@@ -7,6 +7,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,8 +36,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         initBuxoff();
         initViews();
-        initFab();
         initButtons();
+        initEditTexts();
+
+        updateUI();
     }
 
     private void initBuxoff() {
@@ -52,22 +56,31 @@ public class MainActivity extends AppCompatActivity {
         textDescription = (EditText) findViewById(R.id.textDescription);
         textTag = (EditText) findViewById(R.id.textTags);
         textAccount = (EditText) findViewById(R.id.textAccount);
+        buttonAdd = (Button) findViewById(R.id.buttonSave);
+        buttonPush = (Button) findViewById(R.id.buttonPush);
     }
 
-    private void initFab() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+    private void initEditTexts() {
+        List<EditText> l = Arrays.asList(textAmount, textDescription, textTag, textAccount);
+        TextWatcher tw = new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                add(view);
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                updateAddButton();
             }
-        });
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        };
+
+        for (EditText e : l) {
+            e.addTextChangedListener(tw);
+        }
     }
 
     private void initButtons() {
-        buttonAdd = (Button) findViewById(R.id.buttonSave);
-        buttonPush = (Button) findViewById(R.id.buttonPush);
-
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,13 +95,25 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void updateUI() {
+        int count = buxoff.count();
+        updateAddButton();
+        buttonPush.setEnabled(buxoff.enablePush(count));
+        labelStats.setText("Total: " + count);
+    }
+
+    private void updateAddButton() {
+        buttonAdd.setEnabled(buxoff.enableAdd(
+                textAmount.getText().toString(), textAccount.getText().toString()));
+    }
+
     private void add(View view) {
         try {
             buxoff.add(textAmount.getText().toString(), textDescription.getText().toString(),
                     textTag.getText().toString(), textAccount.getText().toString());
             updateStatus(view, "Record is saved");
             clearText();
-            updateCount();
+            updateUI();
         } catch (RuntimeException e) {
             updateStatus(view, e.getMessage());
         }
@@ -99,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
             String body = buxoff.push(textAmount.getText().toString(), textDescription.getText().toString(),
                     textTag.getText().toString(), textAccount.getText().toString());
             clearText();
-            updateCount();
             sendEmail(buxoff.subject(), body);
+            updateUI();
         } catch (RuntimeException e) {
             updateStatus(view, e.getMessage());
         }
@@ -109,10 +134,6 @@ public class MainActivity extends AppCompatActivity {
     private void updateStatus(View view, String msg) {
         Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
-    }
-
-    private void updateCount() {
-        labelStats.setText("Total: " + buxoff.count());
     }
 
     private void clearText() {
@@ -129,12 +150,11 @@ public class MainActivity extends AppCompatActivity {
         emailIntent.setData(Uri.parse("mailto:" + "recipient@example.com"));
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
         emailIntent.putExtra(Intent.EXTRA_TEXT, body);
-
-        try {
-            startActivity(Intent.createChooser(emailIntent, "Send email using..."));
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(this, "No email clients installed.", Toast.LENGTH_SHORT).show();
-        }
+        startActivity(Intent.createChooser(emailIntent, "Send email using..."));
+//        } catch (android.content.ActivityNotFoundException ex) {
+//            throw new RuntimeException("No email clients installed.");
+////            Toast.makeText(this, "No email clients installed.", Toast.LENGTH_SHORT).show();
+//        }
     }
 
     @Override
