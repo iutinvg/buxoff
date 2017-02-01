@@ -11,6 +11,7 @@
 #include "Validation.h"
 #include "Email.h"
 #include "ControllerHelpers.h"
+#include "ViewHelpers.h"
 
 #include "jutils.h"
 
@@ -27,6 +28,9 @@ extern "C" {
     JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_subject(JNIEnv *, jobject);
 
     JNIEXPORT jint JNICALL Java_com_sevencrayons_buxoff_Buxoff_count(JNIEnv *, jobject);
+
+    JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enableAdd(JNIEnv *, jobject, jstring amount, jstring account);
+    JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enablePush(JNIEnv *, jobject, jint records_count);
 };
 
 JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_init(JNIEnv *env, jobject obj, jstring fn) {
@@ -59,6 +63,15 @@ JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_push(JNIEnv *env, 
 JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_subject(JNIEnv *env, jobject obj) {
     return env->NewStringUTF(Email::subject().c_str());
 }
+
 JNIEXPORT jint JNICALL Java_com_sevencrayons_buxoff_Buxoff_count(JNIEnv *env, jobject obj) {
     return storage->get_records_count();
+}
+
+JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enableAdd(JNIEnv *env, jobject, jstring amount, jstring account) {
+    return view_enable_add(JStr{env, amount}, JStr{env, account});
+}
+
+JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enablePush(JNIEnv *env, jobject, jint records_count) {
+    return view_enable_push(records_count);
 }
