@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                updateAddButton();
+                updateUI();
             }
 
             @Override
@@ -97,14 +98,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI() {
         int count = buxoff.count();
-        updateAddButton();
-        buttonPush.setEnabled(buxoff.enablePush(count));
+        String amount = textAmount.getText().toString();
+        String account = textAccount.getText().toString();
+        buttonAdd.setEnabled(buxoff.enableAdd(amount, account));
+        buttonPush.setEnabled(buxoff.enablePush(count, amount, account));
         labelStats.setText("Total: " + count);
-    }
-
-    private void updateAddButton() {
-        buttonAdd.setEnabled(buxoff.enableAdd(
-                textAmount.getText().toString(), textAccount.getText().toString()));
     }
 
     private void add(View view) {
@@ -124,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
             String body = buxoff.push(textAmount.getText().toString(), textDescription.getText().toString(),
                     textTag.getText().toString(), textAccount.getText().toString());
             clearText();
+            Log.d("body", body);
             sendEmail(buxoff.subject(), body);
             updateUI();
         } catch (RuntimeException e) {

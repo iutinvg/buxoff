@@ -43,13 +43,13 @@ TEST_CASE("is_empty", "[record]") {
     r = Record("", "", {}, "");
     REQUIRE(r.empty() == true);
 
+    r = Record("", "", {""}, "");
+    REQUIRE(r.empty() == true);
+
     r = Record("1", "", {}, "");
     REQUIRE(r.empty() == false);
 
     r = Record("", "d", {}, "");
-    REQUIRE(r.empty() == false);
-
-    r = Record("", "", {""}, "");
     REQUIRE(r.empty() == false);
 
     r = Record("", "", {}, "act");

@@ -14,6 +14,7 @@ Record::Record(string amount, string description, Tags tags, string account):
     _description{description},
     _tags{tags},
     _account{account} {
+        _tags.erase("");
 }
 
 Record::Record(nlohmann::json o):
@@ -22,6 +23,7 @@ Record::Record(nlohmann::json o):
     _tags{o["tags"].get<Tags>()},
     _account{o["acct"].get<string>()}
 {
+        _tags.erase("");
 }
 
 string Record::get_line() const {
@@ -70,6 +72,6 @@ void Record::validate() const {
 
 // account is prefilled in UI, so we ignore it if other fields are empty
 bool Record::empty(bool ignore_account) const {
-    return _amount.empty() && _description.empty() &&
-        _tags.empty() && (ignore_account || _account.empty());
+    return _amount.empty() && _description.empty() && _tags.empty() &&
+        (ignore_account || _account.empty());
 }

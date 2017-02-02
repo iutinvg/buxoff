@@ -21,6 +21,7 @@ public:
         }
     const char* c_str() const { return str.c_str(); }
     operator std::string() const { return str; }
+    int size() { return str.size(); }
 };
 
 // http://stackoverflow.com/a/8492085/444966

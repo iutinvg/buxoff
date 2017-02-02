@@ -8,8 +8,8 @@ namespace Buxoff {
         return !(amount.empty() || account.empty());
     }
 
-    bool view_enable_push(int records_count) {
-        return records_count > 0;
+    bool view_enable_push(int records_count, const std::string& amount, const std::string& account) {
+        return records_count > 0 || view_enable_add(amount, account);
     }
 };
 

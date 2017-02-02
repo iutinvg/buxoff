@@ -30,23 +30,32 @@ extern "C" {
     JNIEXPORT jint JNICALL Java_com_sevencrayons_buxoff_Buxoff_count(JNIEnv *, jobject);
 
     JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enableAdd(JNIEnv *, jobject, jstring amount, jstring account);
-    JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enablePush(JNIEnv *, jobject, jint records_count);
+    JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enablePush(JNIEnv *, jobject, jint records_count, jstring amount, jstring account);
 };
 
+void JNI_OnUnload(JavaVM *vm, void *reserved) {
+    LOGI("close storage");
+    delete storage;
+    storage = nullptr;
+}
+
 JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_init(JNIEnv *env, jobject obj, jstring fn) {
-    assert(storage == nullptr);
+    if (storage) {
+        LOGI("storage is already initialised");
+        return;
+    }
 
     JStr filename{env, fn};
     LOGI("full path: %s", filename.c_str());
-    LOGI("lib version: %f", 20170131.1);
+    LOGI("lib version: %f", 20170202.5);
     storage = new Storage(filename);
     LOGI("open status: %s", storage->last_status.ToString().c_str());
 }
 
 JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_add(JNIEnv *env, jobject obj,
     jstring amount, jstring desc, jstring tag, jstring account) {
+    Record r{JStr{env, amount}, JStr{env, desc}, {JStr{env, tag}}, JStr{env, account}};
     try {
-        Record r{JStr{env, amount}, JStr{env, desc}, {JStr{env, tag}}, JStr{env, account}};
         controller_add(*storage, r);
     } catch (ValidationError& e) {
         throw_java_exception(env, e.what());
@@ -56,8 +65,13 @@ JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_add(JNIEnv *env, jobj
 JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_push(JNIEnv *env, jobject obj,
     jstring amount, jstring desc, jstring tag, jstring account) {
     Record r{JStr{env, amount}, JStr{env, desc}, {JStr{env, tag}}, JStr{env, account}};
-    std::string email_body = controller_push(*storage, r);
-    return env->NewStringUTF(email_body.c_str());
+    try {
+        std::string email_body = controller_push(*storage, r);
+        return env->NewStringUTF(email_body.c_str());
+    } catch (ValidationError& e) {
+        throw_java_exception(env, e.what());
+    }
+    return nullptr;
 }
 
 JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_subject(JNIEnv *env, jobject obj) {
@@ -72,6 +86,6 @@ JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enableAdd(JNIEnv 
     return view_enable_add(JStr{env, amount}, JStr{env, account});
 }
 
-JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enablePush(JNIEnv *env, jobject, jint records_count) {
-    return view_enable_push(records_count);
+JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enablePush(JNIEnv *env, jobject, jint records_count, jstring amount, jstring account) {
+    return view_enable_push(records_count, JStr{env, amount}, JStr{env, account});
 }
