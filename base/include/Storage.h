@@ -8,6 +8,9 @@
 
 #include "Record.h"
 
+// TODO: storage is needed for decomposition
+//      candidates (UserDefaults, RecordStorage will get a "connection")?
+
 
 namespace Buxoff {
     const std::string Record_ID_Prefix{"tr_"};
