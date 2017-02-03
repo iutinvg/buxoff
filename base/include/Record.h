@@ -5,16 +5,10 @@
 #include <set>
 #include <vector>
 
-#ifndef NLOHMANN_JSON_HPP
-namespace nlohmann {
-    class json;
-}
-#endif
+#include "json.hpp"
 
 namespace Buxoff {
     typedef std::set<std::string> Tags;
-
-    const std::string Record_ID_Prefix{"tr_"};
 
     class Record {
         std::string _amount;

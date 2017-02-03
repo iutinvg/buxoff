@@ -1,8 +1,6 @@
 #include <numeric>
 #include <stdexcept>
 
-#include "json.hpp"
-
 #include "Record.h"
 #include "Validation.h"
 

@@ -20,10 +20,9 @@ Storage::~Storage() {
     delete _db;
 }
 
-string Storage::get_string(const string &key) {
-    std::string value;
-    auto status = _db->Get(leveldb::ReadOptions(), key, &value);
-    assert(status.ok());
+string Storage::get_string(const string &key, const string &def) {
+    std::string value{def};
+    _db->Get(leveldb::ReadOptions(), key, &value);
     return value;
 }
 
@@ -104,6 +103,22 @@ void Storage::clear(const string& prefix) {
     }
     assert(it->status().ok());
 }
+
+
+// std::string Storage::get_ud(const std::string& key)
+// {
+//     auto o = nlohmann::json::parse(get_string(User_ID_Prefix, "{}"));
+//     return o[key];
+// }
+
+
+// void Storage::put_ud(const std::string& key, const std::string& val)
+// {
+//     auto o = nlohmann::json::parse(get_string(User_ID_Prefix, "{}"));
+//     o[key]
+//     put(User_ID_Prefix + key, val);
+// }
+
 
 string Buxoff::random_key(size_t length) {
     auto randchar = []() -> char

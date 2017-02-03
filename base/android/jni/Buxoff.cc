@@ -12,6 +12,7 @@
 #include "Email.h"
 #include "ControllerHelpers.h"
 #include "ViewHelpers.h"
+#include "UserDefaults.h"
 
 #include "jutils.h"
 
@@ -31,6 +32,12 @@ extern "C" {
 
     JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enableAdd(JNIEnv *, jobject, jstring amount, jstring account);
     JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enablePush(JNIEnv *, jobject, jint records_count, jstring amount, jstring account);
+
+    JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_getUdStr(JNIEnv *, jobject, jstring key, jstring def);
+    JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_putUdStr(JNIEnv *, jobject, jstring key, jstring val);
+
+    // JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_getUdBool(JNIEnv *, jobject, jstring key, jboolean def);
+    // JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_putUdBool(JNIEnv *, jobject, jstring key, jboolean val);
 };
 
 void JNI_OnUnload(JavaVM *vm, void *reserved) {
@@ -89,3 +96,21 @@ JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enableAdd(JNIEnv 
 JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enablePush(JNIEnv *env, jobject, jint records_count, jstring amount, jstring account) {
     return view_enable_push(records_count, JStr{env, amount}, JStr{env, account});
 }
+
+
+JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_getUdStr(JNIEnv *env, jobject, jstring key, jstring def) {
+    std::string val{get_ud(*storage, JStr{env, key}, std::string{JStr{env, def}})};
+    return env->NewStringUTF(val.c_str());
+}
+
+JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_putUdStr(JNIEnv *env, jobject, jstring key, jstring val) {
+    put_ud(*storage, JStr{env, key}, JStr{env, val});
+}
+
+// JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_getUdBool(JNIEnv *env, jobject, jstring key, jboolean def) {
+//     return get_ud(*storage, JStr{env, key}, def);
+// }
+
+// JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_putUdBool(JNIEnv *env, jobject, jstring key, jboolean val) {
+//     put_ud(*storage, JStr{env, key}, val);
+// }
