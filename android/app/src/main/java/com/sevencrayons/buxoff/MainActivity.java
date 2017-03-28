@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     EditText textDescription;
     EditText textTag;
     EditText textAccount;
+    EditText textEmail;
     Button buttonAdd;
     Button buttonPush;
 
@@ -55,12 +56,14 @@ public class MainActivity extends AppCompatActivity {
         textDescription = (EditText) findViewById(R.id.textDescription);
         textTag = (EditText) findViewById(R.id.textTags);
         textAccount = (EditText) findViewById(R.id.textAccount);
+        textEmail = (EditText) findViewById(R.id.textEmail);
+
         buttonAdd = (Button) findViewById(R.id.buttonSave);
         buttonPush = (Button) findViewById(R.id.buttonPush);
     }
 
     private void initEditTexts() {
-        List<EditText> l = Arrays.asList(textAmount, textDescription, textTag, textAccount);
+        List<EditText> l = Arrays.asList(textAmount, textDescription, textTag, textAccount, textEmail);
         TextWatcher tw = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -98,8 +101,9 @@ public class MainActivity extends AppCompatActivity {
         int count = buxoff.count();
         String amount = textAmount.getText().toString();
         String account = textAccount.getText().toString();
+        String email = textEmail.getText().toString();
         buttonAdd.setEnabled(buxoff.enableAdd(amount, account));
-        buttonPush.setEnabled(buxoff.enablePush(count, amount, account));
+        buttonPush.setEnabled(buxoff.enablePush(count, amount, account, email));
         labelStats.setText("Total: " + count);
     }
 

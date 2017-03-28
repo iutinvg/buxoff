@@ -23,18 +23,24 @@ static Storage *storage = nullptr;
 
 extern "C" {
     JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_init(JNIEnv *, jobject, jstring);
-    JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_add(JNIEnv *, jobject, jstring amount, jstring desc, jstring tag, jstring account);
+    JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_add(JNIEnv *, jobject,
+        jstring amount, jstring desc, jstring tag, jstring account);
 
-    JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_push(JNIEnv *, jobject, jstring amount, jstring desc, jstring tag, jstring account);
+    JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_push(JNIEnv *, jobject,
+        jstring amount, jstring desc, jstring tag, jstring account);
     JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_subject(JNIEnv *, jobject);
 
     JNIEXPORT jint JNICALL Java_com_sevencrayons_buxoff_Buxoff_count(JNIEnv *, jobject);
 
-    JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enableAdd(JNIEnv *, jobject, jstring amount, jstring account);
-    JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enablePush(JNIEnv *, jobject, jint records_count, jstring amount, jstring account);
+    JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enableAdd(JNIEnv *, jobject,
+        jstring amount, jstring account);
+    JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enablePush(JNIEnv *, jobject,
+        jint records_count, jstring amount, jstring account, jstring email);
 
-    JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_udGet(JNIEnv *, jobject, jstring key, jstring def);
-    JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_udPut(JNIEnv *, jobject, jstring key, jstring val);
+    JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_udGet(JNIEnv *, jobject,
+        jstring key, jstring def);
+    JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_udPut(JNIEnv *, jobject,
+        jstring key, jstring val);
 
     // JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_getUdBool(JNIEnv *, jobject, jstring key, jboolean def);
     // JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_putUdBool(JNIEnv *, jobject, jstring key, jboolean val);
@@ -89,20 +95,29 @@ JNIEXPORT jint JNICALL Java_com_sevencrayons_buxoff_Buxoff_count(JNIEnv *env, jo
     return storage->get_records_count();
 }
 
-JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enableAdd(JNIEnv *env, jobject, jstring amount, jstring account) {
+JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enableAdd(JNIEnv *env, jobject,
+    jstring amount, jstring account) {
     return view_enable_add(JStr{env, amount}, JStr{env, account});
 }
 
-JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enablePush(JNIEnv *env, jobject, jint records_count, jstring amount, jstring account) {
-    return view_enable_push(records_count, JStr{env, amount}, JStr{env, account});
+JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enablePush(JNIEnv *env, jobject,
+    jint records_count, jstring amount, jstring account, jstring email) {
+    return view_enable_push(
+        records_count,
+        JStr{env, amount},
+        JStr{env, account},
+        JStr{env, email}
+    );
 }
 
-JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_udGet(JNIEnv *env, jobject, jstring key, jstring def) {
+JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_udGet(JNIEnv *env, jobject,
+    jstring key, jstring def) {
     std::string val{ud_get(*storage, JStr{env, key}, JStr{env, def}.str())};
     return env->NewStringUTF(val.c_str());
 }
 
-JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_udPut(JNIEnv *env, jobject, jstring key, jstring val) {
+JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_udPut(JNIEnv *env, jobject,
+    jstring key, jstring val) {
     ud_put(*storage, JStr{env, key}, JStr{env, val});
 }
 

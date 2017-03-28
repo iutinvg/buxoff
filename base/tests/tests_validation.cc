@@ -23,3 +23,12 @@ TEST_CASE("email", "[validation]") {
     REQUIRE_THROWS_AS(validate_email("user@domain@com"), ValidationError);
     REQUIRE_THROWS_AS(validate_email("user.domain.com"), ValidationError);
 }
+
+TEST_CASE("email_is", "[validation]") {
+    REQUIRE(is_valid_email("user@domain.com") == true);
+    REQUIRE(is_valid_email("") == false);
+    REQUIRE(is_valid_email("user") == false);
+    REQUIRE(is_valid_email("domain.com") == false);
+    REQUIRE(is_valid_email("user@domain@com") == false);
+    REQUIRE(is_valid_email("user.domain.com") == false);
+}

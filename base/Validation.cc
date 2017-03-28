@@ -16,6 +16,15 @@ namespace Buxoff {
         throw ValidationErrorEmail{};
     }
 
+    bool is_valid_email(const string& email) {
+        try {
+            validate_email(email);
+        } catch (ValidationError&) {
+            return false;
+        }
+        return true;
+    }
+
     void validate_amount(const string& amount) throw (ValidationError) {
         try {
             stof(amount);

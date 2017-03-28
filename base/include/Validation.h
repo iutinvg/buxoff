@@ -35,6 +35,7 @@ namespace Buxoff {
     };
 
     void validate_email(const std::string& email) throw (ValidationError);
+    bool is_valid_email(const std::string& email);
     void validate_amount(const std::string& amount) throw (ValidationError);
     void validate_account(const std::string& account) throw (ValidationError);
 };

@@ -7,7 +7,7 @@ public class Buxoff {
     public native int count();
     public native String subject();
     public native boolean enableAdd(String amount, String account);
-    public native boolean enablePush(int records_count, String amount, String account);
+    public native boolean enablePush(int records_count, String amount, String account, String email);
 
     public native String udGet(String key);
     public native void udPut(String key, String value);
