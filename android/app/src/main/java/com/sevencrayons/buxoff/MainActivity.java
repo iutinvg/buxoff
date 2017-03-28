@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    static final String TAG = "MainActivity";
 
     Buxoff buxoff;
     TextView labelStats;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         initButtons();
         initEditTexts();
+        initPersistentEditTexts();
 
         updateUI();
     }
@@ -82,6 +84,28 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void initPersistentEditTexts() {
+        List<EditText> l = Arrays.asList(textAccount, textEmail);
+        for (final EditText e : l) {
+            final String key = (String)e.getTag();
+            e.setText(buxoff.udGet(key, ""));
+
+            e.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    String value = charSequence.toString();
+                    buxoff.udPut(key, value);
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {}
+            });
+        }
+    }
+
     private void initButtons() {
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,14 +128,14 @@ public class MainActivity extends AppCompatActivity {
         String email = textEmail.getText().toString();
         buttonAdd.setEnabled(buxoff.enableAdd(amount, account));
         buttonPush.setEnabled(buxoff.enablePush(count, amount, account, email));
-        labelStats.setText("Total: " + count);
+        labelStats.setText(getString(R.string.total) + count);
     }
 
     private void add(View view) {
         try {
             buxoff.add(textAmount.getText().toString(), textDescription.getText().toString(),
                     textTag.getText().toString(), textAccount.getText().toString());
-            updateStatus(view, "Record is saved");
+            updateStatus(view, getString(R.string.saved));
             clearText();
             updateUI();
         } catch (RuntimeException e) {
@@ -124,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
             String body = buxoff.push(textAmount.getText().toString(), textDescription.getText().toString(),
                     textTag.getText().toString(), textAccount.getText().toString());
             clearText();
-            Log.d("body", body);
             sendEmail(buxoff.subject(), body);
             updateUI();
         } catch (RuntimeException e) {
@@ -148,10 +171,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendEmail(String subject, String body){
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-        emailIntent.setData(Uri.parse("mailto:" + "recipient@example.com"));
+        emailIntent.setData(Uri.parse("mailto:" + buxoff.udGet((String)textEmail.getTag(), "")));
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
         emailIntent.putExtra(Intent.EXTRA_TEXT, body);
-        startActivity(Intent.createChooser(emailIntent, "Send email using..."));
+        startActivity(Intent.createChooser(emailIntent, getString(R.string.send_using)));
 //        } catch (android.content.ActivityNotFoundException ex) {
 //            throw new RuntimeException("No email clients installed.");
 ////            Toast.makeText(this, "No email clients installed.", Toast.LENGTH_SHORT).show();
