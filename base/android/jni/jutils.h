@@ -13,15 +13,17 @@
 // convert jstring manipulations to stack allocated object routine
 class JStr {
     const char* cstr;
-    std::string str;
+    std::string sstr;
 public:
     JStr(JNIEnv* env, jstring& jstr):
-        cstr{env->GetStringUTFChars(jstr, 0)}, str{cstr} {
+        cstr{env->GetStringUTFChars(jstr, 0)}, sstr{cstr} {
             env->ReleaseStringUTFChars(jstr, cstr);
         }
-    const char* c_str() const { return str.c_str(); }
-    operator std::string() const { return str; }
-    int size() { return str.size(); }
+    const char* c_str() const { return sstr.c_str(); }
+    std::string str() const { return sstr; }
+    int size() { return sstr.size(); }
+
+    operator std::string() const { return sstr; }
 };
 
 // http://stackoverflow.com/a/8492085/444966

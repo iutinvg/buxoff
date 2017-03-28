@@ -9,5 +9,9 @@ make
 ## Tests run
 make tests
 
+Don't forget to build LevelDB before:
+cd ~/buxoff/base/deps/leveldb
+make
+
 ## Clean
 make clean

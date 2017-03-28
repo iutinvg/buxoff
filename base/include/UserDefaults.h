@@ -13,7 +13,7 @@ namespace Buxoff {
     const std::string User_ID_Prefix{"user_defaults"};
 
     template<typename T>
-    void put_ud(Storage& s, const std::string& key, const T& val)
+    void ud_put(Storage& s, const std::string& key, const T& val)
     {
         auto o = nlohmann::json::parse(s.get_string(User_ID_Prefix, "{}"));
         o[key] = val;
@@ -21,7 +21,7 @@ namespace Buxoff {
     }
 
     template<typename T>
-    T get_ud(Storage& s, const std::string& key, const T& def)
+    T ud_get(Storage& s, const std::string& key, const T& def)
     {
         auto o = nlohmann::json::parse(s.get_string(User_ID_Prefix, "{}"));
         if (o.count(key)) {
