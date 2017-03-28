@@ -9,6 +9,9 @@ public class Buxoff {
     public native boolean enableAdd(String amount, String account);
     public native boolean enablePush(int records_count, String amount, String account);
 
+    public native String udGet(String key);
+    public native void udPut(String key, String value);
+
     static {
         System.loadLibrary("buxoff");
     }

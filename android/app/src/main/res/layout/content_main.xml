@@ -39,12 +39,12 @@
         android:layout_height="wrap_content">
 
         <EditText
+            android:id="@+id/textTags"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="50"
-            android:inputType="numberDecimal"
-            android:id="@+id/textTags"
-            android:hint="Tag"/>
+            android:hint="Tag"
+            android:inputType="text" />
 
         <EditText
             android:layout_width="0dp"
