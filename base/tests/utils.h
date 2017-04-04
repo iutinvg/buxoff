@@ -3,6 +3,6 @@
 
 #include "Storage.h"
 
-Buxoff::Storage get_clean_storage();
+void clean_storage();
 
 #endif

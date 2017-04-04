@@ -1,7 +1,7 @@
 #include "utils.h"
 
-Buxoff::Storage get_clean_storage() {
-    auto s = Buxoff::Storage("test.db");
+void clean_storage() {
+    auto c = Buxoff::Connection("test.db");
+    auto s = Buxoff::StringStorage(&c, {});
     s.clear();
-    return s;
 }
