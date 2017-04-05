@@ -72,3 +72,7 @@ bool Record::empty(bool ignore_account) const {
     return _amount.empty() && _description.empty() && _tags.empty() &&
         (ignore_account || _account.empty());
 }
+
+std::vector<Record> RecordStorage::all() {
+    return std::vector<Record>{};
+}

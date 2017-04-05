@@ -3,11 +3,13 @@
 
 #include <string>
 
+#include "Storage.h"
+
 namespace Buxoff {
     class Storage;
     class Record;
-    void controller_add(Storage&, const Record&);
-    std::string controller_push(Storage&, const Record&);
+    void controller_add(Connection*, const Record&);
+    std::string controller_push(Connection*, const Record&);
 };
 
 #endif

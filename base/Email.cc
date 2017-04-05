@@ -2,7 +2,7 @@
 
 using namespace Buxoff;
 
-Email::Email(const RecordsList& records):
+Email::Email(const std::vector<Record>& records):
     records{records} {
 }
 

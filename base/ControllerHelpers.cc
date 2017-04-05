@@ -5,18 +5,20 @@
 
 using namespace Buxoff;
 
-void Buxoff::controller_add(Storage& storage, const Record& r)
+void Buxoff::controller_add(Connection* c, const Record& r)
 {
     r.validate();
-    storage.put(r);
+    RecordStorage rs{c};
+    rs.put(r);
 }
 
-std::string Buxoff::controller_push(Storage& storage, const Record& r)
+std::string Buxoff::controller_push(Connection* c, const Record& r)
 {
     if (!r.empty()) {
-        controller_add(storage, r);
+        controller_add(c, r);
     }
-    Email e{storage.get_records()};
-    storage.clear_records();
+    RecordStorage rs{c};
+    Email e{rs.all()};
+    rs.clear();
     return e.body();
 }

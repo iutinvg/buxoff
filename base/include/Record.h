@@ -13,11 +13,6 @@
 namespace Buxoff {
     using Tags = std::set<std::string>;
 
-    class RecordStorage: public StringStorage {
-    public:
-        RecordStorage(Connection *adb): StringStorage(adb, "rec_") {};
-    };
-
     class Record {
         std::string _amount;
         std::string _description;
@@ -39,7 +34,11 @@ namespace Buxoff {
         operator std::string() const { return get_json_string(); }
     };
 
-    using RecordsList = std::vector<Record>;
+    class RecordStorage: public StringStorage {
+    public:
+        RecordStorage(Connection *adb): StringStorage(adb, "rec_") {};
+        std::vector<Record> all();
+    };
 };
 
 #endif

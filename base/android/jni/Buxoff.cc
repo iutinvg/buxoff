@@ -19,7 +19,7 @@
 
 using namespace Buxoff;
 
-static Storage *storage = nullptr;
+static Connection *connection = nullptr;
 
 extern "C" {
     JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_init(JNIEnv *, jobject, jstring);
@@ -47,13 +47,13 @@ extern "C" {
 };
 
 void JNI_OnUnload(JavaVM *vm, void *reserved) {
-    LOGI("close storage");
-    delete storage;
-    storage = nullptr;
+    LOGI("close connection");
+    delete connection;
+    connection = nullptr;
 }
 
 JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_init(JNIEnv *env, jobject obj, jstring fn) {
-    if (storage) {
+    if (connection) {
         LOGI("storage is already initialised");
         return;
     }
@@ -61,15 +61,15 @@ JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_init(JNIEnv *env, job
     JStr filename{env, fn};
     LOGI("full path: %s", filename.c_str());
     LOGI("lib version: %f", 20170202.5);
-    storage = new Storage(filename);
-    LOGI("open status: %s", storage->last_status.ToString().c_str());
+    connection = new Connection(filename);
+    LOGI("open status: %s", connection->last_status.ToString().c_str());
 }
 
 JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_add(JNIEnv *env, jobject obj,
     jstring amount, jstring desc, jstring tag, jstring account) {
     Record r{JStr{env, amount}, JStr{env, desc}, {JStr{env, tag}}, JStr{env, account}};
     try {
-        controller_add(*storage, r);
+        controller_add(connection, r);
     } catch (ValidationError& e) {
         throw_java_exception(env, e.what());
     }
@@ -79,7 +79,7 @@ JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_push(JNIEnv *env, 
     jstring amount, jstring desc, jstring tag, jstring account) {
     Record r{JStr{env, amount}, JStr{env, desc}, {JStr{env, tag}}, JStr{env, account}};
     try {
-        std::string email_body = controller_push(*storage, r);
+        std::string email_body = controller_push(connection, r);
         return env->NewStringUTF(email_body.c_str());
     } catch (ValidationError& e) {
         throw_java_exception(env, e.what());
@@ -92,7 +92,8 @@ JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_subject(JNIEnv *en
 }
 
 JNIEXPORT jint JNICALL Java_com_sevencrayons_buxoff_Buxoff_count(JNIEnv *env, jobject obj) {
-    return storage->get_records_count();
+    RecordStorage rs(connection);
+    return rs.count();
 }
 
 JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enableAdd(JNIEnv *env, jobject,
@@ -112,19 +113,13 @@ JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enablePush(JNIEnv
 
 JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_udGet(JNIEnv *env, jobject,
     jstring key, jstring def) {
-    std::string val{ud_get(*storage, JStr{env, key}, JStr{env, def}.str())};
+    UserDefaults ud(connection);
+    std::string val{ud.get(JStr{env, key}, JStr{env, def})};
     return env->NewStringUTF(val.c_str());
 }
 
 JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_udPut(JNIEnv *env, jobject,
     jstring key, jstring val) {
-    ud_put(*storage, JStr{env, key}, JStr{env, val});
+    UserDefaults ud(connection);
+    ud.put(JStr{env, key}, JStr{env, val});
 }
-
-// JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_getUdBool(JNIEnv *env, jobject, jstring key, jboolean def) {
-//     return get_ud(*storage, JStr{env, key}, def);
-// }
-
-// JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_putUdBool(JNIEnv *env, jobject, jstring key, jboolean val) {
-//     put_ud(*storage, JStr{env, key}, val);
-// }

@@ -9,9 +9,9 @@
 namespace Buxoff {
     class Email
     {
-        RecordsList records;
+        std::vector<Record> records;
     public:
-        Email(const RecordsList& records);
+        Email(const std::vector<Record>& records);
         std::string body();
 
         static std::string subject();
