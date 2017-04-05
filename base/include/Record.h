@@ -7,8 +7,16 @@
 
 #include "json.hpp"
 
+#include "Storage.h"
+
+
 namespace Buxoff {
-    typedef std::set<std::string> Tags;
+    using Tags = std::set<std::string>;
+
+    class RecordStorage: public StringStorage {
+    public:
+        RecordStorage(Connection *adb): StringStorage(adb, "rec_") {};
+    };
 
     class Record {
         std::string _amount;
@@ -31,7 +39,7 @@ namespace Buxoff {
         operator std::string() const { return get_json_string(); }
     };
 
-    typedef std::vector<Record> RecordsList;
+    using RecordsList = std::vector<Record>;
 };
 
 #endif
