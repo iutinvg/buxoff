@@ -89,7 +89,7 @@ TEST_CASE("for_each", "[connection]") {
         vals2.push_back(value);
     };
 
-    c.for_each(prefix, prefix + last_prefix, l);
+    c.for_each(prefix, prefix + last_suffix, l);
     sort(keys2.begin(), keys2.end());
     sort(vals2.begin(), vals2.end());
 

@@ -11,7 +11,7 @@
 #include <leveldb/options.h>
 
 namespace Buxoff {
-    constexpr char last_prefix[] = "\u02ad";
+    constexpr char last_suffix[] = "\u02ad";
     std::string random_key(size_t length=10);
 
     class Connection {
@@ -38,7 +38,7 @@ namespace Buxoff {
 
         template<class Func>
         void for_each(const std::string& prefix, Func f) {
-            for_each(prefix, prefix + last_prefix, f);
+            for_each(prefix, prefix + last_suffix, f);
         }
     };
 
