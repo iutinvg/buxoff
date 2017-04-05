@@ -7,12 +7,7 @@
 using namespace Buxoff;
 using namespace std;
 
-Record::Record(string amount, string description, Tags tags, string account):
-    _amount{amount},
-    _description{description},
-    _tags{tags},
-    _account{account} {
-        _tags.erase("");
+Record::Record(const std::string& json_str):Record(nlohmann::json::parse(json_str)) {
 }
 
 Record::Record(nlohmann::json o):
@@ -24,16 +19,20 @@ Record::Record(nlohmann::json o):
         _tags.erase("");
 }
 
+Record::Record(string amount, string description, Tags tags, string account):
+    _amount{amount},
+    _description{description},
+    _tags{tags},
+    _account{account} {
+        _tags.erase("");
+}
+
 string Record::get_line() const {
     string tags{_join_tags(_tags)};
     return _description + " " + _amount + " tags:" + tags + " acct:" + _account;
 }
 
 string Record::_join_tags(const Tags &tags) const {
-    // return accumulate(tags.begin(), tags.end(), string{},
-    //     [](const string& a, const string& b) {
-    //         return a.empty() ? b : a + "," + b;
-    //     });
     if (tags.empty()) {
         return "";
     }

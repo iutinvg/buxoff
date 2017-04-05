@@ -1,11 +1,10 @@
-#define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "json.hpp"
 #include "Record.h"
 
 
 using namespace Buxoff;
-
+using namespace std;
 
 TEST_CASE("get_line_N_tags", "[record]") {
     Record r = Record("345.67", "desc", {"tag1", "tag2"}, "cash");
@@ -17,15 +16,28 @@ TEST_CASE("get_line_1_tag", "[record]") {
     REQUIRE(r.get_line() == "desc 345.67 tags:tag1 acct:cash");
 }
 
+TEST_CASE("get_line_no_tags", "[record]") {
+    Record r = Record("345.67", "desc", {}, "cash");
+    REQUIRE(r.get_line() == "desc 345.67 tags: acct:cash");
+}
+
 TEST_CASE("from_json", "[record]") {
     nlohmann::json o = "{\"acct\":\"cash\",\"amount\":\"345.67\",\"description\":\"desc\",\"tags\":[\"tag1\",\"tag2\"]}"_json;
     Record r = Record(o);
     REQUIRE(r.get_line() == "desc 345.67 tags:tag1,tag2 acct:cash");
 }
 
-TEST_CASE("get_line_no_tags", "[record]") {
-    Record r = Record("345.67", "desc", {}, "cash");
-    REQUIRE(r.get_line() == "desc 345.67 tags: acct:cash");
+TEST_CASE("from_string", "[record]") {
+    string str{"{\"acct\":\"cash\",\"amount\":\"345.67\",\"description\":\"desc\",\"tags\":[\"tag1\",\"tag2\"]}"};
+    Record r = Record(str);
+    REQUIRE(r.get_line() == "desc 345.67 tags:tag1,tag2 acct:cash");
+}
+
+TEST_CASE("to_string", "[record]") {
+    string str{"{\"acct\":\"cash\",\"amount\":\"345.67\",\"description\":\"desc\",\"tags\":[\"tag1\",\"tag2\"]}"};
+    Record r = Record(str);
+    string str2 = r;
+    REQUIRE(str2 == str);
 }
 
 TEST_CASE("get_json_string", "[record]") {
