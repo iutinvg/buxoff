@@ -11,6 +11,9 @@
 #include <leveldb/options.h>
 
 namespace Buxoff {
+    constexpr char last_prefix[] = "\u02ad";
+    std::string random_key(size_t length=10);
+
     class Connection {
         leveldb::DB* db;
     public:
@@ -21,9 +24,6 @@ namespace Buxoff {
         std::string get(const std::string& key, const std::string& def={});
         void put(const std::string& key, const std::string& value);
         void remove(const std::string& key); // delete is a key word
-
-        static std::string random_key(size_t length=10);
-        static std::string last_prefix() { return "\u02ad"; };
 
         template<class Func>
         void for_each(const std::string& first, const std::string& last, Func f) {
@@ -38,7 +38,7 @@ namespace Buxoff {
 
         template<class Func>
         void for_each(const std::string& prefix, Func f) {
-            for_each(prefix, prefix + last_prefix(), f);
+            for_each(prefix, prefix + last_prefix, f);
         }
     };
 

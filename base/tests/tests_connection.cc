@@ -13,7 +13,6 @@
 using namespace Buxoff;
 using namespace std;
 
-
 TEST_CASE("C-r", "[connection]") {
     auto c = Connection("test.db");
     REQUIRE(true);
@@ -26,7 +25,7 @@ TEST_CASE("random_key", "[connection]") {
 
     string s;
     for (auto i = 0; i < num; ++i) {
-        s = c.random_key(10);
+        s = random_key(10);
         keys.insert(s);
     }
 
@@ -34,7 +33,7 @@ TEST_CASE("random_key", "[connection]") {
 }
 
 TEST_CASE("random_key_size", "[connection]") {
-    auto s1 = Connection::random_key(20);
+    auto s1 = random_key(20);
     REQUIRE(s1.size() == 20);
 }
 
@@ -42,8 +41,8 @@ TEST_CASE("get-put", "[connection]") {
     clean_storage();
     auto c = Connection("test.db");
 
-    string key{c.random_key()};
-    string value{c.random_key()};
+    string key{random_key()};
+    string value{random_key()};
 
     c.put(key, value);
     auto res = c.get(key);
@@ -55,9 +54,9 @@ TEST_CASE("remove", "[connection]") {
     clean_storage();
     auto c = Connection("test.db");
 
-    string key{c.random_key()};
-    string value{c.random_key()};
-    string def{c.random_key()};
+    string key{random_key()};
+    string value{random_key()};
+    string def{random_key()};
 
     c.put(key, value);
     c.remove(key);
@@ -74,8 +73,8 @@ TEST_CASE("for_each", "[connection]") {
     string prefix{"test_"};
 
     for (int i = 0; i < 10; ++i) {
-        auto k = prefix + c.random_key();
-        auto v = prefix + c.random_key();
+        auto k = prefix + random_key();
+        auto v = prefix + random_key();
         keys.push_back(k);
         vals.push_back(v);
         c.put(k, v);
@@ -90,7 +89,7 @@ TEST_CASE("for_each", "[connection]") {
         vals2.push_back(value);
     };
 
-    c.for_each(prefix, prefix + Connection::last_prefix(), l);
+    c.for_each(prefix, prefix + last_prefix, l);
     sort(keys2.begin(), keys2.end());
     sort(vals2.begin(), vals2.end());
 
@@ -107,8 +106,8 @@ TEST_CASE("for_each_prefix", "[connection]") {
     string prefix{"test_"};
 
     for (int i = 0; i < 10; ++i) {
-        auto k = prefix + c.random_key();
-        auto v = prefix + c.random_key();
+        auto k = prefix + random_key();
+        auto v = prefix + random_key();
         keys.push_back(k);
         vals.push_back(v);
         c.put(k, v);

@@ -5,19 +5,7 @@
 using namespace Buxoff;
 using namespace std;
 
-Connection::Connection(const std::string& filename) {
-    srand(time(0));
-    leveldb::Options options;
-    options.create_if_missing = true;
-    last_status = leveldb::DB::Open(options, filename, &db);
-    assert(last_status.ok());
-}
-
-Connection::~Connection() {
-    delete db;
-}
-
-string Connection::random_key(size_t length) {
+string Buxoff::random_key(size_t length) {
     auto randchar = []() -> char
     {
         constexpr char charset[] =
@@ -30,6 +18,18 @@ string Connection::random_key(size_t length) {
     string str(length, 0);
     generate_n(str.begin(), length, randchar);
     return str;
+}
+
+Connection::Connection(const std::string& filename) {
+    srand(time(0));
+    leveldb::Options options;
+    options.create_if_missing = true;
+    last_status = leveldb::DB::Open(options, filename, &db);
+    assert(last_status.ok());
+}
+
+Connection::~Connection() {
+    delete db;
 }
 
 string Connection::get(const string &key, const string &def) {
@@ -50,7 +50,7 @@ void Connection::remove(const std::string& key) {
 
 
 string StringStorage::put(const string& value) {
-    string key{prefix + db->random_key()};
+    string key{prefix + random_key()};
     db->put(key, value);
     return key;
 }
