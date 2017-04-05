@@ -20,6 +20,10 @@ string Buxoff::random_key(size_t length) {
     return str;
 }
 
+string Buxoff::random_key(const string& prefix, size_t length) {
+    return prefix + random_key(length);
+}
+
 Connection::Connection(const std::string& filename) {
     srand(time(0));
     leveldb::Options options;
@@ -50,19 +54,19 @@ void Connection::remove(const std::string& key) {
 
 
 string StringStorage::put(const string& value) {
-    string key{prefix + random_key()};
+    string key{random_key(prefix)};
     db->put(key, value);
     return key;
 }
 
-std::vector<std::string> StringStorage::vector() {
+std::vector<std::string> StringStorage::all() {
     std::vector<std::string> res;
     auto f = [&res](const string& key, const string& value) { res.push_back(value); };
     db->for_each(prefix, f);
     return res;
 }
 
-std::unordered_map<std::string, std::string> StringStorage::map() {
+std::unordered_map<std::string, std::string> StringStorage::all_map() {
     std::unordered_map<std::string, std::string> res;
     auto f = [&res](const string& key, const string& value) { res[key] = value; };
     db->for_each(prefix, f);

@@ -1,108 +1,117 @@
 #include <set>
+#include <algorithm>
+
 #include "catch.hpp"
 #include "Storage.h"
-#include "Record.h"
 
 #include "utils.h"
 
 using namespace Buxoff;
 using namespace std;
 
-TEST_CASE("C-r", "[storage]") {
-    auto s = Storage("test.db");
-    REQUIRE(true);
+TEST_CASE("storage-get-put", "[storage]") {
+    clean_storage();
+    auto c = Connection("test.db");
+    auto ss = StringStorage(&c, "test_");
+
+    auto val = random_key();
+
+    auto key = ss.put(val);
+    auto val2 = ss.get(key);
+
+    REQUIRE(val == val2);
 }
 
-TEST_CASE("get-put", "[storage]") {
-    auto s = get_clean_storage();
-    auto r1 = Record("1", "d", {"tag1"}, "c");
-    auto key = s.put(r1);
-    auto r2 = s.get(key);
+TEST_CASE("storage-get-put-with-key", "[storage]") {
+    clean_storage();
+    auto c = Connection("test.db");
+    auto ss = StringStorage(&c, "test_");
 
-    REQUIRE(r1.get_line() == r2.get_line());
+    auto key = random_key();
+    auto val = random_key();
+
+    ss.put(key, val);
+    auto val2 = ss.get(key);
+
+    REQUIRE(val == val2);
 }
 
-TEST_CASE("get-put-record-props", "[storage]") {
-    auto s = get_clean_storage();
-    string amount{"1"};
-    string desc{"d"};
-    Tags tags{"tag1"};
-    string acct{"c"};
-    auto key = s.put(amount, desc, tags, acct);
-    auto r1 = s.get(key);
-    auto r2 = Record{amount, desc, tags, acct};
-    REQUIRE(r1.get_line() == r2.get_line());
+TEST_CASE("storage-get-default", "[storage]") {
+    clean_storage();
+    auto c = Connection("test.db");
+    auto ss = StringStorage(&c, "test_");
+
+    auto key = random_key();
+    auto def = random_key();
+
+    auto val = ss.get(key, def);
+
+    REQUIRE(val == def);
 }
 
-TEST_CASE("get_records", "[storage]") {
-    auto s = get_clean_storage();
+TEST_CASE("storage-all", "[storage]") {
+    clean_storage();
+    auto c = Connection("test.db");
+    auto ss = StringStorage(&c, "test_");
 
-    s.put(Record("1", "d", {"tag1"}, "c"));
-    s.put(Record("1", "d", {"tag1"}, "c"));
-    s.put(Record("1", "d", {"tag1"}, "c"));
+    std::vector<string> v1;
+    for (int i = 0; i < 10; ++i) {
+        auto v = random_key();
+        ss.put(v);
+        v1.push_back(v);
+    }
+    auto v2 = ss.all();
 
-    auto l = s.get_records();
-    REQUIRE(l.size() == 3);
+    REQUIRE(v1.size() == v2.size());
+    for (auto v : v2) {
+        REQUIRE(any_of(v1.begin(), v1.end(), [&v](string& s) { return s == v; }));
+    }
 }
 
-TEST_CASE("get_records_except_others", "[storage]") {
-    auto s = get_clean_storage();
+TEST_CASE("storage-all_map", "[storage]") {
+    clean_storage();
+    auto c = Connection("test.db");
+    auto ss = StringStorage(&c, "test_");
 
-    s.put(Record("1", "d", {"tag1"}, "c"));
-    s.put("key", "value");
+    std::vector<string> keys;
+    std::vector<string> values;
+    for (int i = 0; i < 10; ++i) {
+        auto k = random_key(ss.prefix);
+        auto v = random_key();
+        ss.put(k, v);
+        keys.push_back(k);
+        values.push_back(v);
+    }
+    auto res = ss.all_map();
 
-    REQUIRE(s.get_records().size() == 1);
+    REQUIRE(res.size() == keys.size());
+    for (int i = 0; i < keys.size(); ++i) {
+        REQUIRE(res[keys[i]] == values[i]);
+    }
 }
 
-TEST_CASE("get_records_count", "[storage]") {
-    auto s = get_clean_storage();
+TEST_CASE("storage-count", "[storage]") {
+    clean_storage();
+    auto c = Connection("test.db");
+    auto ss = StringStorage(&c, "test_");
 
-    s.put(Record("1", "d", {"tag1"}, "c"));
-    s.put(Record("1", "d", {"tag1"}, "c"));
-
-    REQUIRE(s.get_records_count() == 2);
-}
-
-TEST_CASE("clear_records", "[storage]") {
-    auto s = get_clean_storage();
-
-    s.put(Record("1", "d", {"tag1"}, "c"));
-    s.put(Record("1", "d", {"tag1"}, "c"));
-    s.put("key", "value");
-    REQUIRE(s.get_records_count() == 2);
-    REQUIRE(s.get_total_count() == 3);
-
-    s.clear_records();
-    REQUIRE(s.get_records_count() == 0);
-    REQUIRE(s.get_total_count() == 1);
-}
-
-TEST_CASE("clear all", "[storage]") {
-    auto s = get_clean_storage();
-
-    s.put(Record("1", "d", {"tag1"}, "c"));
-    s.put("key", "value");
-    REQUIRE(s.get_records_count() == 1);
-    REQUIRE(s.get_total_count() == 2);
-
-    s.clear();
-    REQUIRE(s.get_total_count() == 0);
-}
-
-TEST_CASE("random_key", "[storage]") {
-    set<string> c;
-    auto num = 10000;
-
-    string s;
-    for (auto i = 0; i < num; ++i) {
-        s = random_key(10);
-        c.insert(s);
+    for (int i = 0; i < 10; ++i) {
+        ss.put(random_key());
     }
 
-    REQUIRE(c.size() == num);
+    REQUIRE(ss.count() == 10);
 }
 
-TEST_CASE("random_key_size", "[storage]") {
-    auto s1 = random_key(20);
-    REQUIRE(s1.size() == 20);
+TEST_CASE("storage-clear", "[storage]") {
+    clean_storage();
+    auto c = Connection("test.db");
+    auto ss = StringStorage(&c, "test_");
+
+    for (int i = 0; i < 10; ++i) {
+        ss.put(random_key());
+    }
+
+    REQUIRE(ss.count() == 10);
+    ss.clear();
+    REQUIRE(ss.count() == 0);
 }

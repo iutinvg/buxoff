@@ -13,6 +13,7 @@
 namespace Buxoff {
     constexpr char last_suffix[] = "\u02ad";
     std::string random_key(size_t length=10);
+    std::string random_key(const std::string& prefix, size_t length=10);
 
     class Connection {
         leveldb::DB* db;
@@ -44,15 +45,15 @@ namespace Buxoff {
 
     class StringStorage {
         Connection* db;
-        const std::string prefix;
     public:
+        const std::string prefix;
         StringStorage(Connection *adb, const std::string& pref): db{adb}, prefix{pref} {};
         std::string get(const std::string& key, const std::string& def={}) { return db->get(key, def); };
         void put(const std::string& key, const std::string& value) { db->put(key, value); };
         std::string put(const std::string& value);
 
-        std::vector<std::string> vector();
-        std::unordered_map<std::string, std::string> map();
+        std::vector<std::string> all();
+        std::unordered_map<std::string, std::string> all_map();
         int count();
         void clear();
     };
