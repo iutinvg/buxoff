@@ -25,25 +25,19 @@ extern "C" {
     JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_init(JNIEnv *, jobject, jstring);
     JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_add(JNIEnv *, jobject,
         jstring amount, jstring desc, jstring tag, jstring account);
-
     JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_push(JNIEnv *, jobject,
         jstring amount, jstring desc, jstring tag, jstring account);
     JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_subject(JNIEnv *, jobject);
-
     JNIEXPORT jint JNICALL Java_com_sevencrayons_buxoff_Buxoff_count(JNIEnv *, jobject);
-
     JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enableAdd(JNIEnv *, jobject,
         jstring amount, jstring account);
     JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enablePush(JNIEnv *, jobject,
         jint records_count, jstring amount, jstring account, jstring email);
 
-    JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_udGet(JNIEnv *, jobject,
+    JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_UserDefaults_get(JNIEnv *env, jobject,
         jstring key, jstring def);
-    JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_udPut(JNIEnv *, jobject,
+    JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_UserDefaults_put(JNIEnv *env, jobject,
         jstring key, jstring val);
-
-    // JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_getUdBool(JNIEnv *, jobject, jstring key, jboolean def);
-    // JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_putUdBool(JNIEnv *, jobject, jstring key, jboolean val);
 };
 
 void JNI_OnUnload(JavaVM *vm, void *reserved) {
@@ -60,7 +54,7 @@ JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_init(JNIEnv *env, job
 
     JStr filename{env, fn};
     LOGI("full path: %s", filename.c_str());
-    LOGI("lib version: %f", 20170202.5);
+    LOGI("lib version: %f", 20170407.2);
     connection = new Connection(filename);
     LOGI("open status: %s", connection->last_status.ToString().c_str());
 }
@@ -111,14 +105,14 @@ JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enablePush(JNIEnv
     );
 }
 
-JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_Buxoff_udGet(JNIEnv *env, jobject,
+JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_UserDefaults_get(JNIEnv *env, jobject,
     jstring key, jstring def) {
     UserDefaults ud(connection);
     std::string val{ud.get(JStr{env, key}, JStr{env, def})};
     return env->NewStringUTF(val.c_str());
 }
 
-JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_Buxoff_udPut(JNIEnv *env, jobject,
+JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_UserDefaults_put(JNIEnv *env, jobject,
     jstring key, jstring val) {
     UserDefaults ud(connection);
     ud.put(JStr{env, key}, JStr{env, val});

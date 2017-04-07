@@ -8,8 +8,8 @@
 namespace Buxoff {
     class Storage;
     class Record;
-    void controller_add(Connection*, const Record&);
-    std::string controller_push(Connection*, const Record&);
+    void controller_add(Connection* c, const Record& record);
+    std::string controller_push(Connection* c, const Record& record);
 };
 
 #endif

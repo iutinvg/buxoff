@@ -9,8 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     static final String TAG = "MainActivity";
 
     Buxoff buxoff;
+    UserDefaults ud;
+
     TextView labelStats;
     EditText textAmount;
     EditText textDescription;
@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initBuxoff() {
-        buxoff = new Buxoff();
-        buxoff.init(Utils.getDocPath(this));
+        buxoff = new Buxoff(Utils.getDocPath(this));
+        ud = new UserDefaults();
     }
 
     private void initViews() {
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         List<EditText> l = Arrays.asList(textAccount, textEmail);
         for (final EditText e : l) {
             final String key = (String)e.getTag();
-            e.setText(buxoff.udGet(key, ""));
+            e.setText(ud.get(key, ""));
 
             e.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     String value = charSequence.toString();
-                    buxoff.udPut(key, value);
+                    ud.put(key, value);
                 }
 
                 @Override
@@ -166,12 +166,13 @@ public class MainActivity extends AppCompatActivity {
         for (EditText e : l) {
             e.setText("");
         }
+
         Utils.focus(this, textAmount);
     }
 
     private void sendEmail(String subject, String body){
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-        emailIntent.setData(Uri.parse("mailto:" + buxoff.udGet((String)textEmail.getTag(), "")));
+        emailIntent.setData(Uri.parse("mailto:" + ud.get((String)textEmail.getTag(), "")));
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
         emailIntent.putExtra(Intent.EXTRA_TEXT, body);
         startActivity(Intent.createChooser(emailIntent, getString(R.string.send_using)));

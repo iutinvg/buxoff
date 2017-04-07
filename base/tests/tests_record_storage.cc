@@ -9,5 +9,5 @@ using namespace Buxoff;
 using namespace std;
 
 TEST_CASE("record-storage-all", "[record-storage]") {
-    REQUIRE(true);
+    REQUIRE(false);
 }
