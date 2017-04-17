@@ -26,6 +26,8 @@ namespace Buxoff {
         Record(nlohmann::json o);
         Record(const std::string& json_str);
 
+        Tags tags() const;
+
         std::string get_line() const;
         std::string get_json_string() const;
         void validate() const;
@@ -38,6 +40,7 @@ namespace Buxoff {
     public:
         RecordStorage(Connection *adb): StringStorage(adb, "rec_") {};
         std::vector<Record> all();
+        std::set<std::string> all_tags();
     };
 };
 

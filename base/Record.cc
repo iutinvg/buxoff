@@ -27,6 +27,10 @@ Record::Record(string amount, string description, Tags tags, string account):
         _tags.erase("");
 }
 
+Tags Record::tags() const {
+    return _tags;
+}
+
 string Record::get_line() const {
     string tags{_join_tags(_tags)};
     return _description + " " + _amount + " tags:" + tags + " acct:" + _account;
@@ -73,6 +77,17 @@ bool Record::empty(bool ignore_account) const {
         (ignore_account || _account.empty());
 }
 
-std::vector<Record> RecordStorage::all() {
-    return std::vector<Record>{};
+vector<Record> RecordStorage::all() {
+    return vector<Record>{};
+}
+
+set<string> RecordStorage::all_tags() {
+    set<string> tags_set;
+    for (const Record &r: all()) {
+        tags_set.insert(r.tags().begin(), r.tags().end());
+        // for (const string &t: r.tags()) {
+        //     tags_set.insert(t);
+        // }
+    }
+    return tags_set;
 }

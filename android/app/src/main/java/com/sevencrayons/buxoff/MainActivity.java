@@ -8,8 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,11 +23,12 @@ public class MainActivity extends AppCompatActivity {
 
     Buxoff buxoff;
     UserDefaults ud;
+    TagsStorage tagsStorage;
 
     TextView labelStats;
     EditText textAmount;
     EditText textDescription;
-    EditText textTag;
+    AutoCompleteTextView textTag;
     EditText textAccount;
     EditText textEmail;
     Button buttonAdd;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private void initBuxoff() {
         buxoff = new Buxoff(Utils.getDocPath(this));
         ud = new UserDefaults();
+        tagsStorage = new TagsStorage();
     }
 
     private void initViews() {
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         labelStats = (TextView) findViewById(R.id.textStats);
         textAmount = (EditText) findViewById(R.id.textAmount);
         textDescription = (EditText) findViewById(R.id.textDescription);
-        textTag = (EditText) findViewById(R.id.textTags);
+        textTag = (AutoCompleteTextView) findViewById(R.id.textTags);
         textAccount = (EditText) findViewById(R.id.textAccount);
         textEmail = (EditText) findViewById(R.id.textEmail);
 
@@ -121,6 +124,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void updateTagsAutocompletion() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, tagsStorage.all());
+        textTag.setAdapter(adapter);
+    }
+
     private void updateUI() {
         int count = buxoff.count();
         String amount = textAmount.getText().toString();
@@ -129,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
         buttonAdd.setEnabled(buxoff.enableAdd(amount, account));
         buttonPush.setEnabled(buxoff.enablePush(count, amount, account, email));
         labelStats.setText(getString(R.string.total) + count);
+
+        updateTagsAutocompletion();
     }
 
     private void add(View view) {

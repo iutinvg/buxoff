@@ -9,6 +9,24 @@
 using namespace Buxoff;
 using namespace std;
 
+TEST_CASE("storage-put-contaimer", "[storage]") {
+    clean_storage();
+    auto c = Connection("test.db");
+    auto ss = StringStorage(&c, "test_");
+
+    vector<string> v{"a", "b"};
+    set<string> s{"c", "d"};
+    ss.put_all(v);
+    ss.put_all(s);
+
+    auto all = ss.all();
+    sort(all.begin(), all.end());
+    REQUIRE(all[0] == "a");
+    REQUIRE(all[1] == "b");
+    REQUIRE(all[2] == "c");
+    REQUIRE(all[3] == "d");
+}
+
 TEST_CASE("storage-get-put", "[storage]") {
     clean_storage();
     auto c = Connection("test.db");

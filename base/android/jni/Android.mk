@@ -1,8 +1,11 @@
+# TODO:
+# http://stackoverflow.com/a/8980441/444966
+
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := buxoff
-LOCAL_SRC_FILES := ../../Storage.cc ../../Record.cc ../../Email.cc ../../Validation.cc ../../ControllerHelpers.cc Buxoff.cc
+LOCAL_SRC_FILES := ../../TagsStorage.cc ../../Storage.cc ../../Record.cc ../../Email.cc ../../Validation.cc ../../ControllerHelpers.cc Buxoff.cc
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../include $(LOCAL_PATH)/../../deps/catch/include $(LOCAL_PATH)/../../deps/json/src $(LOCAL_PATH)/../../deps/leveldb/include $(LOCAL_PATH)/../../deps/leveldb $(LOCAL_PATH)/../../include
 # LOCAL_STATIC_LIBRARIES += leveldb
 LOCAL_SHARED_LIBRARIES += leveldb

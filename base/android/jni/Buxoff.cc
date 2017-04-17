@@ -13,6 +13,7 @@
 #include "ControllerHelpers.h"
 #include "ViewHelpers.h"
 #include "UserDefaults.h"
+#include "TagsStorage.h"
 
 #include "jutils.h"
 
@@ -38,6 +39,8 @@ extern "C" {
         jstring key, jstring def);
     JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_UserDefaults_put(JNIEnv *env, jobject,
         jstring key, jstring val);
+
+    JNIEXPORT jobjectArray JNICALL Java_com_sevencrayons_buxoff_TagsStorage_all(JNIEnv *env, jobject);
 };
 
 void JNI_OnUnload(JavaVM *vm, void *reserved) {
@@ -105,15 +108,32 @@ JNIEXPORT jboolean JNICALL Java_com_sevencrayons_buxoff_Buxoff_enablePush(JNIEnv
     );
 }
 
+// User Defaults
 JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_UserDefaults_get(JNIEnv *env, jobject,
     jstring key, jstring def) {
-    UserDefaults ud(connection);
+    UserDefaults ud{connection};
     std::string val{ud.get(JStr{env, key}, JStr{env, def})};
     return env->NewStringUTF(val.c_str());
 }
 
 JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_UserDefaults_put(JNIEnv *env, jobject,
     jstring key, jstring val) {
-    UserDefaults ud(connection);
+    UserDefaults ud{connection};
     ud.put(JStr{env, key}, JStr{env, val});
+}
+
+// Tags Storage
+JNIEXPORT jobjectArray JNICALL Java_com_sevencrayons_buxoff_TagsStorage_all(
+    JNIEnv *env, jobject jobj) {
+    TagsStorage ts{connection};
+    std::set<std::string> tags = ts.all_tags();
+    jobjectArray res = env->NewObjectArray(
+        tags.size(), env->FindClass("java/lang/String"), NULL);
+
+    int i = 0;
+    for (const std::string& tag: tags) {
+        env->SetObjectArrayElement(res, i, env->NewStringUTF(tag.c_str()));
+        ++i;
+    }
+    return res;
 }

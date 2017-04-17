@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <set>
 #include <random>
 #include <cassert>
 
@@ -26,7 +27,7 @@ namespace Buxoff {
         void put(const std::string& key, const std::string& value);
         void remove(const std::string& key); // delete is a key word
 
-        template<class Func>
+        template<typename Func>
         void for_each(const std::string& first, const std::string& last, Func f) {
             std::unique_ptr<leveldb::Iterator> it(db->NewIterator(leveldb::ReadOptions()));
             for (it->Seek(first); it->Valid(); it->Next()) {
@@ -37,13 +38,14 @@ namespace Buxoff {
             assert(it->status().ok());
         }
 
-        template<class Func>
+        template<typename Func>
         void for_each(const std::string& prefix, Func f) {
             for_each(prefix, prefix + last_suffix, f);
         }
     };
 
     class StringStorage {
+    protected:
         Connection* db;
     public:
         const std::string prefix;
@@ -51,6 +53,13 @@ namespace Buxoff {
         std::string get(const std::string& key, const std::string& def={}) { return db->get(key, def); };
         void put(const std::string& key, const std::string& value) { db->put(key, value); };
         std::string put(const std::string& value);
+        // TODO: create a template with name put
+        template<typename C>
+        void put_all(const C &c) {
+            for (const std::string &s: c) {
+                put(s);
+            }
+        }
 
         std::vector<std::string> all();
         std::unordered_map<std::string, std::string> all_map();
