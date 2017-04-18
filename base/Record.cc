@@ -78,7 +78,10 @@ bool Record::empty(bool ignore_account) const {
 }
 
 vector<Record> RecordStorage::all() {
-    return vector<Record>{};
+    vector<Record> res;
+    auto f = [&res](const string& key, const string& value) { res.push_back(value); };
+    db->for_each(prefix, f);
+    return res;
 }
 
 set<string> RecordStorage::all_tags() {

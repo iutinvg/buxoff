@@ -108,6 +108,29 @@ TEST_CASE("storage-all_map", "[storage]") {
     }
 }
 
+TEST_CASE("storage-all_map_clear_key", "[storage]") {
+    clean_storage();
+    auto c = Connection("test.db");
+    string prefix{"test_"};
+    auto ss = StringStorage(&c, prefix);
+
+    std::vector<string> keys;
+    std::vector<string> values;
+    for (int i = 0; i < 10; ++i) {
+        auto k = random_key();
+        auto v = random_key();
+        ss.put(ss.prefix + k, v);
+        keys.push_back(k);
+        values.push_back(v);
+    }
+    auto res = ss.all_map(true);
+
+    REQUIRE(res.size() == keys.size());
+    for (int i = 0; i < keys.size(); ++i) {
+        REQUIRE(res[keys[i]] == values[i]);
+    }
+}
+
 TEST_CASE("storage-count", "[storage]") {
     clean_storage();
     auto c = Connection("test.db");

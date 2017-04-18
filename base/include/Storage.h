@@ -61,8 +61,11 @@ namespace Buxoff {
             }
         }
 
+        // all items as a vector
         std::vector<std::string> all();
-        std::unordered_map<std::string, std::string> all_map();
+        // all items as a map {key->value}
+        // if clear_key is true the prefix will be removed from the key
+        std::unordered_map<std::string, std::string> all_map(bool clear_key=false);
         int count();
         void clear();
     };

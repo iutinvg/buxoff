@@ -66,10 +66,17 @@ std::vector<std::string> StringStorage::all() {
     return res;
 }
 
-std::unordered_map<std::string, std::string> StringStorage::all_map() {
+std::unordered_map<std::string, std::string> StringStorage::all_map(bool clear_key) {
     std::unordered_map<std::string, std::string> res;
-    auto f = [&res](const string& key, const string& value) { res[key] = value; };
-    db->for_each(prefix, f);
+    if (clear_key) {
+        auto f = [&res, this](const string& key, const string& value) {
+            res[key.substr(prefix.size())] = value;
+        };
+        db->for_each(prefix, f);
+    } else {
+        auto f = [&res](const string& key, const string& value) {res[key] = value;};
+        db->for_each(prefix, f);
+    }
     return res;
 }
 

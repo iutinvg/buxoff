@@ -16,7 +16,7 @@ TEST_CASE("put", "[tags-storage]") {
     ss.put(val);
     ss.put(val);
     // but it's stored once
-    auto m = ss.all_map();
+    auto m = ss.all_map(true);
     REQUIRE(m.size() == 1);
-    REQUIRE(m[ss.prefix + val] == val);
+    REQUIRE(m[val] == val);
 }
