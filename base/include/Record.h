@@ -27,6 +27,7 @@ namespace Buxoff {
         Record(const std::string& json_str);
 
         Tags tags() const;
+        std::string description() const {return _description;}
 
         std::string get_line() const;
         std::string get_json_string() const;

@@ -2,7 +2,10 @@
 #define __Buxoff__ViewHelpers__
 
 #include <string>
+#include <set>
 #include "Validation.h"
+#include "RulesStorage.h"
+
 
 namespace Buxoff {
     bool view_enable_add(const std::string& amount, const std::string& account) {
@@ -13,8 +16,9 @@ namespace Buxoff {
         return is_valid_email(email) && (records_count > 0 || view_enable_add(amount, account));
     }
 
-    std::string tag_for_description(const std::string& desc) {
-        return "";
+    std::set<std::string> tag_for_description(Connection* c, const std::string& desc) {
+        auto rs = RulesStorage{c};
+        return rs.get(desc);
     }
 };
 
