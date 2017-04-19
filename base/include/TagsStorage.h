@@ -1,7 +1,6 @@
 #ifndef __Buxoff__TagsStorage__
 #define __Buxoff__TagsStorage__
 
-#include <set>
 #include "Storage.h"
 
 namespace Buxoff {
