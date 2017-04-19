@@ -126,7 +126,7 @@ JNIEXPORT void JNICALL Java_com_sevencrayons_buxoff_UserDefaults_put(JNIEnv *env
 JNIEXPORT jobjectArray JNICALL Java_com_sevencrayons_buxoff_TagsStorage_all(
     JNIEnv *env, jobject jobj) {
     TagsStorage ts{connection};
-    std::set<std::string> tags = ts.all_tags();
+    auto tags = ts.all();
     jobjectArray res = env->NewObjectArray(
         tags.size(), env->FindClass("java/lang/String"), NULL);
 

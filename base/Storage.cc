@@ -53,20 +53,37 @@ void Connection::remove(const std::string& key) {
 }
 
 
-string StringStorage::put(const string& value) {
-    string key{random_key(prefix)};
+void StringStorage::validate_key_value (
+        const std::string& key,
+        const std::string& value) throw (StorageError) {
+    if (key.empty() || value.empty())
+        throw StorageError{"empty key or value"};
+}
+
+void StringStorage::put(
+        const std::string& key,
+        const std::string& value) throw (StorageError) {
+    validate_key_value(key, value);
     db->put(key, value);
+};
+
+string StringStorage::put(const string& value) throw (StorageError) {
+    string key{random_key(prefix)};
+    put(key, value);
     return key;
 }
 
 std::vector<std::string> StringStorage::all() {
     std::vector<std::string> res;
-    auto f = [&res](const string& key, const string& value) { res.push_back(value); };
+    auto f = [&res](const string& key, const string& value) {
+        res.push_back(value);
+    };
     db->for_each(prefix, f);
     return res;
 }
 
-std::unordered_map<std::string, std::string> StringStorage::all_map(bool clear_key) {
+std::unordered_map<std::string, std::string> StringStorage::all_map(
+        bool clear_key) {
     std::unordered_map<std::string, std::string> res;
     if (clear_key) {
         auto f = [&res, this](const string& key, const string& value) {
@@ -74,7 +91,9 @@ std::unordered_map<std::string, std::string> StringStorage::all_map(bool clear_k
         };
         db->for_each(prefix, f);
     } else {
-        auto f = [&res](const string& key, const string& value) {res[key] = value;};
+        auto f = [&res](const string& key, const string& value) {
+            res[key] = value;
+        };
         db->for_each(prefix, f);
     }
     return res;
@@ -88,7 +107,9 @@ int StringStorage::count() {
 }
 
 void StringStorage::clear() {
-    auto f = [this](const string& key, const string& value) { db->remove(key); };
+    auto f = [this](const string& key, const string& value) {
+        db->remove(key);
+    };
     db->for_each(prefix, f);
 };
 

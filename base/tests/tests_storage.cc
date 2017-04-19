@@ -9,6 +9,17 @@
 using namespace Buxoff;
 using namespace std;
 
+TEST_CASE("storage-validation", "[storage]") {
+    clean_storage();
+    auto c = Connection("test.db");
+    auto ss = StringStorage(&c, "test_");
+
+    REQUIRE_THROWS_AS(ss.put(""), StorageError);
+    REQUIRE_THROWS_AS(ss.put("", ""), StorageError);
+    REQUIRE_THROWS_AS(ss.put("foo", ""), StorageError);
+    REQUIRE_THROWS_AS(ss.put("", "foo"), StorageError);
+}
+
 TEST_CASE("storage-put-contaimer", "[storage]") {
     clean_storage();
     auto c = Connection("test.db");
