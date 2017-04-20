@@ -40,4 +40,17 @@ void throw_java_exception(JNIEnv *env, const char *msg)
     env->ThrowNew(c, msg);
 }
 
+template<typename C>
+jobjectArray java_strings_array(JNIEnv *env, const C& c) {
+    jobjectArray res = env->NewObjectArray(
+        c.size(), env->FindClass("java/lang/String"), NULL);
+
+    int i = 0;
+    for (const std::string& tag: c) {
+        env->SetObjectArrayElement(res, i, env->NewStringUTF(tag.c_str()));
+        ++i;
+    }
+    return res;
+}
+
 #endif

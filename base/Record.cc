@@ -7,7 +7,8 @@
 using namespace Buxoff;
 using namespace std;
 
-Record::Record(const std::string& json_str):Record(nlohmann::json::parse(json_str)) {
+Record::Record(const std::string& json_str):
+    Record(nlohmann::json::parse(json_str)) {
 }
 
 Record::Record(nlohmann::json o):
@@ -37,24 +38,7 @@ string Record::get_line() const {
 }
 
 string Record::_join_tags(const Tags &tags) const {
-    if (tags.empty()) {
-        return "";
-    }
-
-    string s;
-    s.reserve(tags.size() * 10);
-
-    auto final = tags.end();
-    --final;
-
-    for (auto it = tags.begin(); it != tags.end(); ++it) {
-        s += *it;
-        if (it != final) {
-            s += ",";
-        }
-    }
-
-    return s;
+    return join_strings(tags);
 }
 
 string Record::get_json_string() const {
@@ -79,7 +63,9 @@ bool Record::empty(bool ignore_account) const {
 
 vector<Record> RecordStorage::all() {
     vector<Record> res;
-    auto f = [&res](const string& key, const string& value) { res.push_back(value); };
+    auto f = [&res](const string& key, const string& value) {
+        res.push_back(value);
+    };
     db->for_each(prefix, f);
     return res;
 }

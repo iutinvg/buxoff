@@ -14,7 +14,10 @@ TEST_CASE("rules-get", "[rules-storage]") {
     auto rs = RulesStorage(&c);
     rs.put("desc", set<string>{"tag2", "tag1"});
     auto tags = rs.get("desc");
+    vector<string> v(tags.begin(), tags.end());
     REQUIRE(tags.size() == 2);
+    REQUIRE(v[0] == "tag1");
+    REQUIRE(v[1] == "tag2");
 }
 
 TEST_CASE("rules-put", "[rules-storage]") {

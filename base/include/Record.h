@@ -13,6 +13,28 @@
 namespace Buxoff {
     using Tags = std::set<std::string>;
 
+    template<typename C>
+    std::string join_strings(const C& tags) {
+        if (tags.empty()) {
+            return "";
+        }
+
+        std::string s;
+        s.reserve(tags.size() * 10);
+
+        auto final = tags.end();
+        --final;
+
+        for (auto it = tags.begin(); it != tags.end(); ++it) {
+            s += *it;
+            if (it != final) {
+                s += ",";
+            }
+        }
+
+        return s;
+    }
+
     class Record {
         std::string _amount;
         std::string _description;
@@ -22,7 +44,8 @@ namespace Buxoff {
         std::string _join_tags(const Tags &tags) const;
     public:
         Record(){}; // mostly needed for testing
-        Record(std::string amount, std::string description, Tags tags, std::string account);
+        Record(std::string amount, std::string description,
+                Tags tags, std::string account);
         Record(nlohmann::json o);
         Record(const std::string& json_str);
 

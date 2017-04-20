@@ -5,12 +5,6 @@
 
 
 namespace Buxoff {
-    // class C {
-    // public:
-    //     C();
-    // };
-
-    // int f(int);
     class ValidationError: public std::logic_error{
     public:
         using logic_error::logic_error;
@@ -18,20 +12,17 @@ namespace Buxoff {
 
     class ValidationErrorEmail: public ValidationError {
     public:
-        using ValidationError::ValidationError;
-        ValidationErrorEmail(): ValidationErrorEmail{"Invalid email"} {}
+        ValidationErrorEmail(): ValidationError{"Invalid email"} {}
     };
 
     class ValidationErrorAmount: public ValidationError {
     public:
-        using ValidationError::ValidationError;
-        ValidationErrorAmount(): ValidationErrorAmount{"Amount must be a number"} {}
+        ValidationErrorAmount():ValidationError{"Amount must be a number"} {}
     };
 
     class ValidationErrorAccount: public ValidationError {
     public:
-        using ValidationError::ValidationError;
-        ValidationErrorAccount(): ValidationErrorAccount{"Account must be set"} {}
+        ValidationErrorAccount(): ValidationError{"Account must be set"} {}
     };
 
     void validate_email(const std::string& email) throw (ValidationError);
