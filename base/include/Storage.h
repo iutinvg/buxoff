@@ -89,6 +89,8 @@ namespace Buxoff {
         // if clear_key is true the prefix will be removed from the key
         std::unordered_map<std::string, std::string> all_map(
                 bool clear_key=false);
+        // get all keys as a set
+        std::set<std::string>keys(bool clear_key=false);
         int count();
         void clear();
     };

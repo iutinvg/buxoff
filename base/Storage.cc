@@ -37,7 +37,7 @@ Connection::~Connection() {
 }
 
 string Connection::get(const string &key, const string &def) {
-    std::string value{def};
+    string value{def};
     last_status = db->Get(leveldb::ReadOptions(), key, &value);
     return value;
 }
@@ -47,22 +47,22 @@ void Connection::put(const string& key, const string& value) {
     assert(last_status.ok());
 }
 
-void Connection::remove(const std::string& key) {
+void Connection::remove(const string& key) {
     last_status = db->Delete(leveldb::WriteOptions(), key);
     assert(last_status.ok());
 }
 
 
 void StringStorage::validate_key_value (
-        const std::string& key,
-        const std::string& value) throw (StorageError) {
+        const string& key,
+        const string& value) throw (StorageError) {
     if (key.empty() || value.empty())
         throw StorageError{"empty key or value"};
 }
 
 void StringStorage::put(
-        const std::string& key,
-        const std::string& value) throw (StorageError) {
+        const string& key,
+        const string& value) throw (StorageError) {
     validate_key_value(key, value);
     db->put(key, value);
 };
@@ -74,7 +74,7 @@ string StringStorage::put(const string& value) throw (StorageError) {
 }
 
 std::vector<std::string> StringStorage::all() {
-    std::vector<std::string> res;
+    vector<string> res;
     auto f = [&res](const string& key, const string& value) {
         res.push_back(value);
     };
@@ -84,7 +84,7 @@ std::vector<std::string> StringStorage::all() {
 
 std::unordered_map<std::string, std::string> StringStorage::all_map(
         bool clear_key) {
-    std::unordered_map<std::string, std::string> res;
+    unordered_map<string, string> res;
     if (clear_key) {
         auto f = [&res, this](const string& key, const string& value) {
             res[key.substr(prefix.size())] = value;
@@ -93,6 +93,22 @@ std::unordered_map<std::string, std::string> StringStorage::all_map(
     } else {
         auto f = [&res](const string& key, const string& value) {
             res[key] = value;
+        };
+        db->for_each(prefix, f);
+    }
+    return res;
+}
+
+std::set<std::string> StringStorage::keys(bool clear_key) {
+    std::set<string> res;
+    if (clear_key) {
+        auto f = [&res, this](const string& key, const string& value) {
+            res.insert(key.substr(prefix.size()));
+        };
+        db->for_each(prefix, f);
+    } else {
+        auto f = [&res](const string& key, const string& value) {
+            res.insert(key);
         };
         db->for_each(prefix, f);
     }
@@ -112,130 +128,3 @@ void StringStorage::clear() {
     };
     db->for_each(prefix, f);
 };
-
-// Storage::Storage(string filename) {
-//     srand(time(0));
-//     leveldb::Options options;
-//     options.create_if_missing = true;
-//     last_status = leveldb::DB::Open(options, filename, &_db);
-//     assert(last_status.ok());
-// }
-
-// Storage::~Storage() {
-//     delete _db;
-// }
-
-// string Storage::get_string(const string &key, const string &def) {
-//     std::string value{def};
-//     _db->Get(leveldb::ReadOptions(), key, &value);
-//     return value;
-// }
-
-// Record Storage::get(const string& key) {
-//     std::string value {get_string(key)};
-//     return Record(nlohmann::json::parse(value));
-// }
-
-// RecordsList Storage::get_records() {
-//     auto last = Record_ID_Prefix + "\u02ad";
-
-//     unique_ptr<leveldb::Iterator> it(_db->NewIterator(leveldb::ReadOptions()));
-//     RecordsList res;
-//     for (it->Seek(Record_ID_Prefix);
-//         it->Valid() && it->key().ToString() < last;
-//         it->Next()) {
-//         res.push_back(Record(nlohmann::json::parse(it->value().ToString())));
-//     }
-//     assert(it->status().ok());
-//     return res;
-// }
-
-// int Storage::get_records_count() {
-//     auto i = 0;
-//     auto last = Record_ID_Prefix + "\u02ad";
-
-//     unique_ptr<leveldb::Iterator> it(_db->NewIterator(leveldb::ReadOptions()));
-//     for (it->Seek(Record_ID_Prefix);
-//         it->Valid() && it->key().ToString() < last;
-//         it->Next()) {
-//         ++i;
-//     }
-//     last_status = it->status();
-//     assert(it->status().ok());
-//     return i;
-// }
-
-// int Storage::get_total_count() {
-//     auto i = 0;
-//     unique_ptr<leveldb::Iterator> it(_db->NewIterator(leveldb::ReadOptions()));
-//     for (it->SeekToFirst(); it->Valid(); it->Next()) {
-//         ++i;
-//     }
-//     last_status = it->status();
-//     assert(it->status().ok());
-//     return i;
-// }
-
-// void Storage::put(const string& key, const string& value) {
-//     last_status = _db->Put(leveldb::WriteOptions(), key, value);
-//     assert(last_status.ok());
-// }
-
-// void Storage::put(const string& key, const Record& record) {
-//     put(key, record.get_json_string());
-// }
-
-// string Storage::put(const Record& record) {
-//     string key{Record_ID_Prefix + random_key()};
-//     put(key, record);
-//     return key;
-// }
-
-// string Storage::put(const string& amount, const string& description, const Tags& tags, const string& account) {
-//     return put(Record{amount, description, tags, account});
-// }
-
-// void Storage::clear_records() {
-//     clear(Record_ID_Prefix);
-// }
-
-// void Storage::clear(const string& prefix) {
-//     auto last = prefix + "\u02ad";
-//     unique_ptr<leveldb::Iterator> it(_db->NewIterator(leveldb::ReadOptions()));
-//     for (it->Seek(prefix); it->Valid() && it->key().ToString() < last; it->Next()) {
-//         auto s = _db->Delete(leveldb::WriteOptions(), it->key());
-//         assert(s.ok());
-//     }
-//     assert(it->status().ok());
-// }
-
-
-// std::string Storage::get_ud(const std::string& key)
-// {
-//     auto o = nlohmann::json::parse(get_string(User_ID_Prefix, "{}"));
-//     return o[key];
-// }
-
-
-// void Storage::put_ud(const std::string& key, const std::string& val)
-// {
-//     auto o = nlohmann::json::parse(get_string(User_ID_Prefix, "{}"));
-//     o[key]
-//     put(User_ID_Prefix + key, val);
-// }
-
-
-// string Buxoff::random_key(size_t length) {
-//     auto randchar = []() -> char
-//     {
-//         constexpr char charset[] =
-//         "0123456789"
-//         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-//         "abcdefghijklmnopqrstuvwxyz";
-//         constexpr size_t max_index = (sizeof(charset) - 1);
-//         return charset[ rand() % max_index ];
-//     };
-//     string str(length, 0);
-//     generate_n(str.begin(), length, randchar);
-//     return str;
-// }

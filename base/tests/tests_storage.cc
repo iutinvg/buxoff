@@ -9,6 +9,34 @@
 using namespace Buxoff;
 using namespace std;
 
+TEST_CASE("storage-keys", "[storage]") {
+    clean_storage();
+    auto c = Connection("test.db");
+    auto ss = StringStorage(&c, "test_");
+    ss.put(ss.prefix + "k1", "v1");
+    ss.put(ss.prefix + "k2", "v2");
+    auto res = ss.keys();
+    vector<string> v(res.begin(), res.end());
+
+    REQUIRE(res.size() == 2);
+    REQUIRE(v[0] == "test_k1");
+    REQUIRE(v[1] == "test_k2");
+}
+
+TEST_CASE("storage-keys-clear", "[storage]") {
+    clean_storage();
+    auto c = Connection("test.db");
+    auto ss = StringStorage(&c, "test_");
+    ss.put(ss.prefix + "k1", "v1");
+    ss.put(ss.prefix + "k2", "v2");
+    auto res = ss.keys(true);
+    vector<string> v(res.begin(), res.end());
+
+    REQUIRE(res.size() == 2);
+    REQUIRE(v[0] == "k1");
+    REQUIRE(v[1] == "k2");
+}
+
 TEST_CASE("storage-validation", "[storage]") {
     clean_storage();
     auto c = Connection("test.db");
