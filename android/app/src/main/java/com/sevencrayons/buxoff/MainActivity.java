@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.ArrayAdapter;
@@ -24,11 +25,14 @@ public class MainActivity extends AppCompatActivity {
     Buxoff buxoff;
     UserDefaults ud;
     TagsStorage tagsStorage;
+    RulesStorage rulesStorage;
+
 
     TextView labelStats;
     EditText textAmount;
-    EditText textDescription;
+    AutoCompleteTextView textDescription;
     AutoCompleteTextView textTag;
+    boolean tagWasResolved = true; // flag tag was set by a resolution
     EditText textAccount;
     EditText textEmail;
     Button buttonAdd;
@@ -41,8 +45,11 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         initButtons();
         initEditTexts();
+        initTags();
         initPersistentEditTexts();
+        initRulesResolution();
 
+        updateButtons();
         updateUI();
     }
 
@@ -50,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         buxoff = new Buxoff(Utils.getDocPath(this));
         ud = new UserDefaults();
         tagsStorage = new TagsStorage();
+        rulesStorage = new RulesStorage();
     }
 
     private void initViews() {
@@ -58,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         labelStats = (TextView) findViewById(R.id.textStats);
         textAmount = (EditText) findViewById(R.id.textAmount);
-        textDescription = (EditText) findViewById(R.id.textDescription);
+        textDescription = (AutoCompleteTextView) findViewById(R.id.textDescription);
         textTag = (AutoCompleteTextView) findViewById(R.id.textTags);
         textAccount = (EditText) findViewById(R.id.textAccount);
         textEmail = (EditText) findViewById(R.id.textEmail);
@@ -68,14 +76,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initEditTexts() {
-        List<EditText> l = Arrays.asList(textAmount, textDescription, textTag, textAccount, textEmail);
+        List<EditText> l = Arrays.asList(textAmount, textDescription, textAccount, textEmail);
         TextWatcher tw = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                updateUI();
+                updateButtons();
             }
 
             @Override
@@ -109,6 +117,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void initRulesResolution() {
+        textDescription.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                resolveRule();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
+    }
+
+    private void initTags() {
+        textTag.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                tagWasResolved = false;
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
+    }
+
     private void initButtons() {
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,13 +162,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void updateTagsAutocompletion() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, tagsStorage.all());
-        textTag.setAdapter(adapter);
-    }
-
-    private void updateUI() {
+    private void updateButtons() {
+        Log.d(TAG, "update buttons");
         int count = buxoff.count();
         String amount = textAmount.getText().toString();
         String account = textAccount.getText().toString();
@@ -138,8 +171,42 @@ public class MainActivity extends AppCompatActivity {
         buttonAdd.setEnabled(buxoff.enableAdd(amount, account));
         buttonPush.setEnabled(buxoff.enablePush(count, amount, account, email));
         labelStats.setText(getString(R.string.total) + count);
+    }
 
+    private void updateTagsAutocompletion() {
+        String[] l = tagsStorage.all();
+        Log.d(TAG, "tags autocompletion: " + Arrays.toString(l));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, l);
+        textTag.setAdapter(adapter);
+    }
+
+    private void updateRulesAutocompletion() {
+        String[] l = rulesStorage.all();
+        Log.d(TAG, "rules autocompletion: " + Arrays.toString(l));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, l);
+        textDescription.setAdapter(adapter);
+    }
+
+    private void updateUI() {
+        Log.d(TAG, "updateUI");
         updateTagsAutocompletion();
+        updateRulesAutocompletion();
+    }
+
+    private void resolveRule() {
+        Log.d(TAG, "try to resolve rule...");
+        String tag = textTag.getText().toString();
+        // we won't tag if it was set by user
+        if (tag.isEmpty() || tagWasResolved) {
+            String desc = textDescription.getText().toString();
+            textTag.setText(rulesStorage.tags(desc));
+            Log.d(TAG, "resolve rule for " + desc + "...");
+            tagWasResolved = true;
+        } else {
+            Log.d(TAG, "but it's empty or set by user");
+        }
     }
 
     private void add(View view) {

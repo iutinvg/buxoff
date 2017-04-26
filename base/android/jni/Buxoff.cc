@@ -56,6 +56,8 @@ extern "C" {
     JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_RulesStorage_tags(
             JNIEnv *env, jobject obj,
             jstring desc);
+    JNIEXPORT jobjectArray JNICALL Java_com_sevencrayons_buxoff_RulesStorage_all(
+            JNIEnv *env, jobject obj);
 };
 
 void JNI_OnUnload(JavaVM *vm, void *reserved) {
@@ -168,4 +170,11 @@ JNIEXPORT jstring JNICALL Java_com_sevencrayons_buxoff_RulesStorage_tags(
         JNIEnv *env, jobject obj, jstring desc) {
     auto tags = tags_for_description(connection, JStr{env, desc});
     return env->NewStringUTF(tags.c_str());
+}
+
+JNIEXPORT jobjectArray JNICALL Java_com_sevencrayons_buxoff_RulesStorage_all(
+        JNIEnv *env, jobject obj) {
+
+    RulesStorage rs{connection};
+    return java_strings_array(env, rs.keys(true));
 }

@@ -15,9 +15,12 @@ void Buxoff::controller_add(Connection* c, const Record& r)
     RulesStorage rls{c};
 
     try {
+        auto tags = r.tags();
         rs.put(r);
-        ts.put_all(r.tags());
-        // rls.put(r.description(), r.tags());
+        for (auto &tag : tags) {
+            ts.put(tag);
+        }
+        rls.put(r.description(), r.tags());
     } catch (StorageError& e) {
         // from user point of view, it's totally fine
         // to store empty tags or descriptions

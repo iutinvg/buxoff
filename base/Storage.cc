@@ -1,3 +1,5 @@
+// #include <iostream>
+
 #include "json.hpp"
 
 #include "Storage.h"
@@ -68,6 +70,7 @@ void StringStorage::put(
 };
 
 string StringStorage::put(const string& value) throw (StorageError) {
+    // cout << "base put\n";
     string key{random_key(prefix)};
     put(key, value);
     return key;
