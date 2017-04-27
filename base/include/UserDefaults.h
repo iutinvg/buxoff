@@ -5,6 +5,12 @@
 
 namespace Buxoff {
     class UserDefaults: public StringStorage {
+    protected:
+        void validate_key_value(
+                const std::string& key,
+                const std::string& value) throw (StorageError) override {
+            // allow empty string storage
+        };
     public:
         UserDefaults(Connection *adb): StringStorage(adb, "user_defaults_") {};
     };

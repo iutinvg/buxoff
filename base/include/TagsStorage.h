@@ -8,7 +8,7 @@ namespace Buxoff {
     public:
         TagsStorage(Connection *adb): StringStorage(adb, "tag_") {};
         using StringStorage::put;
-        std::string put(const std::string& value) throw (StorageError);
+        std::string put(const std::string& value) throw (StorageError) override;
     };
 };
 

@@ -17,10 +17,8 @@ void Buxoff::controller_add(Connection* c, const Record& r)
     try {
         auto tags = r.tags();
         rs.put(r);
-        for (auto &tag : tags) {
-            ts.put(tag);
-        }
-        rls.put(r.description(), r.tags());
+        ts.put_all(tags);
+        rls.put(r.description(), tags);
     } catch (StorageError& e) {
         // from user point of view, it's totally fine
         // to store empty tags or descriptions

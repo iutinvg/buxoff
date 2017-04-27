@@ -59,7 +59,8 @@ namespace Buxoff {
     class StringStorage {
     protected:
         Connection* db;
-        void validate_key_value(
+        // virtual to redefine in inhrted classes
+        virtual void validate_key_value(
                 const std::string& key,
                 const std::string& value) throw (StorageError);
     public:
@@ -71,7 +72,8 @@ namespace Buxoff {
         };
         void put(const std::string& key, const std::string& value)
             throw (StorageError);
-        std::string put(const std::string& value) throw (StorageError);
+        // put without key is tend to be different in inherited classes
+        virtual std::string put(const std::string& value) throw (StorageError);
         // TODO: create a template with name put
         template<typename C>
         void put_all(const C &c) throw (StorageError) {
