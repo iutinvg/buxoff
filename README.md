@@ -1,5 +1,3 @@
-# Build on Macos
-
 # What?
 Simple offline buxfer.com client.
 
@@ -34,6 +32,8 @@ This project is a sort of an academic project now. It's my investigation how to 
 
 * all "business logic" is implemented in C++, UI is implemented on a plaform technology
 * persistent layer is LevelDB https://github.com/google/leveldb
+* JSON docs are stored in the database: https://github.com/nlohmann/json
+* Catch is used for unit-testing: https://github.com/philsquared/Catch
 * `make` is used for building of libraries for Android and iPhone
 * Play Market App: https://play.google.com/store/apps/details?id=com.sevencrayons.buxoff
 
