@@ -1,7 +1,6 @@
 # Build on Macos
-https://github.com/litl/android-leveldb/blob/master/src/main/jni/Android.mk
 
-#What?
+# What?
 Simple offline buxfer.com client.
 
 Buxoff is short for a Buxfer Offline. And this is yet another client app for the famous
@@ -13,10 +12,10 @@ There are three main differences from the other clients:
 2. that's why it is fast;
 3. it is safe (read below).
 
-#Who?
+# Who?
 This is application for those who are traveling a lot and always on the run. Yes, 3G / 4G / LTE is everywhere nowadays, but, alas, sometime it is terribly slow or too expensive. Do you like international roaming?
 
-#Why?
+# Why?
 Buxoff is not one more slow / buggy web app forcing you to wait forages until it loads.
 This is a native mobile application working as fast as you phone can. You can save all your
 expenses on the spot and push them to server later.
@@ -27,13 +26,11 @@ Buxoff uses email interface of buxfer.com, thus it doesn't require your buxfer a
 and even Internet connection. And nobody can see your buxfer account using this app if you happy enough to lose you mobile.
 
 
-#More
+# More
 
 Support page: http://sevencrayons.com/buxoff
 
-This project is a sort of an academic project now. It's my investigation how to
-write C++ crossplatform code for mobiles. So technical details could be a point
-of your interest:
+This project is a sort of an academic project now. It's my investigation how to write C++ crossplatform code for mobiles. So it's my hobby C++ project. Some technical details could be a point of your interest:
 
 * all "business logic" is implemented in C++, UI is implemented on a plaform technology
 * persistent layer is LevelDB https://github.com/google/leveldb
