@@ -26,7 +26,25 @@ The transaction properties (tags, transactions, rules) are saved locally on devi
 Buxoff uses email interface of buxfer.com, thus it doesn't require your buxfer account credentials
 and even Internet connection. And nobody can see your buxfer account using this app if you happy enough to lose you mobile.
 
+
 #More
+
 Support page: http://sevencrayons.com/buxoff
 
-Play Market App: https://play.google.com/store/apps/details?id=com.sevencrayons.buxoff
+This project is a sort of an academic project now. It's my investigation how to
+write C++ crossplatform code for mobiles. So technical details could be a point
+of your interest:
+
+* all "business logic" is implemented in C++, UI is implemented on a plaform technology
+* persistent layer is LevelDB https://github.com/google/leveldb
+* `make` is used for building of libraries for Android and iPhone
+* Play Market App: https://play.google.com/store/apps/details?id=com.sevencrayons.buxoff
+
+
+## Reading
+
+Some interesting things about cross mobile C++ development
+
+* was an inspiration for me: http://oleb.net/blog/2014/05/how-dropbox-uses-cplusplus-cross-platform-development/
+* an idea how to build LevelDB for Android: https://github.com/litl/android-leveldb/blob/master/src/main/jni/Android.mk
+* very useful list of C++ libs / tools: https://github.com/fffaraz/awesome-cpp
