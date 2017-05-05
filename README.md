@@ -45,3 +45,4 @@ Some interesting things about cross mobile C++ development
 * was an inspiration for me: http://oleb.net/blog/2014/05/how-dropbox-uses-cplusplus-cross-platform-development/
 * an idea how to build LevelDB for Android: https://github.com/litl/android-leveldb/blob/master/src/main/jni/Android.mk
 * very useful list of C++ libs / tools: https://github.com/fffaraz/awesome-cpp
+* good JNI examples / patterns can be found here: http://www3.ntu.edu.sg/home/ehchua/programming/java/JavaNativeInterface.html
