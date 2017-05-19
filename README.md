@@ -32,7 +32,7 @@ This project is a sort of an academic project now. It's my investigation how to 
 
 * all "business logic" is implemented in C++, UI is implemented on a plaform technology
 * persistent layer is [LevelDB](https://github.com/google/leveldb)
-* The records are stored in [JSON](https://github.com/nlohmann/json) in the database
+* The records are stored in [JSON](https://github.com/nlohmann/json) format in the database
 * [Catch](https://github.com/philsquared/Catch) is used for unit-testing
 * `make` is used for building of libraries for Android and iPhone
 * Play Market App: https://play.google.com/store/apps/details?id=com.sevencrayons.buxoff
