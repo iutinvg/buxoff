@@ -1,8 +1,10 @@
 # How to Build
 
 ## Android build
+```
 cd ~/buxoff/base/android/jni
 ~/Library/Android/sdk/ndk-bundle/ndk-build
+```
 
 Now open the project in Android Studio and build.
 
