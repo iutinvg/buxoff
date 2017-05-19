@@ -8,11 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class StorageWrapper;
-
-@interface ViewController : UIViewController {
-    StorageWrapper *_sw;
-}
+@interface ViewController : UIViewController <UITextFieldDelegate>
 
 @property (nonatomic, strong) IBOutlet UITextField *textAmount;
 @property (nonatomic, strong) IBOutlet UITextField *textDesc;
@@ -27,5 +23,6 @@
 
 - (IBAction)actionAdd:(id)sender;
 - (IBAction)actionPush:(id)sender;
+- (IBAction)textFieldDidChange:(UITextField*)f;
 
 @end

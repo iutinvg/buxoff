@@ -6,6 +6,16 @@ cd ~/buxoff/base/android/jni
 cd ~/buxoff/base
 make
 
+Build static LevelDB.
+```
+cd ~/buxoff/base/deps/leveldb
+make PLATFORM=IOS SHARED_OUTDIR=out-shared
+```
+
+`so_out` is necessary as a workaround for a bug in building system. Probably,
+it will be fixed soon.
+
+
 ## Tests run
 make tests
 

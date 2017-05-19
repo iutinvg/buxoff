@@ -7,18 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F93486251ECE855200F33CA0 /* ViewHelpersWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = F93486241ECE855200F33CA0 /* ViewHelpersWrapper.mm */; };
+		F93486281ECE8E8700F33CA0 /* UserDefaultsWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = F93486271ECE8E8700F33CA0 /* UserDefaultsWrapper.mm */; };
 		F941C0C71D4C4FDA00763036 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F941C0C61D4C4FDA00763036 /* main.m */; };
 		F941C0CA1D4C4FDA00763036 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F941C0C91D4C4FDA00763036 /* AppDelegate.m */; };
-		F941C0CD1D4C4FDA00763036 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = F941C0CC1D4C4FDA00763036 /* ViewController.mm */; };
+		F941C0CD1D4C4FDA00763036 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F941C0CC1D4C4FDA00763036 /* ViewController.m */; };
 		F941C0D01D4C4FDA00763036 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F941C0CE1D4C4FDA00763036 /* Main.storyboard */; };
 		F941C0D21D4C4FDA00763036 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F941C0D11D4C4FDA00763036 /* Assets.xcassets */; };
 		F941C0D51D4C4FDA00763036 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F941C0D31D4C4FDA00763036 /* LaunchScreen.storyboard */; };
 		F941C0E01D4C4FDA00763036 /* BuxoffTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F941C0DF1D4C4FDA00763036 /* BuxoffTests.m */; };
 		F941C0EB1D4C4FDA00763036 /* BuxoffUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F941C0EA1D4C4FDA00763036 /* BuxoffUITests.m */; };
 		F941C1061D4C54A400763036 /* libbuxoff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F941C1031D4C54A400763036 /* libbuxoff.a */; };
-		F9B1C5451D5241F500871950 /* StorageWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = F9B1C5441D5241F500871950 /* StorageWrapper.mm */; };
+		F9B1C5451D5241F500871950 /* ConnectionWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = F9B1C5441D5241F500871950 /* ConnectionWrapper.mm */; };
 		F9B1C5591D52B49400871950 /* libleveldb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B1C5571D52B49400871950 /* libleveldb.a */; };
 		F9B1C55A1D52B49400871950 /* libmemenv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B1C5581D52B49400871950 /* libmemenv.a */; };
+		F9B85DF51EC93DA9000B5818 /* RecordStorageWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = F9B85DF41EC93DA9000B5818 /* RecordStorageWrapper.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,12 +42,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F91872CC1ECBDEB000169F71 /* ConnectionWrapper+Impl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ConnectionWrapper+Impl.h"; sourceTree = "<group>"; };
+		F93486231ECE855200F33CA0 /* ViewHelpersWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewHelpersWrapper.h; sourceTree = "<group>"; };
+		F93486241ECE855200F33CA0 /* ViewHelpersWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewHelpersWrapper.mm; sourceTree = "<group>"; };
+		F93486261ECE8E8700F33CA0 /* UserDefaultsWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDefaultsWrapper.h; sourceTree = "<group>"; };
+		F93486271ECE8E8700F33CA0 /* UserDefaultsWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UserDefaultsWrapper.mm; sourceTree = "<group>"; };
 		F941C0C21D4C4FDA00763036 /* Buxoff.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Buxoff.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F941C0C61D4C4FDA00763036 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F941C0C81D4C4FDA00763036 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F941C0C91D4C4FDA00763036 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		F941C0CB1D4C4FDA00763036 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		F941C0CC1D4C4FDA00763036 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		F941C0CC1D4C4FDA00763036 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		F941C0CF1D4C4FDA00763036 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F941C0D11D4C4FDA00763036 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F941C0D41D4C4FDA00763036 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -56,10 +64,13 @@
 		F941C0EA1D4C4FDA00763036 /* BuxoffUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BuxoffUITests.m; sourceTree = "<group>"; };
 		F941C0EC1D4C4FDA00763036 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F941C1031D4C54A400763036 /* libbuxoff.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbuxoff.a; path = ../../../base/ios/libbuxoff.a; sourceTree = "<group>"; };
-		F9B1C5431D5241CA00871950 /* StorageWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StorageWrapper.h; sourceTree = "<group>"; };
-		F9B1C5441D5241F500871950 /* StorageWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StorageWrapper.mm; sourceTree = "<group>"; };
+		F9B1C5431D5241CA00871950 /* ConnectionWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionWrapper.h; sourceTree = "<group>"; };
+		F9B1C5441D5241F500871950 /* ConnectionWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ConnectionWrapper.mm; sourceTree = "<group>"; };
 		F9B1C5571D52B49400871950 /* libleveldb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libleveldb.a; path = "../../../base/deps/leveldb/out-ios-universal/libleveldb.a"; sourceTree = "<group>"; };
 		F9B1C5581D52B49400871950 /* libmemenv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmemenv.a; path = "../../../base/deps/leveldb/out-ios-universal/libmemenv.a"; sourceTree = "<group>"; };
+		F9B85DF31EC93DA9000B5818 /* RecordStorageWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordStorageWrapper.h; sourceTree = "<group>"; };
+		F9B85DF41EC93DA9000B5818 /* RecordStorageWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RecordStorageWrapper.mm; sourceTree = "<group>"; };
+		F9B85DF61EC94333000B5818 /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = json.hpp; path = ../../../base/deps/json/src/json.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,13 +124,11 @@
 		F941C0C41D4C4FDA00763036 /* Buxoff */ = {
 			isa = PBXGroup;
 			children = (
-				F9B1C5431D5241CA00871950 /* StorageWrapper.h */,
-				F9B1C5441D5241F500871950 /* StorageWrapper.mm */,
 				F941C1071D4C54F800763036 /* libbuxoff */,
 				F941C0C81D4C4FDA00763036 /* AppDelegate.h */,
 				F941C0C91D4C4FDA00763036 /* AppDelegate.m */,
 				F941C0CB1D4C4FDA00763036 /* ViewController.h */,
-				F941C0CC1D4C4FDA00763036 /* ViewController.mm */,
+				F941C0CC1D4C4FDA00763036 /* ViewController.m */,
 				F941C0CE1D4C4FDA00763036 /* Main.storyboard */,
 				F941C0D11D4C4FDA00763036 /* Assets.xcassets */,
 				F941C0D31D4C4FDA00763036 /* LaunchScreen.storyboard */,
@@ -158,9 +167,19 @@
 		F941C1071D4C54F800763036 /* libbuxoff */ = {
 			isa = PBXGroup;
 			children = (
+				F9B85DF61EC94333000B5818 /* json.hpp */,
+				F9B1C5431D5241CA00871950 /* ConnectionWrapper.h */,
+				F9B1C5441D5241F500871950 /* ConnectionWrapper.mm */,
+				F91872CC1ECBDEB000169F71 /* ConnectionWrapper+Impl.h */,
+				F9B85DF31EC93DA9000B5818 /* RecordStorageWrapper.h */,
+				F9B85DF41EC93DA9000B5818 /* RecordStorageWrapper.mm */,
 				F9B1C5571D52B49400871950 /* libleveldb.a */,
 				F9B1C5581D52B49400871950 /* libmemenv.a */,
 				F941C1031D4C54A400763036 /* libbuxoff.a */,
+				F93486231ECE855200F33CA0 /* ViewHelpersWrapper.h */,
+				F93486241ECE855200F33CA0 /* ViewHelpersWrapper.mm */,
+				F93486261ECE8E8700F33CA0 /* UserDefaultsWrapper.h */,
+				F93486271ECE8E8700F33CA0 /* UserDefaultsWrapper.mm */,
 			);
 			name = libbuxoff;
 			sourceTree = "<group>";
@@ -295,10 +314,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F941C0CD1D4C4FDA00763036 /* ViewController.mm in Sources */,
+				F93486251ECE855200F33CA0 /* ViewHelpersWrapper.mm in Sources */,
+				F93486281ECE8E8700F33CA0 /* UserDefaultsWrapper.mm in Sources */,
+				F941C0CD1D4C4FDA00763036 /* ViewController.m in Sources */,
 				F941C0CA1D4C4FDA00763036 /* AppDelegate.m in Sources */,
+				F9B85DF51EC93DA9000B5818 /* RecordStorageWrapper.mm in Sources */,
 				F941C0C71D4C4FDA00763036 /* main.m in Sources */,
-				F9B1C5451D5241F500871950 /* StorageWrapper.mm in Sources */,
+				F9B1C5451D5241F500871950 /* ConnectionWrapper.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,7 +414,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -433,7 +455,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
