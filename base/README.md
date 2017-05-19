@@ -16,7 +16,7 @@ cd ~/buxoff/base/deps/leveldb
 make PLATFORM=IOS SHARED_OUTDIR=out-shared
 ```
 
-`so_out` is necessary as a workaround for a bug in building system:
+`SHARED_OUTDIR=out-shared` is necessary as a workaround for a bug in building system:
 https://github.com/google/leveldb/issues/467
 Probably, it will be fixed soon.
 
