@@ -15,8 +15,8 @@ This is application for those who are traveling a lot and always on the run. Yes
 
 # Why?
 Buxoff is not one more slow / buggy web app forcing you to wait forages until it loads.
-This is a native mobile application working as fast as you phone can. You can save all your
-expenses on the spot and push them to server later.
+This is a native mobile application working as fast as your phone can. You can save all your
+expenses on the spot and push them to buxfer.com later.
 
 The transaction properties (tags, transactions, rules) are saved locally on device and autocompletion helps you fill the fields. The more you use the app, the more rules it knows.
 
@@ -31,9 +31,9 @@ Support page: http://sevencrayons.com/buxoff
 This project is a sort of an academic project now. It's my investigation how to write C++ crossplatform code for mobiles. So it's my hobby C++ project. Some technical details could be a point of your interest:
 
 * all "business logic" is implemented in C++, UI is implemented on a plaform technology
-* persistent layer is LevelDB https://github.com/google/leveldb
-* JSON docs are stored in the database: https://github.com/nlohmann/json
-* Catch is used for unit-testing: https://github.com/philsquared/Catch
+* persistent layer is [LevelDB](https://github.com/google/leveldb)
+* The records are stored in [JSON](https://github.com/nlohmann/json) in the database
+* [Catch](https://github.com/philsquared/Catch) is used for unit-testing
 * `make` is used for building of libraries for Android and iPhone
 * Play Market App: https://play.google.com/store/apps/details?id=com.sevencrayons.buxoff
 
