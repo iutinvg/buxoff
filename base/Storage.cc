@@ -3,6 +3,7 @@
 #include "json.hpp"
 
 #include "Storage.h"
+#include "FuzzySearch.h"
 
 using namespace Buxoff;
 using namespace std;
@@ -76,7 +77,7 @@ string StringStorage::put(const string& value) throw (StorageError) {
     return key;
 }
 
-std::vector<std::string> StringStorage::all() {
+vector<string> StringStorage::all() {
     vector<string> res;
     auto f = [&res](const string& key, const string& value) {
         res.push_back(value);
@@ -85,7 +86,7 @@ std::vector<std::string> StringStorage::all() {
     return res;
 }
 
-std::unordered_map<std::string, std::string> StringStorage::all_map(
+unordered_map<string, string> StringStorage::all_map(
         bool clear_key) {
     unordered_map<string, string> res;
     if (clear_key) {
@@ -102,8 +103,8 @@ std::unordered_map<std::string, std::string> StringStorage::all_map(
     return res;
 }
 
-std::set<std::string> StringStorage::keys(bool clear_key) {
-    std::set<string> res;
+set<string> StringStorage::keys(bool clear_key) {
+    set<string> res;
     if (clear_key) {
         auto f = [&res, this](const string& key, const string& value) {
             res.insert(key.substr(prefix.size()));
@@ -115,6 +116,17 @@ std::set<std::string> StringStorage::keys(bool clear_key) {
         };
         db->for_each(prefix, f);
     }
+    return res;
+}
+
+vector<string> StringStorage::search(const std::string& needle) {
+    vector<string> res;
+    auto f = [&res, &needle](const string& key, const string& value) {
+        if (Buxoff::search(needle, value)) {
+            res.push_back(value);
+        }
+    };
+    db->for_each(prefix, f);
     return res;
 }
 

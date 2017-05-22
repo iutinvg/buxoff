@@ -9,6 +9,19 @@
 using namespace Buxoff;
 using namespace std;
 
+TEST_CASE("storage-search", "[storage]") {
+    clean_storage();
+    auto c = Connection("test.db");
+    auto ss = StringStorage(&c, "test_");
+
+    ss.put("cartwheel");
+    ss.put("boom");
+
+    auto res = ss.search("car");
+    REQUIRE(res.size() == 1);
+    REQUIRE(res[0] == "cartwheel");
+}
+
 TEST_CASE("storage-keys", "[storage]") {
     clean_storage();
     auto c = Connection("test.db");
