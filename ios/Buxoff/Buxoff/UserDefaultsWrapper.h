@@ -10,5 +10,5 @@
 
 @interface UserDefaultsWrapper : NSObject
 + (void)put:(NSString*)key value:(NSString*)value;
-+ (NSString*)get:(NSString*)key default:(NSString*)def;
++ (NSString*)get:(NSString*)key def:(NSString*)def;
 @end

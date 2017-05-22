@@ -21,14 +21,4 @@
     return rs.count();
 }
 
-+ (void)add:(NSString*)amount desc:(NSString*)desc tag:(NSString*)tag account:(NSString*)account
-{
-    Buxoff::Record r{
-        [amount UTF8String],
-        [desc UTF8String],
-        {[tag UTF8String]},
-        [account UTF8String]};
-    controller_add([ConnectionWrapper sharedConnection].impl, r);
-}
-
 @end

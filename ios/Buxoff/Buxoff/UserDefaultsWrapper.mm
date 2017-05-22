@@ -18,7 +18,7 @@
     ud.put(key.UTF8String, value.UTF8String);
 }
 
-+ (NSString*)get:(NSString*)key default:(NSString*)def
++ (NSString*)get:(NSString*)key def:(NSString*)def
 {
     Buxoff::UserDefaults ud{[ConnectionWrapper sharedConnection].impl};
     return [NSString stringWithUTF8String:ud.get(key.UTF8String, def.UTF8String).c_str()];

@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
 
-@interface ViewController : UIViewController <UITextFieldDelegate>
+
+@interface ViewController : UIViewController <UITextFieldDelegate, MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, strong) IBOutlet UITextField *textAmount;
 @property (nonatomic, strong) IBOutlet UITextField *textDesc;

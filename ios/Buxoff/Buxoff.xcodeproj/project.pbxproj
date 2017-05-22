@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		F93486251ECE855200F33CA0 /* ViewHelpersWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = F93486241ECE855200F33CA0 /* ViewHelpersWrapper.mm */; };
 		F93486281ECE8E8700F33CA0 /* UserDefaultsWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = F93486271ECE8E8700F33CA0 /* UserDefaultsWrapper.mm */; };
+		F939385D1ECFBEA000B3E7F5 /* EmailWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = F939385C1ECFBEA000B3E7F5 /* EmailWrapper.mm */; };
+		F93938601ECFC0EE00B3E7F5 /* ControllerHelpersWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = F939385F1ECFC0EE00B3E7F5 /* ControllerHelpersWrapper.mm */; };
+		F93938631ECFC49E00B3E7F5 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F93938621ECFC49E00B3E7F5 /* MessageUI.framework */; };
 		F941C0C71D4C4FDA00763036 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F941C0C61D4C4FDA00763036 /* main.m */; };
 		F941C0CA1D4C4FDA00763036 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F941C0C91D4C4FDA00763036 /* AppDelegate.m */; };
 		F941C0CD1D4C4FDA00763036 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F941C0CC1D4C4FDA00763036 /* ViewController.m */; };
@@ -47,6 +50,11 @@
 		F93486241ECE855200F33CA0 /* ViewHelpersWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewHelpersWrapper.mm; sourceTree = "<group>"; };
 		F93486261ECE8E8700F33CA0 /* UserDefaultsWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDefaultsWrapper.h; sourceTree = "<group>"; };
 		F93486271ECE8E8700F33CA0 /* UserDefaultsWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = UserDefaultsWrapper.mm; sourceTree = "<group>"; };
+		F939385B1ECFBEA000B3E7F5 /* EmailWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmailWrapper.h; sourceTree = "<group>"; };
+		F939385C1ECFBEA000B3E7F5 /* EmailWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EmailWrapper.mm; sourceTree = "<group>"; };
+		F939385E1ECFC0EE00B3E7F5 /* ControllerHelpersWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControllerHelpersWrapper.h; sourceTree = "<group>"; };
+		F939385F1ECFC0EE00B3E7F5 /* ControllerHelpersWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ControllerHelpersWrapper.mm; sourceTree = "<group>"; };
+		F93938621ECFC49E00B3E7F5 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		F941C0C21D4C4FDA00763036 /* Buxoff.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Buxoff.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F941C0C61D4C4FDA00763036 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F941C0C81D4C4FDA00763036 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -78,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F93938631ECFC49E00B3E7F5 /* MessageUI.framework in Frameworks */,
 				F9B1C5591D52B49400871950 /* libleveldb.a in Frameworks */,
 				F941C1061D4C54A400763036 /* libbuxoff.a in Frameworks */,
 				F9B1C55A1D52B49400871950 /* libmemenv.a in Frameworks */,
@@ -101,6 +110,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F93938611ECFC49E00B3E7F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F93938621ECFC49E00B3E7F5 /* MessageUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		F941C0B91D4C4FDA00763036 = {
 			isa = PBXGroup;
 			children = (
@@ -108,6 +125,7 @@
 				F941C0DE1D4C4FDA00763036 /* BuxoffTests */,
 				F941C0E91D4C4FDA00763036 /* BuxoffUITests */,
 				F941C0C31D4C4FDA00763036 /* Products */,
+				F93938611ECFC49E00B3E7F5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -180,6 +198,10 @@
 				F93486241ECE855200F33CA0 /* ViewHelpersWrapper.mm */,
 				F93486261ECE8E8700F33CA0 /* UserDefaultsWrapper.h */,
 				F93486271ECE8E8700F33CA0 /* UserDefaultsWrapper.mm */,
+				F939385B1ECFBEA000B3E7F5 /* EmailWrapper.h */,
+				F939385C1ECFBEA000B3E7F5 /* EmailWrapper.mm */,
+				F939385E1ECFC0EE00B3E7F5 /* ControllerHelpersWrapper.h */,
+				F939385F1ECFC0EE00B3E7F5 /* ControllerHelpersWrapper.mm */,
 			);
 			name = libbuxoff;
 			sourceTree = "<group>";
@@ -314,8 +336,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F93938601ECFC0EE00B3E7F5 /* ControllerHelpersWrapper.mm in Sources */,
 				F93486251ECE855200F33CA0 /* ViewHelpersWrapper.mm in Sources */,
 				F93486281ECE8E8700F33CA0 /* UserDefaultsWrapper.mm in Sources */,
+				F939385D1ECFBEA000B3E7F5 /* EmailWrapper.mm in Sources */,
 				F941C0CD1D4C4FDA00763036 /* ViewController.m in Sources */,
 				F941C0CA1D4C4FDA00763036 /* AppDelegate.m in Sources */,
 				F9B85DF51EC93DA9000B5818 /* RecordStorageWrapper.mm in Sources */,

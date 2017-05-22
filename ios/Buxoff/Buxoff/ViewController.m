@@ -9,7 +9,9 @@
 #import "ViewController.h"
 #import "RecordStorageWrapper.h"
 #import "ViewHelpersWrapper.h"
+#import "ControllerHelpersWrapper.h"
 #import "UserDefaultsWrapper.h"
+#import "EmailWrapper.h"
 
 @interface ViewController ()
 @property BOOL tagWasResolved;
@@ -46,7 +48,7 @@
 - (void)updatePersistentFiedls
 {
     for (UITextField *f in @[_textAcct, _textEmail]) {
-        f.text = [UserDefaultsWrapper get:f.accessibilityLabel default:@""];
+        f.text = [UserDefaultsWrapper get:f.accessibilityLabel def:@""];
     }
 }
 
@@ -73,17 +75,23 @@
 #pragma mark - Actions
 - (void)actionAdd:(id)sender
 {
-    [RecordStorageWrapper add:_textAmount.text
-                         desc:_textDesc.text
-                          tag:_textTags.text
-                      account:_textAcct.text];
+    [ControllerHelpersWrapper add:_textAmount.text
+                             desc:_textDesc.text
+                              tag:_textTags.text
+                          account:_textAcct.text];
     [self clearText];
     [self updateButtons];
 }
 
 - (void)actionPush:(id)sender
 {
-    
+    NSString* body = [ControllerHelpersWrapper push:_textAmount.text
+                                               desc:_textDesc.text
+                                                tag:_textTags.text
+                                            account:_textAcct.text];
+    [self sendEmail:body];
+    [self clearText];
+    [self updateButtons];
 }
 
 #pragma mark - UITextView
@@ -96,6 +104,52 @@
 {
     [self updatePersitentText:textField];
     return YES;
+}
+
+#pragma mark - UIMailComposer
+- (void)mailComposeController:(MFMailComposeViewController *)controller
+          didFinishWithResult:(MFMailComposeResult)result
+                        error:(NSError *)error
+{
+    [controller dismissViewControllerAnimated:YES completion:nil];
+    if (result == MFMailComposeResultFailed) {
+        [self sendingFailed];
+    }
+}
+
+#pragma mark - Utils
+- (void)sendEmail:(NSString*)body
+{
+    if (![MFMailComposeViewController canSendMail]) {
+        [self sendingFailed];
+        return;
+    }
+    
+    NSString* email = [UserDefaultsWrapper get:_textAmount.accessibilityLabel
+                                           def:@""];
+    MFMailComposeViewController *c = [[MFMailComposeViewController alloc] init];
+    c.mailComposeDelegate = self;
+    [c setToRecipients:@[email]];
+    [c setSubject:[EmailWrapper subject]];
+    [c setMessageBody:body isHTML:NO];
+    [self presentViewController:c animated:YES completion:nil];
+}
+
+- (void)sendingFailed
+{
+    [self showAlert:@"Error" body:@"Email sending is not setup"];
+}
+
+- (void)showAlert:(NSString*)title body:(NSString*)body
+{
+    UIAlertController *ac = [UIAlertController alertControllerWithTitle:title
+                                                                message:body
+                                                         preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK"
+                                                 style:UIAlertActionStyleDefault
+                                               handler:nil];
+    [ac addAction:ok];
+    [self presentViewController:ac animated:YES completion:nil];
 }
 
 @end
