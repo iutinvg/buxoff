@@ -23,7 +23,7 @@ Probably, it will be fixed soon.
 Then you can build static libbuxoff
 ```
 cd ~/buxoff/base
-make
+make PLATFORM=IOS
 ```
 
 Now open the project in Xcode and build.
