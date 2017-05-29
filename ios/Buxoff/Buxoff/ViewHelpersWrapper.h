@@ -11,4 +11,5 @@
 @interface ViewHelpersWrapper : NSObject
 + (BOOL)enableAdd:(NSString*)amount account:(NSString*)account;
 + (BOOL)enablePush:(int)record_count amount:(NSString*)amount account:(NSString *)account email:(NSString*)email;
++ (NSString*)tags:(NSString*)desc;
 @end

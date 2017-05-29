@@ -8,6 +8,10 @@
 
 #import "ViewHelpersWrapper.h"
 #import "ViewHelpers.h"
+#import "ConnectionWrapper.h"
+#import "ConnectionWrapper+Impl.h"
+#import "Record.h"
+
 
 @implementation ViewHelpersWrapper
 
@@ -19,6 +23,12 @@
 + (BOOL)enablePush:(int)record_count amount:(NSString*)amount account:(NSString *)account email:(NSString*)email
 {
     return Buxoff::view_enable_push(record_count, amount.UTF8String, account.UTF8String, email.UTF8String);
+}
+
++ (NSString*)tags:(NSString*)desc
+{
+    auto tags = tags_for_description([ConnectionWrapper sharedConnection].impl, desc.UTF8String);
+    return [NSString stringWithUTF8String:tags.c_str()];
 }
 
 @end

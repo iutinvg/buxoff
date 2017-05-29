@@ -11,4 +11,5 @@
 @interface ControllerHelpersWrapper : NSObject
 + (void)add:(NSString*)amount desc:(NSString*)desc tag:(NSString*)tag account:(NSString*)account;
 + (NSString*)push:(NSString*)amount desc:(NSString*)desc tag:(NSString*)tag account:(NSString*)account;
++ (void)clear_records;
 @end

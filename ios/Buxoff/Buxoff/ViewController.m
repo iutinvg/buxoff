@@ -98,6 +98,11 @@
 - (void)textFieldDidChange:(UITextField*)f
 {
     [self updateButtons];
+    if (f == _textDesc) {
+        [self resolveRule];
+    } else if (f == _textTags) {
+        _tagWasResolved = NO;
+    }
 }
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
@@ -118,6 +123,14 @@
 }
 
 #pragma mark - Utils
+- (void)resolveRule
+{
+    if (!_textTags.text.length || _tagWasResolved) {
+        _tagWasResolved = YES;
+        _textTags.text = [ViewHelpersWrapper tags:_textDesc.text];
+    }
+}
+
 - (void)sendEmail:(NSString*)body
 {
     if (![MFMailComposeViewController canSendMail]) {

@@ -31,8 +31,14 @@
         [desc UTF8String],
         {[tag UTF8String]},
         [account UTF8String]};
-    auto body = controller_push([ConnectionWrapper sharedConnection].impl, r);
+    auto body = controller_push([ConnectionWrapper sharedConnection].impl, r, false);
     return [NSString stringWithUTF8String:body.c_str()];
+}
+
++ (void)clear_records
+{
+    Buxoff::RecordStorage rs{[ConnectionWrapper sharedConnection].impl};
+    rs.clear();
 }
 
 @end
