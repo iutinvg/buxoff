@@ -26,3 +26,23 @@ TEST_CASE("add-tags", "[controller]") {
     REQUIRE(tags[0] == "tag1");
     REQUIRE(tags[1] == "tag2");
 }
+
+TEST_CASE("push-clear", "[controller]") {
+    clean_storage();
+    auto c = Connection("test.db");
+    controller_add(&c, Record{"345.67", "desc", {"tag1", "tag2"}, "cash"});
+    controller_push(&c, Record{"345.67", "desc", {"tag1", "tag2"}, "cash"}, true);
+
+    auto rs = RecordStorage{&c};
+    REQUIRE(rs.all().size() == 0);
+}
+
+TEST_CASE("push-not-clear", "[controller]") {
+    clean_storage();
+    auto c = Connection("test.db");
+    controller_add(&c, Record{"345.67", "desc", {"tag1", "tag2"}, "cash"});
+    controller_push(&c, Record{"345.67", "desc", {"tag1", "tag2"}, "cash"}, false);
+
+    auto rs = RecordStorage{&c};
+    REQUIRE(rs.all().size() == 2);
+}
