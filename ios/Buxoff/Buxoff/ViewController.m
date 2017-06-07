@@ -85,6 +85,9 @@
 
 - (void)actionPush:(id)sender
 {
+    // force saving right now
+    [_textEmail resignFirstResponder];
+    
     NSString* body = [ControllerHelpersWrapper push:_textAmount.text
                                                desc:_textDesc.text
                                                 tag:_textTags.text
@@ -117,7 +120,13 @@
                         error:(NSError *)error
 {
     [controller dismissViewControllerAnimated:YES completion:nil];
-    if (result == MFMailComposeResultFailed) {
+    if (result == MFMailComposeResultSaved || result == MFMailComposeResultSent) {
+        NSLog(@"mail was sent or saved, we can clear records now");
+        [ControllerHelpersWrapper clear_records];
+    } else if (result == MFMailComposeResultCancelled) {
+        NSLog(@"don't clear records, user cancel");
+    } else {
+        NSLog(@"don't clear records, something went wrong");
         [self sendingFailed];
     }
 }
@@ -138,7 +147,7 @@
         return;
     }
     
-    NSString* email = [UserDefaultsWrapper get:_textAmount.accessibilityLabel
+    NSString* email = [UserDefaultsWrapper get:_textEmail.accessibilityLabel
                                            def:@""];
     MFMailComposeViewController *c = [[MFMailComposeViewController alloc] init];
     c.mailComposeDelegate = self;
@@ -150,7 +159,7 @@
 
 - (void)sendingFailed
 {
-    [self showAlert:@"Error" body:@"Email sending is not setup"];
+    [self showAlert:@"Error" body:@"Failed to send email. Probably, you have to setup an email account on this device."];
 }
 
 - (void)showAlert:(NSString*)title body:(NSString*)body
