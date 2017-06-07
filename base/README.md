@@ -26,7 +26,10 @@ cd ~/buxoff/base
 make PLATFORM=IOS
 ```
 
-Now open the project in Xcode and build.
+Now open the project in Xcode and build. Or use command line:
+```
+xcodebuild -target Buxoff -sdk iphoneos -configuration Debug
+```
 
 
 # Other Useful Things
