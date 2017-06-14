@@ -36,6 +36,7 @@
 - (void)updateButtons
 {
     int count = RecordStorageWrapper.count;
+    
     [_buttonAdd setEnabled:[ViewHelpersWrapper enableAdd:_textAmount.text
                                                  account:_textAcct.text]];
     [_buttonPush setEnabled:[ViewHelpersWrapper enablePush:count
@@ -111,6 +112,22 @@
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField
 {
     [self updatePersitentText:textField];
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if (textField == _textAmount) {
+        [_textDesc becomeFirstResponder];
+    } else if (textField == _textDesc) {
+        [_textTags becomeFirstResponder];
+    } else if (textField == _textTags) {
+        [_textAcct becomeFirstResponder];
+    } else if (textField == _textAcct) {
+        [_textEmail becomeFirstResponder];
+    } else if (textField == _textEmail) {
+        [_textAmount becomeFirstResponder];
+    }
     return YES;
 }
 
