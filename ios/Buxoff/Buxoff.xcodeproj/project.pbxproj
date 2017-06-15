@@ -273,6 +273,7 @@
 				TargetAttributes = {
 					F941C0C11D4C4FDA00763036 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 958XJSKUVQ;
 					};
 					F941C0DA1D4C4FDA00763036 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -491,6 +492,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 958XJSKUVQ;
 				HEADER_SEARCH_PATHS = (
 					../../base/include,
 					../../base/deps/leveldb/include,
@@ -511,6 +513,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 958XJSKUVQ;
 				HEADER_SEARCH_PATHS = (
 					../../base/include,
 					../../base/deps/leveldb/include,
