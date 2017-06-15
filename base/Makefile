@@ -17,7 +17,7 @@ AR=xcrun ar
 LIBS=-Ldeps/leveldb/out-ios-universal -lleveldb -L$(PLATFORM_OUTDIR) -lbuxoff
 SIMULATORSDK=$(shell xcrun -sdk iphonesimulator --show-sdk-path)
 DEVICESDK=$(shell xcrun -sdk iphoneos --show-sdk-path)
-DEVICE_CFLAGS = -isysroot "$(DEVICESDK)" -arch armv6 -arch armv7 -arch armv7s -arch arm64
+DEVICE_CFLAGS = -isysroot "$(DEVICESDK)" -arch armv6 -arch armv7 -arch armv7s -arch arm64 -fembed-bitcode
 SIMULATOR_CFLAGS = -isysroot "$(SIMULATORSDK)" -arch i686 -arch x86_64
 
 PLATFORM_OUTDIR=ios

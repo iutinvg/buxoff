@@ -93,6 +93,9 @@ namespace Buxoff {
                 bool clear_key=false);
         // get all keys as a set
         std::set<std::string>keys(bool clear_key=false);
+
+        std::vector<std::string> search(const std::string& needle);
+
         int count();
         void clear();
     };

@@ -27,13 +27,15 @@ void Buxoff::controller_add(Connection* c, const Record& r)
     }
 }
 
-std::string Buxoff::controller_push(Connection* c, const Record& r)
+std::string Buxoff::controller_push(Connection* c, const Record& r, bool clear)
 {
     if (!r.empty()) {
         controller_add(c, r);
     }
     RecordStorage rs{c};
     Email e{rs.all()};
-    rs.clear();
+    if (clear) {
+        rs.clear();
+    }
     return e.body();
 }
