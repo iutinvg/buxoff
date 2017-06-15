@@ -274,6 +274,7 @@
 					F941C0C11D4C4FDA00763036 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = 958XJSKUVQ;
+						ProvisioningStyle = Manual;
 					};
 					F941C0DA1D4C4FDA00763036 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -492,6 +493,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 958XJSKUVQ;
 				HEADER_SEARCH_PATHS = (
 					../../base/include,
@@ -506,6 +509,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.sevencrayons.buxoff;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "3c8da121-4499-4ee8-b291-0977e40c3ea6";
+				PROVISIONING_PROFILE_SPECIFIER = BuxoffDev;
 			};
 			name = Debug;
 		};
@@ -513,6 +518,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 958XJSKUVQ;
 				HEADER_SEARCH_PATHS = (
 					../../base/include,
@@ -527,6 +534,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.sevencrayons.buxoff;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "3c8da121-4499-4ee8-b291-0977e40c3ea6";
+				PROVISIONING_PROFILE_SPECIFIER = BuxoffDev;
 			};
 			name = Release;
 		};
@@ -576,6 +585,95 @@
 			};
 			name = Release;
 		};
+		F9D4AC5B1EF21CEE008BB470 /* Distr */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Distr;
+		};
+		F9D4AC5C1EF21CEE008BB470 /* Distr */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 958XJSKUVQ;
+				HEADER_SEARCH_PATHS = (
+					../../base/include,
+					../../base/deps/leveldb/include,
+				);
+				INFOPLIST_FILE = Buxoff/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-L../../base",
+					"-L../../base/ios",
+					"-L../../base/deps/leveldb/out-ios-universal",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sevencrayons.buxoff;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ea2685b6-4509-4fe3-8c22-680b376ae61b";
+				PROVISIONING_PROFILE_SPECIFIER = BuxoffProd;
+			};
+			name = Distr;
+		};
+		F9D4AC5D1EF21CEE008BB470 /* Distr */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = BuxoffTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sevencrayons.BuxoffTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Buxoff.app/Buxoff";
+			};
+			name = Distr;
+		};
+		F9D4AC5E1EF21CEE008BB470 /* Distr */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = BuxoffUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.sevencrayons.BuxoffUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = Buxoff;
+			};
+			name = Distr;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -584,6 +682,7 @@
 			buildConfigurations = (
 				F941C0ED1D4C4FDA00763036 /* Debug */,
 				F941C0EE1D4C4FDA00763036 /* Release */,
+				F9D4AC5B1EF21CEE008BB470 /* Distr */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -593,6 +692,7 @@
 			buildConfigurations = (
 				F941C0F01D4C4FDA00763036 /* Debug */,
 				F941C0F11D4C4FDA00763036 /* Release */,
+				F9D4AC5C1EF21CEE008BB470 /* Distr */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -602,6 +702,7 @@
 			buildConfigurations = (
 				F941C0F31D4C4FDA00763036 /* Debug */,
 				F941C0F41D4C4FDA00763036 /* Release */,
+				F9D4AC5D1EF21CEE008BB470 /* Distr */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -611,6 +712,7 @@
 			buildConfigurations = (
 				F941C0F61D4C4FDA00763036 /* Debug */,
 				F941C0F71D4C4FDA00763036 /* Release */,
+				F9D4AC5E1EF21CEE008BB470 /* Distr */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -106,7 +106,7 @@
                                     <constraint firstAttribute="height" constant="30" id="cMk-pO-ZnC"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="done"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="done"/>
                                 <connections>
                                     <action selector="textFieldDidChange:" destination="BYZ-38-t0r" eventType="editingChanged" id="kPd-HT-TqJ"/>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="97M-Ql-3MC"/>
