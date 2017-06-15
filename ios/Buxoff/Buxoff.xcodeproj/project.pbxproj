@@ -504,7 +504,7 @@
 					"-L../../base/ios",
 					"-L../../base/deps/leveldb/out-ios-universal",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.sevencrayons.Buxoff;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sevencrayons.buxoff;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -525,7 +525,7 @@
 					"-L../../base/ios",
 					"-L../../base/deps/leveldb/out-ios-universal",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.sevencrayons.Buxoff;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sevencrayons.buxoff;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
